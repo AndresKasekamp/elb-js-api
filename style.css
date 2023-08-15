@@ -6,6 +6,52 @@ body,
   height: 100%;
   width: 100%;
 }
-#menu {
-  padding: 1em;
+
+#sketchPanel {
+  width: 200px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.esri-button {
+  margin: 2px;
+}
+
+#configurationDiv {
+  padding: 10px;
+  text-align: left;
+  width: 250px;
+}
+
+#configurationInfoDiv {
+  padding: 7px;
+  text-align: left;
+}
+
+#snappingctrlkey {
+  display: inline;
+}
+
+#actionbuttons,
+#edgeoperationbuttons {
+  display: none;
+}
+
+.update-options {
+  display: flex;
+  flex-direction: row;
+}
+
+.edge-button,
+.shape-button {
+  flex: 1;
+  border-style: solid;
+  border-width: 1px;
+  border-image: none;
+}
+
+.edge-button-selected,
+.shape-button-selected {
+  background: #4c4c4c;
+  color: #fff;
 }

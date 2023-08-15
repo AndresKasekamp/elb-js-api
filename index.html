@@ -20,6 +20,99 @@
 
 <body>
     <div id="viewDiv"></div>
+    <div id="sketchPanel" class="esri-widget">
+        <div id="startbuttons">
+            <button id="point" data-type="point" class="esri-button starttool">
+                Draw a point of interest
+            </button>
+            <button id="line" data-type="polyline" class="esri-button starttool">
+                Draw a route
+            </button>
+            <button id="extrudedPolygon" data-type="polygon" class="esri-button starttool">
+                Draw a building
+            </button>
+        </div>
+        <div id="actionbuttons">
+            <button id="cancel" class="esri-button">Cancel</button>
+            <button id="done" class="esri-button">Done</button>
+        </div>
+        <div id="edgeoperationbuttons">
+            <br />Select the edge operation:
+            <div class="update-options" id="edge">
+                <button class="esri-widget--button edge-button" id="none-edge-button" value="none">
+                    None
+                </button>
+                <button class="esri-widget--button edge-button edge-button-selected" id="split-edge-button"
+                    value="split">
+                    Split
+                </button>
+                <button class="esri-widget--button edge-button" id="offset-edge-button" value="offset">
+                    Offset
+                </button>
+            </div>
+            Select the move operation:
+            <div class="update-options" id="shape">
+                <button class="esri-widget--button shape-button" id="none-shape-button" value="none">
+                    None
+                </button>
+                <button class="esri-widget--button shape-button shape-button-selected" id="move-shape-button"
+                    value="move">
+                    Move
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="configurationDiv" class="esri-widget">
+        <table id="configurationTable">
+            <tbody>
+                <tr>
+                    <td>
+                        <label><b>Tooltip/Label </b></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="tooltipOptionscheckbox" id="tooltipOptionscheckboxlabel">
+                            - Tooltip</label>
+                    </td>
+                    <td><input type="checkbox" id="tooltipOptionsheckbox" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="labelOptionscheckbox" id="labelOptionscheckboxlabel">
+                            - Label</label>
+                    </td>
+                    <td><input type="checkbox" id="labelOptionscheckbox" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="enabledcheckbox" id="enabledcheckboxlabel"><b>Snapping enabled (
+                                <div id="snappingctrlkey">CTRL-key</div>
+                                )
+                            </b></label>
+                    </td>
+                    <td><input type="checkbox" id="enabledcheckbox" checked /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="selfsnappingcheckbox" id="selfsnappingcheckboxlabel">
+                            - self snapping</label>
+                    </td>
+                    <td><input type="checkbox" id="selfsnappingcheckbox" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="featuresnappingcheckbox" id="featuresnappingcheckboxlabel">
+                            - feature snapping</label>
+                    </td>
+                    <td><input type="checkbox" id="featuresnappingcheckbox" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="configurationInfoDiv" class="esri-widget">
+        <b>Open configuration <span>&#8594;</span></b>
+    </div>
 </body>
 
 </html>
