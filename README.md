@@ -1,3 +1,1 @@
-# elb-js-api
-
-Site: https://andreskasekamp.github.io/elb-js-api/
+Testing project. Integrating JS API with Estonian Land Board (ELB) services.
