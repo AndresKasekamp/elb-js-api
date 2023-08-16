@@ -16,6 +16,7 @@ require([
   "./modules/layerList.js",
   "./modules/coordinate.js",
   "./modules/lineOfSight.js",
+  "./modules/search.js",
 ], (
   Expand,
   Point,
@@ -29,7 +30,8 @@ require([
   initScene,
   initLayerList,
   initCoordinates,
-  initLoS
+  initLoS,
+  initSearch
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -68,7 +70,12 @@ require([
     "e5c6a086a5ae4d1991d4ca35733fe0ed",
   ];
   const basemaps = initLayerList.setupBasemapGallery(view, basemapIds);
-  const basemapsExpand = initLayerList.setupExpand("List of Basemaps", view, basemaps, false);
+  const basemapsExpand = initLayerList.setupExpand(
+    "List of Basemaps",
+    view,
+    basemaps,
+    false
+  );
   view.ui.add(basemapsExpand, "top-left");
   /**************************************
    *  Coordinate tool
@@ -97,6 +104,15 @@ require([
   );
 
   view.ui.add(expandLoS, "top-left");
+
+  /**************************************
+   * Initialize the Search Widget
+   **************************************/
+  const url = "http://inaadress.maaamet.ee/inaadress/gazetteer/";
+
+  const customSearchSource = initSearch.setupCustomSearchSource(url);
+  const searchWidget = initSearch.setupSearchWidget(view, customSearchSource);
+  view.ui.add(searchWidget, "top-right");
 
   /**************************************
    * Sketching (1): Init settings
