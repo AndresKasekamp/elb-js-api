@@ -1,6 +1,7 @@
 // TODO basemap gallery
 // TODO replace coordinate conversion with Z widget
-// TODO add Senyang in-ads widget
+// TODO add Senyang in-ads widget (kontrollida), muuta mõõtmeid
+// TODO legendi widget
 
 require([
   "esri/widgets/Expand",

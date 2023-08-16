@@ -1,3 +1,7 @@
+// TODO proovi CORS localil lahendada
+// TODO kas custom search peabki selline välja nägema?
+
+
 define([
   "esri/widgets/Search",
   "esri/widgets/Search/SearchSource",
