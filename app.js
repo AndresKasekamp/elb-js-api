@@ -12,6 +12,7 @@ require([
 
   "./modules/layers.js",
   "./modules/scene.js",
+  "./modules/layerList.js",
 ], (
   LineOfSight,
   Expand,
@@ -24,10 +25,11 @@ require([
   Editor,
 
   layers,
-  initScene
+  initScene,
+  initLayerList
 ) => {
   /************************************************************
-   * Load a web scene and set it to the map property in a SceneView.
+   * Init scene (/w layers) and view
    ************************************************************/
 
   const graphicsLayer = layers.setupGraphicsLayer();
@@ -36,36 +38,13 @@ require([
   const scene = initScene.setupWebScene(graphicsLayer, communicationTower);
   const view = initScene.setupWebView(scene);
 
-  /*   const scene = new WebScene({
-    portalItem: {
-      id: "92d29869db444e28beab584f696b86c3",
-    },
-    layers: [graphicsLayer, communicationTower],
-  });
-
-  const view = new SceneView({
-    map: scene,
-    container: "viewDiv",
-    qualityProfile: "high",
-  }); */
-
   /**************************************
-   * Adding a layer group, expand o
+   * Adding a layer group, expand
    **************************************/
   view.when(() => {
-    const layerList = new LayerList({
-      view: view,
-    });
-
-    // add an Expand widget to make the menu responsive
-    const expand2 = new Expand({
-      expandTooltip: "List of Layers",
-      view: view,
-      content: layerList,
-      expanded: false,
-    });
-
-    view.ui.add(expand2, "top-left");
+    const layerList = initLayerList.setupLayerList(view);
+    const layerListExpand = initLayerList.setupExpand("List of Layers", view, layerList, false)
+    view.ui.add(layerListExpand, "top-left");
   });
 
   /**************************************
