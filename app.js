@@ -1,32 +1,40 @@
-require([
+// TODO basemap gallery
+// TODO replace coordinate conversion with Z widget
+// TODO add Senyang in-ads widget
 
+require([
   "esri/widgets/LineOfSight",
   "esri/widgets/Expand",
   "esri/geometry/Point",
   "esri/Graphic",
-  "esri/widgets/LayerList",
+
   "esri/widgets/CoordinateConversion",
 
   "esri/widgets/Sketch/SketchViewModel",
   "esri/widgets/Editor",
 
+  "esri/widgets/CoordinateConversion",
+
   "./modules/layers.js",
   "./modules/scene.js",
   "./modules/layerList.js",
+  "./modules/coordinate.js",
 ], (
   LineOfSight,
   Expand,
   Point,
   Graphic,
-  LayerList,
   CoordinateConversion,
 
   SketchViewModel,
   Editor,
 
+  Conversion,
+
   layers,
   initScene,
-  initLayerList
+  initLayerList,
+  initCoordinates
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -43,7 +51,12 @@ require([
    **************************************/
   view.when(() => {
     const layerList = initLayerList.setupLayerList(view);
-    const layerListExpand = initLayerList.setupExpand("List of Layers", view, layerList, false)
+    const layerListExpand = initLayerList.setupExpand(
+      "List of Layers",
+      view,
+      layerList,
+      false
+    );
     view.ui.add(layerListExpand, "top-left");
   });
 
@@ -55,11 +68,16 @@ require([
    *  Coordinate tool
    * TODO add z, replace this code
    **************************************/
-  const ccWidget = new CoordinateConversion({
-    view: view,
-  });
+  const ccWidget = initCoordinates.setupCoordinateWidget(view);
 
   view.ui.add(ccWidget, "bottom-left");
+
+  const numberSearchPattern = /-?\d+[\.]?\d*/;
+
+  const newFormat = initCoordinates.setupNewFormat(numberSearchPattern);
+  ccWidget.formats.add(newFormat);
+
+  ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
 
   /**************************************
    * Initialize the LineOfSight widget
