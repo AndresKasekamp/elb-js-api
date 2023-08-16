@@ -1,6 +1,5 @@
 require([
-  "esri/WebScene",
-  "esri/views/SceneView",
+
   "esri/widgets/LineOfSight",
   "esri/widgets/Expand",
   "esri/geometry/Point",
@@ -12,9 +11,8 @@ require([
   "esri/widgets/Editor",
 
   "./modules/layers.js",
+  "./modules/scene.js",
 ], (
-  WebScene,
-  SceneView,
   LineOfSight,
   Expand,
   Point,
@@ -25,7 +23,8 @@ require([
   SketchViewModel,
   Editor,
 
-  layers
+  layers,
+  initScene
 ) => {
   /************************************************************
    * Load a web scene and set it to the map property in a SceneView.
@@ -34,8 +33,10 @@ require([
   const graphicsLayer = layers.setupGraphicsLayer();
   const communicationTower = layers.setupInternalLayer();
 
+  const scene = initScene.setupWebScene(graphicsLayer, communicationTower);
+  const view = initScene.setupWebView(scene);
 
-  const scene = new WebScene({
+  /*   const scene = new WebScene({
     portalItem: {
       id: "92d29869db444e28beab584f696b86c3",
     },
@@ -46,7 +47,7 @@ require([
     map: scene,
     container: "viewDiv",
     qualityProfile: "high",
-  });
+  }); */
 
   /**************************************
    * Adding a layer group, expand o
