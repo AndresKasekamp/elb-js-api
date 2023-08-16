@@ -10,6 +10,7 @@ require([
   "esri/layers/GraphicsLayer",
   "esri/widgets/Sketch/SketchViewModel",
   "esri/widgets/Editor",
+  "esri/layers/SceneLayer"
 ], (
   WebScene,
   SceneView,
@@ -21,23 +22,33 @@ require([
   CoordinateConversion,
   GraphicsLayer,
   SketchViewModel,
-  Editor
+  Editor,
+  SceneLayer
 ) => {
   /************************************************************
    * Load a web scene and set it to the map property in a SceneView.
    ************************************************************/
 
+  // TODO lisa mobiilimastide kiht siia
   // the layer where the graphics are sketched
   const graphicsLayer = new GraphicsLayer({
     elevationInfo: { mode: "absolute-height" },
-    title: "Sketch GraphicsLayer",
+    title: "Joonistatud kihid",
+  });
+
+  // Adding a non-scene feature layer
+  const communicationTower = new SceneLayer({
+    portalItem: {
+      id: "66e382030b224ffa999249a4d1cbbf4f"
+    },
+    title: "Sidemastid",
   });
 
   const scene = new WebScene({
     portalItem: {
       id: "92d29869db444e28beab584f696b86c3",
     },
-    layers: [graphicsLayer],
+    layers: [graphicsLayer, communicationTower],
   });
 
   const view = new SceneView({
@@ -57,7 +68,7 @@ require([
 
     // add an Expand widget to make the menu responsive
     const expand2 = new Expand({
-      expandTooltip: "LoL",
+      expandTooltip: "List of Layers",
       view: view,
       content: layerList,
       expanded: false,
@@ -68,7 +79,7 @@ require([
 
   /**************************************
    *  Coordinate tool
-   * TODO add z
+   * TODO add z, replace this code
    **************************************/
   const ccWidget = new CoordinateConversion({
     view: view,
@@ -89,10 +100,10 @@ require([
     expandTooltip: "Expand line of sight widget",
     view: view,
     content: lineOfSight,
-    expanded: true,
+    expanded: false,
   });
 
-  view.ui.add(expand, "top-right");
+  view.ui.add(expand, "top-left");
 
   /**************************************
    * Sketching (1): Init settings
