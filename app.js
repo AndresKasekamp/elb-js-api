@@ -11,6 +11,7 @@ require([
   "esri/widgets/Sketch/SketchViewModel",
   "esri/widgets/Editor",
   "esri/layers/SceneLayer"
+
 ], (
   WebScene,
   SceneView,
@@ -29,12 +30,12 @@ require([
    * Load a web scene and set it to the map property in a SceneView.
    ************************************************************/
 
-  // TODO lisa mobiilimastide kiht siia
   // the layer where the graphics are sketched
   const graphicsLayer = new GraphicsLayer({
     elevationInfo: { mode: "absolute-height" },
     title: "Joonistatud kihid",
   });
+
 
   // Adding a non-scene feature layer
   const communicationTower = new SceneLayer({
@@ -42,7 +43,7 @@ require([
       id: "66e382030b224ffa999249a4d1cbbf4f"
     },
     title: "Sidemastid",
-  });
+  }); 
 
   const scene = new WebScene({
     portalItem: {
@@ -59,7 +60,6 @@ require([
 
   /**************************************
    * Adding a layer group, expand o
-   * TODO add a basemap
    **************************************/
   view.when(() => {
     const layerList = new LayerList({
@@ -76,6 +76,10 @@ require([
 
     view.ui.add(expand2, "top-left");
   });
+
+  /**************************************
+   * Basemap gallery
+   **************************************/
 
   /**************************************
    *  Coordinate tool
@@ -423,3 +427,5 @@ require([
   });
   view.ui.add("configurationInfoDiv", "bottom-right");
 });
+
+
