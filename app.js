@@ -3,15 +3,11 @@
 // TODO add Senyang in-ads widget
 
 require([
-  "esri/widgets/LineOfSight",
   "esri/widgets/Expand",
   "esri/geometry/Point",
   "esri/Graphic",
 
-  "esri/widgets/CoordinateConversion",
-
   "esri/widgets/Sketch/SketchViewModel",
-  "esri/widgets/Editor",
 
   "esri/widgets/CoordinateConversion",
 
@@ -19,22 +15,21 @@ require([
   "./modules/scene.js",
   "./modules/layerList.js",
   "./modules/coordinate.js",
+  "./modules/lineOfSight.js",
 ], (
-  LineOfSight,
   Expand,
   Point,
   Graphic,
-  CoordinateConversion,
 
   SketchViewModel,
-  Editor,
 
   Conversion,
 
   layers,
   initScene,
   initLayerList,
-  initCoordinates
+  initCoordinates,
+  initLoS
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -63,10 +58,20 @@ require([
   /**************************************
    * Basemap gallery
    **************************************/
-
+  const basemapIds = [
+    "be99602fc02d448eb859a0b426c0d5b6",
+    "b6517d264b8f467fa5b14c382dfdf87a",
+    "c5773442e91c48c392f28af6600169d0",
+    "1bc7e98137fe44129dd6653bef1920d0",
+    "287be80ff31d4c8babc48b2f959214f5",
+    "4ee7ecad357844bba5b95001de39f1e3",
+    "e5c6a086a5ae4d1991d4ca35733fe0ed",
+  ];
+  const basemaps = initLayerList.setupBasemapGallery(view, basemapIds);
+  const basemapsExpand = initLayerList.setupExpand("List of Basemaps", view, basemaps, false);
+  view.ui.add(basemapsExpand, "top-left");
   /**************************************
    *  Coordinate tool
-   * TODO add z, replace this code
    **************************************/
   const ccWidget = initCoordinates.setupCoordinateWidget(view);
 
@@ -82,20 +87,16 @@ require([
   /**************************************
    * Initialize the LineOfSight widget
    **************************************/
+  const lineOfSight = initLoS.setupLoS(view);
 
-  const lineOfSight = new LineOfSight({
-    view: view,
-  });
+  const expandLoS = initLayerList.setupExpand(
+    "Expand line of sight widget",
+    view,
+    lineOfSight,
+    false
+  );
 
-  // add an Expand widget to make the menu responsive
-  const expand = new Expand({
-    expandTooltip: "Expand line of sight widget",
-    view: view,
-    content: lineOfSight,
-    expanded: false,
-  });
-
-  view.ui.add(expand, "top-left");
+  view.ui.add(expandLoS, "top-left");
 
   /**************************************
    * Sketching (1): Init settings

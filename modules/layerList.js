@@ -1,7 +1,9 @@
-define(["esri/widgets/LayerList", "esri/widgets/Expand"], (
-  LayerList,
-  Expand
-) => ({
+define([
+  "esri/widgets/LayerList",
+  "esri/widgets/Expand",
+  "esri/Basemap",
+  "esri/widgets/BasemapGallery",
+], (LayerList, Expand, Basemap, BasemapGallery) => ({
   setupLayerList: (view) =>
     new LayerList({
       view: view,
@@ -13,5 +15,18 @@ define(["esri/widgets/LayerList", "esri/widgets/Expand"], (
       view: view,
       content: content,
       expanded: expanded,
+    }),
+
+  setupBasemapGallery: (view, basemapIds) =>
+    new BasemapGallery({
+      view: view,
+      source: basemapIds.map(
+        (id) =>
+          new Basemap({
+            portalItem: {
+              id: id,
+            },
+          })
+      ),
     }),
 }));
