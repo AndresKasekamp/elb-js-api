@@ -1,7 +1,6 @@
 // TODO add Senyang in-ads widget (kontrollida), muuta mõõtmeid
 // TODO legendi widget
 
-
 require([
   "esri/widgets/Expand",
 
@@ -9,10 +8,8 @@ require([
 
   "esri/widgets/Sketch/SketchViewModel",
 
-
   "esri/widgets/CoordinateConversion/support/Conversion",
   "esri/geometry/Point",
-
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -20,14 +17,13 @@ require([
   "./modules/coordinate.js",
   "./modules/lineOfSight.js",
   "./modules/search.js",
-  "./modules/sketchConstants.js"
+  "./modules/sketch.js",
 ], (
   Expand,
 
   Graphic,
 
   SketchViewModel,
-
 
   Conversion,
   Point,
@@ -38,7 +34,7 @@ require([
   initCoordinates,
   initLoS,
   initSearch,
-  initSketchConstants
+  initSketch
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -91,14 +87,14 @@ require([
    *  Coordinate tool
 
    **************************************/
-   view.when(() => {
+  view.when(() => {
     const ccWidget = initCoordinates.setupCoordinateWidget(view);
     const numberSearchPattern = /-?\d+[\.]?\d*/;
     const newFormat = initCoordinates.setupNewFormat(numberSearchPattern);
     ccWidget.formats.add(newFormat);
-  
+
     ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
-  
+
     view.ui.add(ccWidget, "bottom-left");
   });
 
@@ -129,27 +125,14 @@ require([
   /**************************************
    * Sketching (1): Init settings
    **************************************/
-
-  // TODO võtan konfiguratsiooni maha, see on veits segav, ülejäänud võib jääda, aga lisa kindlasti kõrguse modimine ka
-  // TODO need divid oleks vaja üle vaadata ja HTML modulariseerida
   // Set-up event handlers for buttons and click events
-  const enabledcheckbox = document.getElementById("enabledcheckbox");
   const startbuttons = document.getElementById("startbuttons");
   const actionbuttons = document.getElementById("actionbuttons");
   const edgeoperationbuttons = document.getElementById("edgeoperationbuttons");
-  const tooltipOptionsheckbox = document.getElementById(
-    "tooltipOptionsheckbox"
-  );
-  const configurationInfoDiv = document.getElementById("configurationInfoDiv");
-  const labelOptionscheckbox = document.getElementById("labelOptionscheckbox");
-  const selfsnappingcheckbox = document.getElementById("selfsnappingcheckbox");
-  const snappingctrlkey = document.getElementById("snappingctrlkey");
-  const featuresnappingcheckbox = document.getElementById(
-    "featuresnappingcheckbox"
-  );
 
-  const sketchViewModel = initSketchConstants.setupSketchViewModel(view, graphicsLayer);
+  const sketchViewModel = initSketch.setupSketchViewModel(view, graphicsLayer);
 
+  // TODO ma arvan et kuskile siia peab lisama kõrguse määramise kuulaja
   // after drawing the geometry, enter the update mode to update the geometry
   // and the deactivate the buttons
   sketchViewModel.on("create", (event) => {
@@ -288,75 +271,4 @@ require([
       }
     }
   }
-
-  /**********************************************
-   * Sketching (3): UI for snapping
-   *********************************************/
-  sketchViewModel.watch("snappingOptions.enabled", (newValue) => {
-    enabledcheckbox.checked = newValue;
-  });
-
-  enabledcheckbox.checked = sketchViewModel.snappingOptions.enabled;
-  enabledcheckbox.addEventListener("change", (event) => {
-    sketchViewModel.snappingOptions.enabled = event.target.checked
-      ? true
-      : false;
-  });
-
-  tooltipOptionsheckbox.checked = sketchViewModel.tooltipOptions.enabled;
-  tooltipOptionsheckbox.addEventListener("change", (event) => {
-    sketchViewModel.tooltipOptions.enabled = event.target.checked
-      ? true
-      : false;
-  });
-
-  labelOptionscheckbox.checked = sketchViewModel.labelOptions.enabled;
-  labelOptionscheckbox.addEventListener("change", (event) => {
-    sketchViewModel.labelOptions.enabled = event.target.checked ? true : false;
-  });
-
-  selfsnappingcheckbox.checked = sketchViewModel.snappingOptions.selfEnabled;
-  selfsnappingcheckbox.addEventListener("change", (event) => {
-    sketchViewModel.snappingOptions.selfEnabled = event.target.checked
-      ? true
-      : false;
-  });
-
-  featuresnappingcheckbox.checked =
-    sketchViewModel.snappingOptions.featureEnabled;
-  featuresnappingcheckbox.addEventListener("change", (event) => {
-    sketchViewModel.snappingOptions.featureEnabled = event.target.checked
-      ? true
-      : false;
-  });
-
-  const configurationExpand = new Expand({
-    expandIcon: "gear",
-    expandTooltip: "Show configuration",
-    expanded: false,
-    view: view,
-    content: document.getElementById("configurationDiv"),
-  });
-
-  // observe the if the CTRL-key got pressed to give the user a visual feedback
-  // the logic itself for toggling snapping is in the SketchViewModel
-  view.on(["key-down"], (ev) => {
-    if (ev.key === "Control") {
-      snappingctrlkey.style.fontWeight = "bold";
-      snappingctrlkey.style.color = "royalblue";
-    }
-  });
-  view.on(["key-up"], (ev) => {
-    if (ev.key === "Control") {
-      snappingctrlkey.style.fontWeight = "normal";
-      snappingctrlkey.style.color = "black";
-    }
-  });
-
-  view.ui.add(configurationExpand, "bottom-right");
-
-  configurationInfoDiv.addEventListener("click", (event) => {
-    configurationExpand.expand();
-  });
-  view.ui.add("configurationInfoDiv", "bottom-right");
 });
