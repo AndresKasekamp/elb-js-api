@@ -2,14 +2,7 @@
 // TODO legendi widget
 
 require([
-  "esri/widgets/Expand",
-
-  "esri/Graphic",
-
-  "esri/widgets/Sketch/SketchViewModel",
-
   "esri/widgets/CoordinateConversion/support/Conversion",
-  "esri/geometry/Point",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -19,16 +12,9 @@ require([
   "./modules/search.js",
   "./modules/sketch.js",
 ], (
-  Expand,
-
-  Graphic,
-
-  SketchViewModel,
-
   Conversion,
-  Point,
 
-  layers,
+  initLayers,
   initScene,
   initLayerList,
   initCoordinates,
@@ -40,8 +26,8 @@ require([
    * Init scene (/w layers) and view
    ************************************************************/
 
-  const graphicsLayer = layers.setupGraphicsLayer();
-  const communicationTower = layers.setupInternalLayer();
+  const graphicsLayer = initLayers.setupGraphicsLayer();
+  const communicationTower = initLayers.setupInternalLayer();
 
   const scene = initScene.setupWebScene(graphicsLayer, communicationTower);
   const view = initScene.setupWebView(scene);
