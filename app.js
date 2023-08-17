@@ -2,6 +2,7 @@
 // TODO replace coordinate conversion with Z widget
 // TODO add Senyang in-ads widget (kontrollida), muuta mõõtmeid
 // TODO legendi widget
+// TODO peab panema kuulama kui widget avaneb, siis teine läheb kinni
 
 require([
   "esri/widgets/Expand",
@@ -53,7 +54,8 @@ require([
       "List of Layers",
       view,
       layerList,
-      false
+      false,
+      "top-left"
     );
     view.ui.add(layerListExpand, "top-left");
   });
@@ -75,7 +77,8 @@ require([
     "List of Basemaps",
     view,
     basemaps,
-    false
+    false,
+    "top-left"
   );
   view.ui.add(basemapsExpand, "top-left");
   /**************************************
@@ -101,7 +104,8 @@ require([
     "Expand line of sight widget",
     view,
     lineOfSight,
-    false
+    false,
+    "top-left"
   );
 
   view.ui.add(expandLoS, "top-left");

@@ -1,4 +1,4 @@
-// TODO koordinaatide conversion ei paista toimivat, uurida
+// TODO koordinaatide conversion toimub läägiga, vaja oleks ka basemapile seda funktsiooni
 
 define([
   "esri/widgets/CoordinateConversion",

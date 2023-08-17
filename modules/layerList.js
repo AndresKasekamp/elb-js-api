@@ -9,12 +9,13 @@ define([
       view: view,
     }),
 
-  setupExpand: (toolTipText, view, content, expanded) =>
+  setupExpand: (toolTipText, view, content, expanded, group) =>
     new Expand({
       expandTooltip: toolTipText,
       view: view,
       content: content,
       expanded: expanded,
+      group: group,
     }),
 
   setupBasemapGallery: (view, basemapIds) =>

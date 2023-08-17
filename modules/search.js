@@ -1,5 +1,6 @@
 // TODO proovi CORS localil lahendada
 // TODO kas custom search peabki selline välja nägema?
+// TODO muuda kasti natuke suuremaks
 
 
 define([
