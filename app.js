@@ -1,8 +1,6 @@
-// TODO basemap gallery
-// TODO replace coordinate conversion with Z widget
 // TODO add Senyang in-ads widget (kontrollida), muuta mõõtmeid
 // TODO legendi widget
-// TODO peab panema kuulama kui widget avaneb, siis teine läheb kinni
+
 
 require([
   "esri/widgets/Expand",
@@ -11,12 +9,10 @@ require([
 
   "esri/widgets/Sketch/SketchViewModel",
 
-  "esri/widgets/CoordinateConversion",
-  "esri/widgets/CoordinateConversion/support/Format",
+
   "esri/widgets/CoordinateConversion/support/Conversion",
   "esri/geometry/Point",
-  "esri/geometry/support/webMercatorUtils",
-  "esri/geometry/SpatialReference",
+
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -24,6 +20,7 @@ require([
   "./modules/coordinate.js",
   "./modules/lineOfSight.js",
   "./modules/search.js",
+  "./modules/sketchConstants.js"
 ], (
   Expand,
 
@@ -31,19 +28,17 @@ require([
 
   SketchViewModel,
 
-  CoordinateConversion,
-  Format,
+
   Conversion,
   Point,
-  webMercatorUtils,
-  SpatialReference,
 
   layers,
   initScene,
   initLayerList,
   initCoordinates,
   initLoS,
-  initSearch
+  initSearch,
+  initSketchConstants
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -134,68 +129,9 @@ require([
   /**************************************
    * Sketching (1): Init settings
    **************************************/
-  const blue = [82, 82, 122, 0.9];
-  const white = [255, 255, 255, 0.8];
 
-  // polygon symbol used for sketching the extruded building footprints
-  const extrudedPolygon = {
-    type: "polygon-3d",
-    symbolLayers: [
-      {
-        type: "extrude",
-        size: 10, // extrude by 10 meters
-        material: {
-          color: white,
-        },
-        edges: {
-          type: "solid",
-          size: "3px",
-          color: blue,
-        },
-      },
-    ],
-  };
-
-  // polyline symbol used for sketching routes
-  const route = {
-    type: "line-3d",
-    symbolLayers: [
-      {
-        type: "line",
-        size: "10px",
-        material: {
-          color: white,
-        },
-      },
-      {
-        type: "line",
-        size: "3px",
-        material: {
-          color: blue,
-        },
-      },
-    ],
-  };
-
-  // point symbol used for sketching points of interest
-  const point = {
-    type: "point-3d",
-    symbolLayers: [
-      {
-        type: "icon",
-        size: "30px",
-        resource: { primitive: "kite" },
-        outline: {
-          color: blue,
-          size: "3px",
-        },
-        material: {
-          color: white,
-        },
-      },
-    ],
-  };
-
+  // TODO võtan konfiguratsiooni maha, see on veits segav, ülejäänud võib jääda, aga lisa kindlasti kõrguse modimine ka
+  // TODO need divid oleks vaja üle vaadata ja HTML modulariseerida
   // Set-up event handlers for buttons and click events
   const enabledcheckbox = document.getElementById("enabledcheckbox");
   const startbuttons = document.getElementById("startbuttons");
@@ -212,32 +148,7 @@ require([
     "featuresnappingcheckbox"
   );
 
-  // load the default value from the snapping checkbox
-  let snappingcheckboxsavedstate = enabledcheckbox.checked ? true : false;
-
-  // define the SketchViewModel and pass in the symbols for each geometry type
-  // set the snappingOptions.selfEnabled to the default state
-  const sketchViewModel = new SketchViewModel({
-    layer: graphicsLayer,
-    view: view,
-    pointSymbol: point,
-    polygonSymbol: extrudedPolygon,
-    polylineSymbol: route,
-    defaultCreateOptions: {
-      hasZ: true, // default value
-    },
-    snappingOptions: {
-      enabled: snappingcheckboxsavedstate,
-      featureSources: [{ layer: graphicsLayer }],
-    },
-    tooltipOptions: { enabled: true },
-    labelOptions: { enabled: true },
-    defaultUpdateOptions: {
-      tool: "transform",
-      enableScaling: true,
-      enableZ: true,
-    },
-  });
+  const sketchViewModel = initSketchConstants.setupSketchViewModel(view, graphicsLayer);
 
   // after drawing the geometry, enter the update mode to update the geometry
   // and the deactivate the buttons
