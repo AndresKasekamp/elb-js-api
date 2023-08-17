@@ -1,4 +1,5 @@
 // TODO lisada BASEMAP with Z?
+// TODO koordinaatide conversion on ikka lappes
 
 define([
   "esri/widgets/CoordinateConversion",
@@ -19,12 +20,10 @@ define([
         // Define a convert function
         // Point -> Position
         convert: function (point) {
-          const returnPoint = point.spatialReference.isWGS84
-            ? point
-            : webMercatorUtils.webMercatorToGeographic(point);
-          const x = returnPoint.x.toFixed(4);
-          const y = returnPoint.y.toFixed(4);
-          const z = returnPoint.z.toFixed(4);
+          const returnPoint = point;
+          const x = returnPoint.x.toFixed(2);
+          const y = returnPoint.y.toFixed(2);
+          const z = returnPoint.z.toFixed(2);
           return {
             location: returnPoint,
             coordinate: `${x}, ${y}, ${z}`,
@@ -38,7 +37,7 @@ define([
             x: parseFloat(parts[0]),
             y: parseFloat(parts[1]),
             z: parseFloat(parts[2]),
-            spatialReference: { wkid: 4326 },
+            spatialReference: { wkid: 3301 },
           });
         },
       },
@@ -60,6 +59,6 @@ define([
           searchPattern: numberSearchPattern,
         },
       ],
-      defaultPattern: "X°, Y°, Z",
+      defaultPattern: "X, Y, Z",
     }),
 }));
