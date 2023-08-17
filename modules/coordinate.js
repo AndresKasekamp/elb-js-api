@@ -1,4 +1,4 @@
-// TODO koordinaatide conversion toimub läägiga, vaja oleks ka basemapile seda funktsiooni
+// TODO lisada BASEMAP with Z?
 
 define([
   "esri/widgets/CoordinateConversion",

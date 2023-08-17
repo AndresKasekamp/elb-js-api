@@ -6,12 +6,17 @@
 
 require([
   "esri/widgets/Expand",
-  "esri/geometry/Point",
+
   "esri/Graphic",
 
   "esri/widgets/Sketch/SketchViewModel",
 
   "esri/widgets/CoordinateConversion",
+  "esri/widgets/CoordinateConversion/support/Format",
+  "esri/widgets/CoordinateConversion/support/Conversion",
+  "esri/geometry/Point",
+  "esri/geometry/support/webMercatorUtils",
+  "esri/geometry/SpatialReference",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -21,12 +26,17 @@ require([
   "./modules/search.js",
 ], (
   Expand,
-  Point,
+
   Graphic,
 
   SketchViewModel,
 
+  CoordinateConversion,
+  Format,
   Conversion,
+  Point,
+  webMercatorUtils,
+  SpatialReference,
 
   layers,
   initScene,
@@ -63,6 +73,7 @@ require([
   /**************************************
    * Basemap gallery
    **************************************/
+  // TODO need viia konstandiks äkki kuhugi
   const basemapIds = [
     "be99602fc02d448eb859a0b426c0d5b6",
     "b6517d264b8f467fa5b14c382dfdf87a",
@@ -83,17 +94,18 @@ require([
   view.ui.add(basemapsExpand, "top-left");
   /**************************************
    *  Coordinate tool
+
    **************************************/
-  const ccWidget = initCoordinates.setupCoordinateWidget(view);
-
-  view.ui.add(ccWidget, "bottom-left");
-
-  const numberSearchPattern = /-?\d+[\.]?\d*/;
-
-  const newFormat = initCoordinates.setupNewFormat(numberSearchPattern);
-  ccWidget.formats.add(newFormat);
-
-  ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
+   view.when(() => {
+    const ccWidget = initCoordinates.setupCoordinateWidget(view);
+    const numberSearchPattern = /-?\d+[\.]?\d*/;
+    const newFormat = initCoordinates.setupNewFormat(numberSearchPattern);
+    ccWidget.formats.add(newFormat);
+  
+    ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
+  
+    view.ui.add(ccWidget, "bottom-left");
+  });
 
   /**************************************
    * Initialize the LineOfSight widget
