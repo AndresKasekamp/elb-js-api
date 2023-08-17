@@ -3,6 +3,8 @@
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
+  "esri/widgets/Slider",
+  "esri/Graphic",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -13,6 +15,8 @@ require([
   "./modules/sketch.js",
 ], (
   Conversion,
+  Slider,
+  Graphic,
 
   initLayers,
   initScene,
@@ -116,9 +120,26 @@ require([
   const actionbuttons = document.getElementById("actionbuttons");
   const edgeoperationbuttons = document.getElementById("edgeoperationbuttons");
 
+  const sliderbutton = document.getElementById("sliderDiv");
+
+  const extrudeSlider = new Slider({
+    container: sliderbutton,
+    min: 0,
+    max: 100,
+    steps: 1,
+    precision: 0,
+    labelFormatFunction: function (value, type) {
+      return `${value.toString()} m`; // Format label to show whole numbers
+    },
+    visibleElements: {
+      labels: true,
+      rangeLabels: true,
+    },
+    values: [10],
+  });
+
   const sketchViewModel = initSketch.setupSketchViewModel(view, graphicsLayer);
 
-  // TODO ma arvan et kuskile siia peab lisama kõrguse määramise kuulaja
   // after drawing the geometry, enter the update mode to update the geometry
   // and the deactivate the buttons
   sketchViewModel.on("create", (event) => {
@@ -137,17 +158,20 @@ require([
     if (event.state === "start") {
       startbuttons.style.display = "none";
       actionbuttons.style.display = "inline";
+      sliderbutton.style.display = "inline";
       if (
         event.graphics[0].geometry.type === "polygon" ||
         event.graphics[0].geometry.type === "polyline"
       ) {
         edgeoperationbuttons.style.display = "inline";
+        sliderbutton.style.display = "inline";
       }
     }
     if (event.state === "complete") {
       startbuttons.style.display = "inline";
       actionbuttons.style.display = "none";
       edgeoperationbuttons.style.display = "none";
+      sliderbutton.style.display = "none";
     }
   });
 
@@ -167,8 +191,10 @@ require([
       // to activate sketching the create method is called passing in the geometry type
       // from the data-type attribute of the html element
       sketchViewModel.create(event.target.getAttribute("data-type"));
+
       startbuttons.style.display = "none";
       actionbuttons.style.display = "inline";
+      sliderbutton.style.display = "none";
     });
   });
 
@@ -184,6 +210,47 @@ require([
   });
 
   view.ui.add("sketchPanel", "bottom-right");
+
+  // Update the building layer extrusion
+  extrudeSlider.on(["thumb-change", "thumb-drag"], extrudeSizeChanged);
+
+  // TODO vb siiski kutsuda uuendada ja siis teha restartupdatevent vms?
+  // TODO või kuidagi listida ja siis matchida aktiivse elemendiga?
+  function extrudeSizeChanged(event) {
+
+    //let first = graphicsLayer.graphics._items[0]
+    // Constructing a new graphic
+    let geom = graphicsLayer.graphics.getItemAt(0).geometry
+    let s = {
+      type: "polygon-3d",
+      symbolLayers: [
+        {
+          type: "extrude",
+          size: event.value, // extrude by 10 meters
+          material: {
+            color: white,
+          },
+          edges: {
+            type: "solid",
+            size: "3px",
+            color: blue,
+          },
+        },
+      ],
+    };
+    let p = new Graphic({
+      geometry: geom,
+      symbol: s,
+    })
+    graphicsLayer.add(p)
+    graphicsLayer.remove(graphicsLayer.graphics[0])
+    
+    //extrudedPolygon.symbolLayers[0].size = event.value; // Update extrude size
+    //sketchViewModel.polygonSymbol = extrudedPolygon; // Apply updated symbol to SketchViewModel
+    /*     sketchViewModel.polygonSymbol.symbolLayers.find(
+      (symbolLayer) => symbolLayer.type === "extrude"
+    ).size = event.value; */
+  }
 
   // default values for edge/move operations
   let edgeType = "split";
