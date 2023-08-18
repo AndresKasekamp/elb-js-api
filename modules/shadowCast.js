@@ -2,11 +2,13 @@
 
 define([
   "esri/widgets/ShadowCast",
-  "esri/widgets/ShadowCast/ShadowCastViewModel",
-], (ShadowCast, ShadowCastViewModel) => ({
+], (ShadowCast) => ({
   setupShadowCast: (view) =>
     new ShadowCast({
       view: view,
       visible: false,
+/*       viewModel: {
+          view: view,
+      } */
     }),
 }));
