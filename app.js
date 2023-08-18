@@ -22,6 +22,7 @@ require([
   "./modules/elevationProfile.js",
   "./modules/measurement.js",
   "./modules/shadowCast.js",
+  "./modules/slice.js",
 ], (
   Conversion,
   Slider,
@@ -37,7 +38,8 @@ require([
   initDaylight,
   initElevationProfile,
   initMeasurement,
-  initShadowCast
+  initShadowCast,
+  initSlice
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -174,6 +176,22 @@ require([
   );
 
   view.ui.add(expandShadowCast, "top-left");
+
+  /**************************************
+   * Slicing
+   **************************************/
+
+   const slicing = initSlice.setupSlice(view);
+
+   const expandSlicing = initLayerList.setupExpand(
+     "Slicing",
+     view,
+     slicing,
+     false,
+     "top-left"
+   );
+ 
+   view.ui.add(expandSlicing, "top-left");
 
   /**************************************
    * Sketching (1): Init settings
