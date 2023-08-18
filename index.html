@@ -17,6 +17,34 @@
 
 <body>
     <div id="viewDiv"></div>
+
+    <div id="topbar">
+        <button id="clearButton" class="action-button esri-icon-trash"
+        title="Clear Measurements"></button>
+        <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
+            title="Measure distance between two points"></button>
+        <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
+            title="Measure area"></button>
+    </div>
+
+    <!--     <div id="toolbarDiv" class="esri-component esri-widget">
+        <button
+          id="distance"
+          class="esri-widget--button esri-interactive esri-icon-measure-line"
+          title="Distance Measurement Tool"
+        ></button>
+        <button
+          id="area"
+          class="esri-widget--button esri-interactive esri-icon-measure-area"
+          title="Area Measurement Tool"
+        ></button>
+        <button
+          id="clear"
+          class="esri-widget--button esri-interactive esri-icon-trash"
+          title="Clear Measurements"
+        ></button>
+      </div> -->
+
     <div id="sketchPanel" class="esri-widget">
         <div id="startbuttons">
             <button id="point" data-type="point" class="esri-button starttool">
@@ -33,7 +61,7 @@
             <button id="cancel" class="esri-button">Cancel</button>
             <button id="done" class="esri-button">Done</button>
         </div>
-        
+
         <div id="sliderDiv"></div>
 
         <div id="edgeoperationbuttons">

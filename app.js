@@ -1,5 +1,8 @@
-// TODO add Senyang in-ads widget (kontrollida), muuta mõõtmeid
 // TODO legendi widget
+// TODO pärast lükata view.when() kõigile tööriistadele
+// TODO widgeti järjekord paika saada
+
+// TODO locate widget kui localhosti pealt saab ära tulla
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -14,6 +17,8 @@ require([
   "./modules/search.js",
   "./modules/sketch.js",
   "./modules/daylight.js",
+  "./modules/elevationProfile.js",
+  "./modules/measurement.js",
 ], (
   Conversion,
   Slider,
@@ -26,7 +31,9 @@ require([
   initLoS,
   initSearch,
   initSketch,
-  initDaylight
+  initDaylight,
+  initElevationProfile,
+  initMeasurement
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -56,17 +63,7 @@ require([
   /**************************************
    * Basemap gallery
    **************************************/
-  // TODO need viia konstandiks äkki kuhugi
-  const basemapIds = [
-    "be99602fc02d448eb859a0b426c0d5b6",
-    "b6517d264b8f467fa5b14c382dfdf87a",
-    "c5773442e91c48c392f28af6600169d0",
-    "1bc7e98137fe44129dd6653bef1920d0",
-    "287be80ff31d4c8babc48b2f959214f5",
-    "4ee7ecad357844bba5b95001de39f1e3",
-    "e5c6a086a5ae4d1991d4ca35733fe0ed",
-  ];
-  const basemaps = initLayerList.setupBasemapGallery(view, basemapIds);
+  const basemaps = initLayerList.setupBasemapGallery(view);
   const basemapsExpand = initLayerList.setupExpand(
     "List of Basemaps",
     view,
@@ -75,9 +72,9 @@ require([
     "top-left"
   );
   view.ui.add(basemapsExpand, "top-left");
+
   /**************************************
    *  Coordinate tool
-
    **************************************/
   view.when(() => {
     const ccWidget = initCoordinates.setupCoordinateWidget(view);
@@ -112,7 +109,7 @@ require([
   const searchWidget = initSearch.setupSearchWidget(view, customSearchSource);
   view.ui.add(searchWidget, "top-right");
 
-    /**************************************
+  /**************************************
    *  Daylight tool
    **************************************/
   const dayLightWidget = initDaylight.setupDaylight(view);
@@ -126,6 +123,37 @@ require([
 
   view.ui.add(expandDlight, "top-left");
 
+  /**************************************
+   *  Elevation profile
+   **************************************/
+  const elevationProfileWidget =
+    initElevationProfile.setupElevationProfile(view);
+  const expandEprofile = initLayerList.setupExpand(
+    "Expand elevation profile",
+    view,
+    elevationProfileWidget,
+    false,
+    "top-left"
+  );
+
+  view.ui.add(expandEprofile, "top-left");
+
+  /**************************************
+   *  Measurement 3D
+   * TODO custom expand widget ka muuta, aga initimise peab üle vaatama
+   **************************************/
+
+  initMeasurement.setupMeasurement(view);
+
+  const expandMeasurement = initLayerList.setupExpand(
+    "Measurement toolbar",
+    view,
+    document.getElementById("topbar"),
+    false,
+    "top-left"
+  );
+
+  view.ui.add(expandMeasurement, "top-left");
 
   /**************************************
    * Sketching (1): Init settings
@@ -237,7 +265,7 @@ require([
       symbolLayers: [
         {
           type: "extrude",
-          size: event.value, 
+          size: event.value,
           material: {
             color: white,
           },
