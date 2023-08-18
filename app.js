@@ -4,6 +4,8 @@
 
 // TODO locate widget kui localhosti pealt saab ära tulla
 
+// TODO screenshot widget lisada
+
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
   "esri/widgets/Slider",
@@ -19,6 +21,7 @@ require([
   "./modules/daylight.js",
   "./modules/elevationProfile.js",
   "./modules/measurement.js",
+  "./modules/shadowCast.js",
 ], (
   Conversion,
   Slider,
@@ -33,7 +36,8 @@ require([
   initSketch,
   initDaylight,
   initElevationProfile,
-  initMeasurement
+  initMeasurement,
+  initShadowCast
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -154,6 +158,22 @@ require([
   );
 
   view.ui.add(expandMeasurement, "top-left");
+
+  /**************************************
+   * Shadow casting
+   **************************************/
+
+  const shadowCast = initShadowCast.setupShadowCast(view);
+
+  const expandShadowCast = initLayerList.setupExpand(
+    "Shadow casting",
+    view,
+    shadowCast,
+    false,
+    "top-left"
+  );
+
+  view.ui.add(expandShadowCast, "top-left");
 
   /**************************************
    * Sketching (1): Init settings
