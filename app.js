@@ -13,6 +13,7 @@ require([
   "./modules/lineOfSight.js",
   "./modules/search.js",
   "./modules/sketch.js",
+  "./modules/daylight.js",
 ], (
   Conversion,
   Slider,
@@ -24,7 +25,8 @@ require([
   initCoordinates,
   initLoS,
   initSearch,
-  initSketch
+  initSketch,
+  initDaylight
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -106,11 +108,24 @@ require([
   /**************************************
    * Initialize the Search Widget
    **************************************/
-  const url = "http://inaadress.maaamet.ee/inaadress/gazetteer/";
-
-  const customSearchSource = initSearch.setupCustomSearchSource(url);
+  const customSearchSource = initSearch.setupCustomSearchSource();
   const searchWidget = initSearch.setupSearchWidget(view, customSearchSource);
   view.ui.add(searchWidget, "top-right");
+
+    /**************************************
+   *  Daylight tool
+   **************************************/
+  const dayLightWidget = initDaylight.setupDaylight(view);
+  const expandDlight = initLayerList.setupExpand(
+    "Expand daylight",
+    view,
+    dayLightWidget,
+    false,
+    "top-left"
+  );
+
+  view.ui.add(expandDlight, "top-left");
+
 
   /**************************************
    * Sketching (1): Init settings
@@ -214,19 +229,15 @@ require([
   // Update the building layer extrusion
   extrudeSlider.on(["thumb-change", "thumb-drag"], extrudeSizeChanged);
 
-  // TODO vb siiski kutsuda uuendada ja siis teha restartupdatevent vms?
-  // TODO või kuidagi listida ja siis matchida aktiivse elemendiga?
   function extrudeSizeChanged(event) {
-
-    //let first = graphicsLayer.graphics._items[0]
     // Constructing a new graphic
-    let geom = graphicsLayer.graphics.getItemAt(0).geometry
-    let s = {
+    let geom = graphicsLayer.graphics.getItemAt(0).geometry;
+    let symStyle = {
       type: "polygon-3d",
       symbolLayers: [
         {
           type: "extrude",
-          size: event.value, // extrude by 10 meters
+          size: event.value, 
           material: {
             color: white,
           },
@@ -240,13 +251,15 @@ require([
     };
     let p = new Graphic({
       geometry: geom,
-      symbol: s,
-    })
-    graphicsLayer.add(p)
-    graphicsLayer.remove(graphicsLayer.graphics[0])
-    
+      symbol: symStyle,
+    });
+    graphicsLayer.add(p);
+
+    // This did not work
     //extrudedPolygon.symbolLayers[0].size = event.value; // Update extrude size
     //sketchViewModel.polygonSymbol = extrudedPolygon; // Apply updated symbol to SketchViewModel
+
+    // This did not work either
     /*     sketchViewModel.polygonSymbol.symbolLayers.find(
       (symbolLayer) => symbolLayer.type === "extrude"
     ).size = event.value; */

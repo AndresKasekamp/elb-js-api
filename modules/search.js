@@ -1,7 +1,7 @@
-// TODO proovi CORS localil lahendada
-// TODO kas custom search peabki selline välja nägema?
+
 // TODO muuda kasti natuke suuremaks
 
+const inAdsUrl =  "http://inaadress.maaamet.ee/inaadress/gazetteer/";
 
 define([
   "esri/widgets/Search",
@@ -11,14 +11,14 @@ define([
   "esri/request",
   "esri/geometry/geometryEngine",
 ], (Search, SearchSource, Graphic, Point, esriRequest, geometryEngine) => ({
-  setupCustomSearchSource: (url) =>
+  setupCustomSearchSource: () =>
     new SearchSource({
       placeholder: "Find address with IN-ADS API",
       // Provide a getSuggestions method
       // to provide suggestions to the Search widget
       getSuggestions: (params) => {
         const keyword = params.suggestTerm; // keyword input by user
-        const suggestUrl = `${url}?address=${encodeURIComponent(keyword)}`;
+        const suggestUrl = `${inAdsUrl}?address=${encodeURIComponent(keyword)}`;
         return esriRequest(suggestUrl, { responseType: "json" }).then(
           (results) => {
             // Return Suggestion results to display
@@ -37,7 +37,7 @@ define([
       //results from the suggestions
       getResults: (params) => {
         const key = params.suggestResult.text; // keyword input by user
-        const newUrl = `${url}?address=${encodeURIComponent(key)}`;
+        const newUrl = `${inAdsUrl}?address=${encodeURIComponent(key)}`;
         return esriRequest(newUrl, {
           responseType: "json",
         }).then((results) => {
