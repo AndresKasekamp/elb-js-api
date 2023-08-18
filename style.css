@@ -6,6 +6,20 @@ body,
   margin: 0;
   height: 100%;
   width: 100%;
+  font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#performanceInfo {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1em;
+}
+
+table {
+  margin: 1em 0;
+}
+
+.center {
+  text-align: center;
 }
 
 #sketchPanel {
@@ -131,3 +145,6 @@ img {
   background: rgba(255, 51, 0, 0.1);
   border: 2px dashed rgb(255, 51, 0);
 }
+
+
+

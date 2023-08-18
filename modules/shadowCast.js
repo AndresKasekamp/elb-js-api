@@ -6,7 +6,7 @@ define([
   setupShadowCast: (view) =>
     new ShadowCast({
       view: view,
-      visible: false,
+      visible: true,
 /*       viewModel: {
           view: view,
       } */
