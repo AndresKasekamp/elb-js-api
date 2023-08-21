@@ -86,7 +86,6 @@ require([
      *  Coordinate tool
      **************************************/
     const ccWidget = initCoordinates.setupCoordinateWidget(view);
-    //const numberSearchPattern = /-?\d+[\.]?\d*/;
     const newFormat = initCoordinates.setupNewFormat();
     ccWidget.formats.add(newFormat);
 
