@@ -78,24 +78,20 @@ define([
       "edgeoperationbuttons"
     );
 
-    const extrudeSliderButton = document.getElementById("extrudeSliderContainer");
+    const extrudeSliderButton = document.getElementById(
+      "extrudeSliderContainer"
+    );
 
     const extrudeSlider = new Slider({
       container: "extrudeSlider",
-      precision: 2,
+      precision: 1,
       min: 0,
-      max: 100,
+      max: 500,
       steps: 1,
       values: [10],
-
-      /*     labelFormatFunction: function (value, type) {
-        return `${value.toString()} m`; // Format label to show whole numbers
-      },
       visibleElements: {
-        labels: true,
         rangeLabels: true,
       },
-      values: [10], */
     });
 
     const sketchViewModel = new SketchViewModel({
@@ -142,8 +138,9 @@ define([
           event.graphics[0].geometry.type === "polyline"
         ) {
           edgeoperationbuttons.style.display = "inline";
-        } if (event.graphics[0].geometry.type === "polyline") {
-         extrudeSliderButton.style.display = "none";
+        }
+        if (event.graphics[0].geometry.type === "polyline") {
+          extrudeSliderButton.style.display = "none";
         }
       }
       if (event.state === "complete") {
@@ -191,7 +188,9 @@ define([
     function extrudeSizeChanged(event) {
       const value = event.value;
       document.getElementById("extrude").innerHTML = value;
-      const extrudedPolygon = sketchViewModel.layer.graphics.getItemAt(sketchViewModel.layer.graphics.length - 1);
+      const extrudedPolygon = sketchViewModel.layer.graphics.getItemAt(
+        sketchViewModel.layer.graphics.length - 1
+      );
       const updatedSymbol = extrudedPolygon.symbol.clone();
       updatedSymbol.symbolLayers.items[0].size = value;
       extrudedPolygon.symbol = updatedSymbol;
