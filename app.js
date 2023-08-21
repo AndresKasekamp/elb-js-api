@@ -1,6 +1,8 @@
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
-
+  "esri/widgets/LayerList",
+  "esri/widgets/Expand",
+  "esri/layers/GroupLayer",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -19,6 +21,9 @@ require([
   "./modules/memoryTest.js",
 ], (
   Conversion,
+  LayerList,
+  Expand,
+  GroupLayer,
 
   initLayers,
   initScene,
@@ -55,7 +60,7 @@ require([
     /**************************************
      * Layerlist from scene
      **************************************/
-    const layerList = initLayerList.setupLayerList(view);
+    /*     const layerList = initLayerList.setupLayerList(view);
     const layerListExpand = initLayerList.setupExpand(
       "List of Layers",
       view,
@@ -63,7 +68,99 @@ require([
       false,
       "top-left"
     );
-    view.ui.add(layerListExpand, "top-left");
+    view.ui.add(layerListExpand, "top-left"); */
+
+    /**************************************
+     * Layerlist version 2
+     * TODO fixi see osa modulaarsemaks
+     * TODO järjekord ja opacity peaks olema slider
+     **************************************/
+    //deifne a layerlist
+    const layerList = new LayerList({
+      view: view,
+      listItemCreatedFunction: defineActions,
+    });
+
+    // have the names of the two types of trees
+    const layer1Name = "Taimkate analüütiline";
+    const layer2Name = "Taimkate realistlik";
+    const layersToRemove = [];
+    // Build a GroupLayer
+    const groupLayer = new GroupLayer({
+      title: "Taimkate",
+      visible: true,
+      visibilityMode: "exclusive",
+    });
+
+    async function defineActions(event) {
+      const item = event.item;
+
+      // TODO see on vaja fixida funktsiooni ssiise
+      await item.layer.when();
+      // when the item is the name of the tree,
+      // add the layers of the items to the group layer
+      if (item.title === layer1Name || item.title === layer2Name) {
+        groupLayer.add(item.layer);
+        layersToRemove.push(item.layer);
+      }
+
+      item.panel = {
+        content: "legend",
+      };
+
+      item.actionsSections = [
+        [
+          {
+            title: "Increase opacity",
+            className: "esri-icon-up",
+            id: "increase-opacity",
+          },
+          {
+            title: "Decrease opacity",
+            className: "esri-icon-down",
+            id: "decrease-opacity",
+          },
+        ],
+      ];
+    }
+
+    layerList.on("trigger-action", (event) => {
+      const layer = event.item.layer;
+
+      // Capture the action id.
+      const id = event.action.id;
+
+      if (id === "increase-opacity") {
+        // if the increase-opacity action is triggered, then
+        // increase the opacity of the GroupLayer by 0.25
+
+        if (layer.opacity < 1) {
+          layer.opacity += 0.25;
+        }
+      } else if (id === "decrease-opacity") {
+        // if the decrease-opacity action is triggered, then
+        // decrease the opacity of the GroupLayer by 0.25
+
+        if (layer.opacity > 0) {
+          layer.opacity -= 0.25;
+        }
+      }
+    });
+
+    const llExpand = new Expand({
+      view: view,
+      content: layerList,
+    });
+
+    view.ui.add(llExpand, "top-left");
+
+    // Remove the layers
+    layersToRemove.forEach((layer) => {
+      view.map.remove(layer);
+    });
+
+    // Add the GroupLayer to view
+    view.map.add(groupLayer);
 
     /**************************************
      * Basemap gallery
