@@ -1,5 +1,6 @@
 // TODO widgeti järjekord paika saada
 // TODO memory tabel on lappes css
+// TODO screenshot ja expand on halb kombo (teha nagu shadow vist)
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -212,33 +213,28 @@ require([
     /**************************************
      * Perfomance info
      **************************************/
-    // TODO checki fonte ja stiile
     // TODO modulariseeri
-    const expandMemory = new Expand({
-      expandTooltip: "Memory",
-      view: view,
-      content: document.getElementById("performanceInfo"),
-      expanded: false,
-      group: "top-right",
-      expandIcon: "graph-bar-side-by-side",
+
+    let isPerformanceInfoVisible = false;
+    const performanceMeasureBtn = document.getElementById(
+      "performanceMeasureBtn"
+    );
+
+    view.ui.add(performanceMeasureBtn, "top-left");
+    const performanceMeasureInfo = document.getElementById("performanceInfo");
+
+    //view.ui.remove(performanceMeasureInfo, "top-right")
+    performanceMeasureBtn.addEventListener("click", () => {
+      if (isPerformanceInfoVisible) {
+        performanceMeasureInfo.style.display = "none";
+      } else {
+        updatePerformanceInfo()
+        performanceMeasureInfo.style.display = "inline";
+        view.ui.add(performanceMeasureInfo, "top-right");
+      }
+      // Update the flag to reflect the new visibility state
+      isPerformanceInfoVisible = !isPerformanceInfoVisible;
     });
-
-    /*     const expandMemory = initLayerList.setupExpand(
-      "Memory",
-      view,
-      document.getElementById("performanceInfo"),
-      true,
-      "top-right",
-      "graph-bar-side-by-side"
-    ); */
-
-    // TODO lükka välja kihid, mis on null koodis (võtavad ruumi)
-    // TODO vaata üle tsentreerimine (tuvasta viga kust ta loeb)
-
-    updatePerformanceInfo();
-    // TODO või panna mingi ootaja timeout sisse, et ära renderdaks?
-    //view.ui.add(expandMemory, "top-right");
-    view.ui.add(document.getElementById("performanceInfo"), "top-right");
   });
 
   const updatePerformanceInfo = () => {

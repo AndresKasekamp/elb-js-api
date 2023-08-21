@@ -1,110 +1,167 @@
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
     <title>ELB JS API testing</title>
 
     <!-- CSS custom -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 
     <!-- Esri JS -->
     <script src="https://js.arcgis.com/4.27/"></script>
 
     <!-- Custom widgets -->
     <script type="module" src="app.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="viewDiv" class="esri-widget">
+      <button
+        id="screenshotBtn"
+        class="action-button2 esri-widget"
+        aria-label="Select screenshot area"
+        title="Select screenshot area"
+      >
+        Select screenshot area
+      </button>
 
-        <button id="screenshotBtn" class="action-button2 esri-widget" aria-label="Select screenshot area"
-            title="Select screenshot area">
-            Select screenshot area
-        </button>
-
-        <div id="performanceInfo">
-            <h4 id="title"></h4>
-            <table id="memory"></table>
-            <table id="count"></table>
-        </div>
-
+      <div id="performanceInfo">
+        <h4 id="title"></h4>
+        <table id="memory"></table>
+        <table id="count"></table>
+      </div>
     </div>
 
-    <button id="shadowCastBtn" class="esri-icon-collection esri-widget--button esri-widget esri-icon-measure-building-height-shadow shadowcast-button" aria-label="Shadow casting"
-        title="Shadow cast"></button>
+    <button
+      id="shadowCastBtn"
+      class="esri-icon-collection esri-widget--button esri-widget esri-icon-measure-building-height-shadow shadowcast-button"
+      aria-label="Shadow casting"
+      title="Shadow cast"
+    ></button>
+
+    <button
+      id="performanceMeasureBtn"
+      class="esri-icon-collection esri-widget--button esri-widget esri-icon-notice-round shadowcast-button"
+      aria-label="Perfomance measure"
+      title="Performance measure"
+    ></button>
 
     <div id="screenshotDiv" class="hide">
-        <img class="js-screenshot-image" />
-        <div>
-            <label>Set a text to be displayed on the image: </label><input type="text" placeholder="Image text"
-                id="textInput" autofocus />
-        </div>
-        <button id="downloadBtn" class="action-button2" aria-label="Download image" title="Download image">
-            Download image
-        </button>
-        <button id="closeBtn" class="action-button2" aria-label="Back to webscene" title="Back to webscene">
-            Back to webscene
-        </button>
+      <img class="js-screenshot-image" />
+      <div>
+        <label>Set a text to be displayed on the image: </label
+        ><input type="text" placeholder="Image text" id="textInput" autofocus />
+      </div>
+      <button
+        id="downloadBtn"
+        class="action-button2"
+        aria-label="Download image"
+        title="Download image"
+      >
+        Download image
+      </button>
+      <button
+        id="closeBtn"
+        class="action-button2"
+        aria-label="Back to webscene"
+        title="Back to webscene"
+      >
+        Back to webscene
+      </button>
     </div>
     <div id="maskDiv" class="hide screenshotCursor"></div>
 
     <div id="topbar">
-        <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
-        <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
-            title="Measure distance between two points"></button>
-        <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
-            title="Measure area"></button>
+      <button
+        id="clearButton"
+        class="action-button esri-icon-trash"
+        title="Clear Measurements"
+      ></button>
+      <button
+        class="action-button esri-icon-measure-line"
+        id="distanceButton"
+        type="button"
+        title="Measure distance between two points"
+      ></button>
+      <button
+        class="action-button esri-icon-measure-area"
+        id="areaButton"
+        type="button"
+        title="Measure area"
+      ></button>
     </div>
-
 
     <div id="sketchPanel" class="esri-widget">
-        <div id="startbuttons">
-            <button id="point" data-type="point" class="esri-button starttool">
-                Draw a point of interest
-            </button>
-            <button id="line" data-type="polyline" class="esri-button starttool">
-                Draw a route
-            </button>
-            <button id="extrudedPolygon" data-type="polygon" class="esri-button starttool">
-                Draw a building
-            </button>
-        </div>
-        <div id="actionbuttons">
-            <button id="cancel" class="esri-button">Cancel</button>
-            <button id="done" class="esri-button">Done</button>
-        </div>
+      <div id="startbuttons">
+        <button id="point" data-type="point" class="esri-button starttool">
+          Draw a point of interest
+        </button>
+        <button id="line" data-type="polyline" class="esri-button starttool">
+          Draw a route
+        </button>
+        <button
+          id="extrudedPolygon"
+          data-type="polygon"
+          class="esri-button starttool"
+        >
+          Draw a building
+        </button>
+      </div>
+      <div id="actionbuttons">
+        <button id="cancel" class="esri-button">Cancel</button>
+        <button id="done" class="esri-button">Done</button>
+      </div>
 
-        <div id="edgeoperationbuttons">
-            <div id="extrudeSliderContainer">
-                <div>Extrude value: <span id="extrude">10</span></div>
-                <div id="extrudeSlider"></div>
-            </div>
-            <br />Select the edge operation:
-            <div class="update-options" id="edge">
-                <button class="esri-widget--button edge-button" id="none-edge-button" value="none">
-                    None
-                </button>
-                <button class="esri-widget--button edge-button edge-button-selected" id="split-edge-button"
-                    value="split">
-                    Split
-                </button>
-                <button class="esri-widget--button edge-button" id="offset-edge-button" value="offset">
-                    Offset
-                </button>
-            </div>
-            Select the move operation:
-            <div class="update-options" id="shape">
-                <button class="esri-widget--button shape-button" id="none-shape-button" value="none">
-                    None
-                </button>
-                <button class="esri-widget--button shape-button shape-button-selected" id="move-shape-button"
-                    value="move">
-                    Move
-                </button>
-            </div>
+      <div id="edgeoperationbuttons">
+        <div id="extrudeSliderContainer">
+          <div>Extrude value: <span id="extrude">10</span></div>
+          <div id="extrudeSlider"></div>
         </div>
+        <br />Select the edge operation:
+        <div class="update-options" id="edge">
+          <button
+            class="esri-widget--button edge-button"
+            id="none-edge-button"
+            value="none"
+          >
+            None
+          </button>
+          <button
+            class="esri-widget--button edge-button edge-button-selected"
+            id="split-edge-button"
+            value="split"
+          >
+            Split
+          </button>
+          <button
+            class="esri-widget--button edge-button"
+            id="offset-edge-button"
+            value="offset"
+          >
+            Offset
+          </button>
+        </div>
+        Select the move operation:
+        <div class="update-options" id="shape">
+          <button
+            class="esri-widget--button shape-button"
+            id="none-shape-button"
+            value="none"
+          >
+            None
+          </button>
+          <button
+            class="esri-widget--button shape-button shape-button-selected"
+            id="move-shape-button"
+            value="move"
+          >
+            Move
+          </button>
+        </div>
+      </div>
     </div>
-</body>
-
+  </body>
 </html>
