@@ -177,6 +177,10 @@ require([
 
     view.ui.add(expandShadowCast, "top-left");
 
+    expandShadowCast.on("click", () => {
+      console.log("I tried to expand");
+    });
+
     /**************************************
      * Slicing
      **************************************/

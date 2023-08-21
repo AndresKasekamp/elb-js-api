@@ -187,43 +187,10 @@ define([
     function extrudeSizeChanged(event) {
       const value = event.value;
       document.getElementById("extrude").innerHTML = value;
-      const extrudedPolygon = sketchViewModel.layer.graphics.getItemAt(0);
+      const extrudedPolygon = sketchViewModel.layer.graphics.getItemAt(sketchViewModel.layer.graphics.length - 1);
       const updatedSymbol = extrudedPolygon.symbol.clone();
       updatedSymbol.symbolLayers.items[0].size = value;
       extrudedPolygon.symbol = updatedSymbol;
-      // Constructing a new graphic
-      /*     let geom = graphicsLayer.graphics.getItemAt(0).geometry;
-    let symStyle = {
-      type: "polygon-3d",
-      symbolLayers: [
-        {
-          type: "extrude",
-          size: event.value,
-          material: {
-            color: white,
-          },
-          edges: {
-            type: "solid",
-            size: "3px",
-            color: blue,
-          },
-        },
-      ],
-    };
-    let p = new Graphic({
-      geometry: geom,
-      symbol: symStyle,
-    });
-    graphicsLayer.add(p); */
-
-      // This did not work
-      //extrudedPolygon.symbolLayers[0].size = event.value; // Update extrude size
-      //sketchViewModel.polygonSymbol = extrudedPolygon; // Apply updated symbol to SketchViewModel
-
-      // This did not work either
-      /*     sketchViewModel.polygonSymbol.symbolLayers.find(
-      (symbolLayer) => symbolLayer.type === "extrude"
-    ).size = event.value; */
     }
 
     const expandSketch = new Expand({
