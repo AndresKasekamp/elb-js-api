@@ -1,6 +1,8 @@
 // TODO lisada BASEMAP with Z?
 // TODO koordinaatide conversion on ikka lappes
 
+const numberSearchPattern = /-?\d+[\.]?\d*/;
+
 define([
   "esri/widgets/CoordinateConversion",
   "esri/widgets/CoordinateConversion/support/Format",
@@ -12,7 +14,7 @@ define([
       view: view,
     }),
 
-  setupNewFormat: (numberSearchPattern) =>
+  setupNewFormat: () =>
     new Format({
       // The format's name should be unique with respect to other formats used by the widget
       name: "XYZ",

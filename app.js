@@ -5,8 +5,6 @@
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
-  "esri/widgets/Slider",
-  "esri/Graphic",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -25,8 +23,6 @@ require([
   "./modules/memoryTest.js",
 ], (
   Conversion,
-  Slider,
-  Graphic,
 
   initLayers,
   initScene,
@@ -59,8 +55,10 @@ require([
    **************************************/
   // TODO kõik mõistlik läheb selle sisse
 
-
   view.when(() => {
+    /**************************************
+     * Layerlist from scene
+     **************************************/
     const layerList = initLayerList.setupLayerList(view);
     const layerListExpand = initLayerList.setupExpand(
       "List of Layers",
@@ -70,25 +68,155 @@ require([
       "top-left"
     );
     view.ui.add(layerListExpand, "top-left");
-  });
 
-  /**************************************
-   * Basemap gallery
-   **************************************/
-  const basemaps = initLayerList.setupBasemapGallery(view);
-  const basemapsExpand = initLayerList.setupExpand(
-    "List of Basemaps",
-    view,
-    basemaps,
-    false,
-    "top-left"
-  );
-  view.ui.add(basemapsExpand, "top-left");
+    /**************************************
+     * Basemap gallery
+     **************************************/
+    const basemaps = initLayerList.setupBasemapGallery(view);
+    const basemapsExpand = initLayerList.setupExpand(
+      "List of Basemaps",
+      view,
+      basemaps,
+      false,
+      "top-left"
+    );
+    view.ui.add(basemapsExpand, "top-left");
+
+    /**************************************
+     *  Coordinate tool
+     **************************************/
+    const ccWidget = initCoordinates.setupCoordinateWidget(view);
+    //const numberSearchPattern = /-?\d+[\.]?\d*/;
+    const newFormat = initCoordinates.setupNewFormat();
+    ccWidget.formats.add(newFormat);
+
+    ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
+
+    view.ui.add(ccWidget, "bottom-left");
+
+    /**************************************
+     * Initialize the LineOfSight widget
+     **************************************/
+    const lineOfSight = initLoS.setupLoS(view);
+
+    const expandLoS = initLayerList.setupExpand(
+      "Expand line of sight widget",
+      view,
+      lineOfSight,
+      false,
+      "top-left"
+    );
+
+    view.ui.add(expandLoS, "top-left");
+
+    /**************************************
+     * Initialize the Search Widget
+     **************************************/
+    const customSearchSource = initSearch.setupCustomSearchSource();
+    const searchWidget = initSearch.setupSearchWidget(view, customSearchSource);
+    view.ui.add(searchWidget, "top-right");
+
+    /**************************************
+     *  Daylight tool
+     **************************************/
+    const dayLightWidget = initDaylight.setupDaylight(view);
+    const expandDlight = initLayerList.setupExpand(
+      "Expand daylight",
+      view,
+      dayLightWidget,
+      false,
+      "top-left"
+    );
+
+    view.ui.add(expandDlight, "top-left");
+
+    /**************************************
+     *  Elevation profile
+     **************************************/
+    const elevationProfileWidget =
+      initElevationProfile.setupElevationProfile(view);
+    const expandEprofile = initLayerList.setupExpand(
+      "Expand elevation profile",
+      view,
+      elevationProfileWidget,
+      false,
+      "top-left"
+    );
+
+    view.ui.add(expandEprofile, "top-left");
+
+    /**************************************
+     *  Measurement 3D
+     * TODO custom expand widget ka muuta, aga initimise peab üle vaatama
+     **************************************/
+
+    initMeasurement.setupMeasurement(view);
+
+    const expandMeasurement = initLayerList.setupExpand(
+      "Measurement toolbar",
+      view,
+      document.getElementById("topbar"),
+      false,
+      "top-left"
+    );
+
+    view.ui.add(expandMeasurement, "top-left");
+
+    /**************************************
+     * Shadow casting
+     **************************************/
+
+    const shadowCast = initShadowCast.setupShadowCast(view);
+
+    const expandShadowCast = initLayerList.setupExpand(
+      "Shadow casting",
+      view,
+      shadowCast,
+      false,
+      "top-left"
+    );
+
+    view.ui.add(expandShadowCast, "top-left");
+
+    /**************************************
+     * Slicing
+     **************************************/
+
+    const slicing = initSlice.setupSlice(view);
+
+    const expandSlicing = initLayerList.setupExpand(
+      "Slicing",
+      view,
+      slicing,
+      false,
+      "top-left"
+    );
+
+    view.ui.add(expandSlicing, "top-left");
+
+    /**************************************
+     * Locate
+     **************************************/
+    const locate = initLocate.setupLocate(view);
+
+    view.ui.add(locate, "top-left");
+
+    /**************************************
+     * Screenshot
+     **************************************/
+
+    initScreenShot.setupScreenshot(view);
+
+    /**************************************
+     * Sketching
+     **************************************/
+    initSketch.setupSketch(view, graphicsLayer);
+  });
 
   /**************************************
    * Perfomance info
    **************************************/
-  // TODO see performance oleks vaja importida ja vaadata mis on reaaselt aktiivne
+  /*   // TODO see performance oleks vaja importida ja vaadata mis on reaaselt aktiivne
   // TODO ilmselt peaita mingisuguse tabi taha ka expand (ikoon lisada)
   view.when(() => {
     const expandMemory = initLayerList.setupExpand(
@@ -97,7 +225,7 @@ require([
       document.getElementById("performanceInfo"),
       false,
       "top-right"
-    )
+    );
     view.ui.add(expandMemory, "top-right");
     updatePerformanceInfo();
   });
@@ -168,140 +296,5 @@ require([
     const kilobyte = 1024;
     const megabyte = kilobyte * 1024;
     return Math.round(bytes / megabyte);
-  }
-
-  /**************************************
-   *  Coordinate tool
-   **************************************/
-  view.when(() => {
-    const ccWidget = initCoordinates.setupCoordinateWidget(view);
-    const numberSearchPattern = /-?\d+[\.]?\d*/;
-    const newFormat = initCoordinates.setupNewFormat(numberSearchPattern);
-    ccWidget.formats.add(newFormat);
-
-    ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
-
-    view.ui.add(ccWidget, "bottom-left");
-  });
-
-  /**************************************
-   * Initialize the LineOfSight widget
-   **************************************/
-  const lineOfSight = initLoS.setupLoS(view);
-
-  const expandLoS = initLayerList.setupExpand(
-    "Expand line of sight widget",
-    view,
-    lineOfSight,
-    false,
-    "top-left"
-  );
-
-  view.ui.add(expandLoS, "top-left");
-
-  /**************************************
-   * Initialize the Search Widget
-   **************************************/
-  const customSearchSource = initSearch.setupCustomSearchSource();
-  const searchWidget = initSearch.setupSearchWidget(view, customSearchSource);
-  view.ui.add(searchWidget, "top-right");
-
-  /**************************************
-   *  Daylight tool
-   **************************************/
-  const dayLightWidget = initDaylight.setupDaylight(view);
-  const expandDlight = initLayerList.setupExpand(
-    "Expand daylight",
-    view,
-    dayLightWidget,
-    false,
-    "top-left"
-  );
-
-  view.ui.add(expandDlight, "top-left");
-
-  /**************************************
-   *  Elevation profile
-   **************************************/
-  const elevationProfileWidget =
-    initElevationProfile.setupElevationProfile(view);
-  const expandEprofile = initLayerList.setupExpand(
-    "Expand elevation profile",
-    view,
-    elevationProfileWidget,
-    false,
-    "top-left"
-  );
-
-  view.ui.add(expandEprofile, "top-left");
-
-  /**************************************
-   *  Measurement 3D
-   * TODO custom expand widget ka muuta, aga initimise peab üle vaatama
-   **************************************/
-
-  initMeasurement.setupMeasurement(view);
-
-  const expandMeasurement = initLayerList.setupExpand(
-    "Measurement toolbar",
-    view,
-    document.getElementById("topbar"),
-    false,
-    "top-left"
-  );
-
-  view.ui.add(expandMeasurement, "top-left");
-
-  /**************************************
-   * Shadow casting
-   **************************************/
-
-  const shadowCast = initShadowCast.setupShadowCast(view);
-
-  const expandShadowCast = initLayerList.setupExpand(
-    "Shadow casting",
-    view,
-    shadowCast,
-    false,
-    "top-left"
-  );
-
-  view.ui.add(expandShadowCast, "top-left");
-
-  /**************************************
-   * Slicing
-   **************************************/
-
-  const slicing = initSlice.setupSlice(view);
-
-  const expandSlicing = initLayerList.setupExpand(
-    "Slicing",
-    view,
-    slicing,
-    false,
-    "top-left"
-  );
-
-  view.ui.add(expandSlicing, "top-left");
-
-  /**************************************
-   * Locate
-   **************************************/
-  const locate = initLocate.setupLocate(view);
-
-  view.ui.add(locate, "top-left");
-
-  /**************************************
-   * Screenshot
-   **************************************/
-
-  initScreenShot.setupScreenshot(view);
-
-  /**************************************
-   * Sketching (1): Init settings
-   **************************************/
-  // TODO kogu see asi on vaja funktsiooni sisse tõsta ja importida
-
-  initSketch.setupSketch(view, graphicsLayer);
-
+  } */
 });
