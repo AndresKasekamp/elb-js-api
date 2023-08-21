@@ -1,4 +1,5 @@
 // TODO kui tööle saad, siis interface ära muuta
+// TODO või proovida sättida default sketch toolbar alguses (esri oma) ja ülejäänud jätta samaks, kuna see draw a building/draw pole optimaalne alati
 
 // Graphic UI parameters
 const blue = [82, 82, 122, 0.9];

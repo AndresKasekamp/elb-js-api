@@ -1,6 +1,3 @@
-// TODO vaata kas screenshotile saaks panna veel mingeid funktsioone juurde, kuidas käib defineeirmine
-// TODO topi mingi kaamera screenshot pildi sisse ka
-// TODO ilmselt teha on click eventiga hoopis ikooni peale vajutades kuidagi
 define(["esri/widgets/Expand"], (Expand) => ({
   setupScreenshot: (view) => {
     // the orange mask used to select the area

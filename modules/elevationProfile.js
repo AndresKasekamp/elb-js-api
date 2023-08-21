@@ -17,7 +17,6 @@ define(["esri/widgets/ElevationProfile"], (ElevationProfile) => ({
         // hide the select button
         // this button can be displayed when there are polylines in the
         // scene to select and display the elevation profile for
-        // TODO näiteks ise joonistad line
         visibleElements: {
             selectButton: true
         }

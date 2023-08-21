@@ -1,10 +1,6 @@
-// TODO widgeti järjekord paika saada
-// TODO memory tabel on lappes css
-// TODO screenshot ja expand on halb kombo (teha nagu shadow vist)
-
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
-  "esri/widgets/Expand",
+
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -23,7 +19,6 @@ require([
   "./modules/memoryTest.js",
 ], (
   Conversion,
-  Expand,
 
   initLayers,
   initScene,
@@ -202,7 +197,6 @@ require([
     /**************************************
      * Screenshot
      **************************************/
-    // TODO pane mingi expand widgeti sisse screenshot area (camera näiteks)
     initScreenShot.setupScreenshot(view);
 
     /**************************************

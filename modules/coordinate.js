@@ -1,5 +1,4 @@
-// TODO lisada BASEMAP with Z?
-// TODO koordinaatide conversion on ikka lappes
+
 
 const numberSearchPattern = /-?\d+[\.]?\d*/;
 
