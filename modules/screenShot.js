@@ -1,6 +1,7 @@
 // TODO vaata kas screenshotile saaks panna veel mingeid funktsioone juurde, kuidas käib defineeirmine
 // TODO topi mingi kaamera screenshot pildi sisse ka
-define([], () => ({
+// TODO ilmselt teha on click eventiga hoopis ikooni peale vajutades kuidagi
+define(["esri/widgets/Expand"], (Expand) => ({
   setupScreenshot: (view) => {
     // the button that triggers area selection mode
     const screenshotBtn = document.getElementById("screenshotBtn");
@@ -17,7 +18,17 @@ define([], () => ({
     // the button to hide the print preview html element
     const closeBtn = document.getElementById("closeBtn");
 
-    view.ui.add(screenshotBtn, "top-right");
+    const expandScreenShot = new Expand({
+      expandTooltip: "Screenshot",
+      view: view,
+      content: screenshotBtn,
+      expanded: false,
+      group: "top-left",
+      expandIcon: "camera-plus",
+    });
+
+    //view.ui.add(screenshotBtn, "top-right");
+    view.ui.add(expandScreenShot, "top-left");
 
     // add an event listener to trigger the area selection mode
     screenshotBtn.addEventListener("click", () => {

@@ -1,10 +1,9 @@
-// TODO legendi widget
-// TODO pärast lükata view.when() kõigile tööriistadele
 // TODO widgeti järjekord paika saada
 // TODO memory tabel on lappes css
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
+  "esri/widgets/Expand",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -23,6 +22,7 @@ require([
   "./modules/memoryTest.js",
 ], (
   Conversion,
+  Expand,
 
   initLayers,
   initScene,
@@ -203,30 +203,44 @@ require([
     /**************************************
      * Screenshot
      **************************************/
-
+    // TODO pane mingi expand widgeti sisse screenshot area (camera näiteks)
     initScreenShot.setupScreenshot(view);
 
     /**************************************
      * Sketching
      **************************************/
     initSketch.setupSketch(view, graphicsLayer);
-  });
 
-  /**************************************
-   * Perfomance info
-   **************************************/
-  /*   // TODO see performance oleks vaja importida ja vaadata mis on reaaselt aktiivne
-  // TODO ilmselt peaita mingisuguse tabi taha ka expand (ikoon lisada)
-  view.when(() => {
-    const expandMemory = initLayerList.setupExpand(
+    /**************************************
+     * Perfomance info
+     **************************************/
+    // TODO checki fonte ja stiile
+    // TODO modulariseeri
+    const expandMemory = new Expand({
+      expandTooltip: "Memory",
+      view: view,
+      content: document.getElementById("performanceInfo"),
+      expanded: false,
+      group: "top-right",
+      expandIcon: "graph-bar-side-by-side",
+    });
+
+    /*     const expandMemory = initLayerList.setupExpand(
       "Memory",
       view,
       document.getElementById("performanceInfo"),
-      false,
-      "top-right"
-    );
-    view.ui.add(expandMemory, "top-right");
+      true,
+      "top-right",
+      "graph-bar-side-by-side"
+    ); */
+
+    // TODO lükka välja kihid, mis on null koodis (võtavad ruumi)
+    // TODO vaata üle tsentreerimine (tuvasta viga kust ta loeb)
+
     updatePerformanceInfo();
+    // TODO või panna mingi ootaja timeout sisse, et ära renderdaks?
+    //view.ui.add(expandMemory, "top-right");
+    view.ui.add(document.getElementById("performanceInfo"), "top-right");
   });
 
   const updatePerformanceInfo = () => {
@@ -255,11 +269,13 @@ require([
       <th>Memory(MB)</th>
     </tr>`;
     for (let layerInfo of stats.layerPerformanceInfos) {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${
-        layerInfo.layer.title
-      }</td><td class="center">${getMB(layerInfo.memory)}</td>`;
-      tableMemoryContainer.appendChild(row);
+      if (layerInfo.memory !== 0) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${
+          layerInfo.layer.title
+        }</td><td class="center">${getMB(layerInfo.memory)}</td>`;
+        tableMemoryContainer.appendChild(row);
+      }
     }
 
     tableCountContainer.innerHTML = `<tr>
@@ -269,7 +285,10 @@ require([
     </tr>`;
 
     for (let layerInfo of stats.layerPerformanceInfos) {
-      if (layerInfo.maximumNumberOfFeatures) {
+      if (
+        layerInfo.maximumNumberOfFeatures &&
+        layerInfo.displayedNumberOfFeatures !== 0
+      ) {
         const row = document.createElement("tr");
         row.innerHTML = `<td>${layerInfo.layer.title}`;
         row.innerHTML += `<td class="center">${
@@ -295,5 +314,5 @@ require([
     const kilobyte = 1024;
     const megabyte = kilobyte * 1024;
     return Math.round(bytes / megabyte);
-  } */
+  }
 });

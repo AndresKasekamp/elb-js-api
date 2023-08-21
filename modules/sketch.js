@@ -62,10 +62,11 @@ const point = {
   ],
 };
 
-define(["esri/widgets/Sketch/SketchViewModel", "esri/widgets/Slider"], (
-  SketchViewModel,
-  Slider
-) => ({
+define([
+  "esri/widgets/Sketch/SketchViewModel",
+  "esri/widgets/Slider",
+  "esri/widgets/Expand",
+], (SketchViewModel, Slider, Expand) => ({
   setupSketch: (view, graphicsLayer) => {
     /**************************************
      * Sketching (1): Init settings
@@ -225,7 +226,16 @@ define(["esri/widgets/Sketch/SketchViewModel", "esri/widgets/Slider"], (
     ).size = event.value; */
     }
 
-    view.ui.add("sketchPanel", "bottom-right");
+    const expandSketch = new Expand({
+      expandTooltip: "Sketching",
+      view: view,
+      content: document.getElementById("sketchPanel"),
+      expanded: false,
+      group: "top-left",
+      expandIcon: "freehand",
+    });
+
+    view.ui.add(expandSketch, "top-left");
 
     // default values for edge/move operations
     let edgeType = "split";
