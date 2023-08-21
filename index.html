@@ -17,11 +17,6 @@
 
 <body>
     <div id="viewDiv" class="esri-widget">
-        <button id="screenshotBtn" class="action-button2 esri-widget" aria-label="Select screenshot area"
-            title="Select screenshot area">
-            Select screenshot area
-        </button>
-
         <div id="performanceInfo">
             <h4 id="title"></h4>
             <table id="memory"></table>
@@ -29,13 +24,14 @@
         </div>
     </div>
 
-    <button id="shadowCastBtn"
-        class="esri-icon-collection esri-widget--button esri-widget esri-icon-measure-building-height-shadow shadowcast-button"
+    <button id="shadowCastBtn" class=" esri-widget--button esri-icon-measure-building-height-shadow shadowcast-button"
         aria-label="Shadow casting" title="Shadow cast"></button>
 
-    <button id="performanceMeasureBtn"
-        class="esri-icon-collection esri-widget--button esri-widget esri-icon-lightbulb shadowcast-button"
+    <button id="performanceMeasureBtn" class=" esri-widget--button esri-icon-lightbulb shadowcast-button"
         aria-label="Perfomance measure" title="Performance measure"></button>
+
+    <button id="screenShotButton" class=" esri-widget--button esri-icon-share2 shadowcast-button"
+        aria-label="Take a screenshot" title="Take a screenshot"></button>
 
     <div id="screenshotDiv" class="hide">
         <img class="js-screenshot-image" />

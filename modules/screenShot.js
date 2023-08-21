@@ -3,9 +3,6 @@
 // TODO ilmselt teha on click eventiga hoopis ikooni peale vajutades kuidagi
 define(["esri/widgets/Expand"], (Expand) => ({
   setupScreenshot: (view) => {
-    // the button that triggers area selection mode
-    const screenshotBtn = document.getElementById("screenshotBtn");
-
     // the orange mask used to select the area
     const maskDiv = document.getElementById("maskDiv");
 
@@ -18,6 +15,9 @@ define(["esri/widgets/Expand"], (Expand) => ({
     // the button to hide the print preview html element
     const closeBtn = document.getElementById("closeBtn");
 
+    // the button that triggers area selection mode
+    const screenshotBtn = document.getElementById("screenShotButton");
+
     const expandScreenShot = new Expand({
       expandTooltip: "Screenshot",
       view: view,
@@ -27,8 +27,10 @@ define(["esri/widgets/Expand"], (Expand) => ({
       expandIcon: "camera-plus",
     });
 
+    view.ui.add(screenshotBtn, "top-left");
+
     //view.ui.add(screenshotBtn, "top-right");
-    view.ui.add(expandScreenShot, "top-left");
+    //view.ui.add(expandScreenShot, "top-left");
 
     // add an event listener to trigger the area selection mode
     screenshotBtn.addEventListener("click", () => {
