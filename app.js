@@ -164,21 +164,15 @@ require([
     /**************************************
      * Shadow casting
      **************************************/
-    // TODO bug fix teha või vähemalt uurida
     const shadowCast = initShadowCast.setupShadowCast(view);
 
-    const expandShadowCast = initLayerList.setupExpand(
-      "Shadow casting",
-      view,
-      shadowCast,
-      false,
-      "top-left"
-    );
+    const shadowCastBtn = document.getElementById("shadowCastBtn");
 
-    view.ui.add(expandShadowCast, "top-left");
+    view.ui.add(shadowCastBtn, "top-left");
 
-    shadowCast.on("click", () => {
-      console.log("I tried to expand");
+    shadowCastBtn.addEventListener("click", () => {
+      shadowCast.visible = !shadowCast.visible;
+      view.ui.add(shadowCast, "top-right");
     });
 
     /**************************************
