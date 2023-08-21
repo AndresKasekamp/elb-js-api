@@ -78,6 +78,8 @@ define([
       "edgeoperationbuttons"
     );
 
+    const extrudeSliderButton = document.getElementById("extrudeSliderContainer");
+
     const extrudeSlider = new Slider({
       container: "extrudeSlider",
       precision: 2,
@@ -140,6 +142,8 @@ define([
           event.graphics[0].geometry.type === "polyline"
         ) {
           edgeoperationbuttons.style.display = "inline";
+        } if (event.graphics[0].geometry.type === "polyline") {
+         extrudeSliderButton.style.display = "none";
         }
       }
       if (event.state === "complete") {
