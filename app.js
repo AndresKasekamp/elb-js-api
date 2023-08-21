@@ -57,6 +57,9 @@ require([
   /**************************************
    * Adding a layer group, expand
    **************************************/
+  // TODO kõik mõistlik läheb selle sisse
+
+
   view.when(() => {
     const layerList = initLayerList.setupLayerList(view);
     const layerListExpand = initLayerList.setupExpand(
@@ -86,7 +89,7 @@ require([
    * Perfomance info
    **************************************/
   // TODO see performance oleks vaja importida ja vaadata mis on reaaselt aktiivne
-  // TODO ilmselt peaita mingisuguse tabi taha ka expand
+  // TODO ilmselt peaita mingisuguse tabi taha ka expand (ikoon lisada)
   view.when(() => {
     const expandMemory = initLayerList.setupExpand(
       "Memory",
@@ -297,27 +300,29 @@ require([
   /**************************************
    * Sketching (1): Init settings
    **************************************/
+  // TODO kogu see asi on vaja funktsiooni sisse tõsta ja importida
+
   // Set-up event handlers for buttons and click events
   const startbuttons = document.getElementById("startbuttons");
   const actionbuttons = document.getElementById("actionbuttons");
   const edgeoperationbuttons = document.getElementById("edgeoperationbuttons");
 
-  const sliderbutton = document.getElementById("sliderDiv");
-
   const extrudeSlider = new Slider({
-    container: sliderbutton,
+    container: "extrudeSlider",
+    precision: 2,
     min: 0,
     max: 100,
     steps: 1,
-    precision: 0,
-    labelFormatFunction: function (value, type) {
+    values: [10],
+    
+/*     labelFormatFunction: function (value, type) {
       return `${value.toString()} m`; // Format label to show whole numbers
     },
     visibleElements: {
       labels: true,
       rangeLabels: true,
     },
-    values: [10],
+    values: [10], */
   });
 
   const sketchViewModel = initSketch.setupSketchViewModel(view, graphicsLayer);
@@ -340,20 +345,20 @@ require([
     if (event.state === "start") {
       startbuttons.style.display = "none";
       actionbuttons.style.display = "inline";
-      sliderbutton.style.display = "inline";
+
       if (
         event.graphics[0].geometry.type === "polygon" ||
         event.graphics[0].geometry.type === "polyline"
       ) {
         edgeoperationbuttons.style.display = "inline";
-        sliderbutton.style.display = "inline";
+
       }
     }
     if (event.state === "complete") {
       startbuttons.style.display = "inline";
       actionbuttons.style.display = "none";
       edgeoperationbuttons.style.display = "none";
-      sliderbutton.style.display = "none";
+
     }
   });
 
@@ -373,10 +378,8 @@ require([
       // to activate sketching the create method is called passing in the geometry type
       // from the data-type attribute of the html element
       sketchViewModel.create(event.target.getAttribute("data-type"));
-
       startbuttons.style.display = "none";
       actionbuttons.style.display = "inline";
-      sliderbutton.style.display = "none";
     });
   });
 
@@ -391,14 +394,21 @@ require([
     }
   });
 
-  view.ui.add("sketchPanel", "bottom-right");
+  
 
   // Update the building layer extrusion
   extrudeSlider.on(["thumb-change", "thumb-drag"], extrudeSizeChanged);
 
   function extrudeSizeChanged(event) {
+
+    const value = event.value;
+    document.getElementById("extrude").innerHTML = value
+    const extrudedPolygon = sketchViewModel.layer.graphics.getItemAt(0);
+    const updatedSymbol = extrudedPolygon.symbol.clone();
+    updatedSymbol.symbolLayers.items[0].size = value;
+    extrudedPolygon.symbol = updatedSymbol;
     // Constructing a new graphic
-    let geom = graphicsLayer.graphics.getItemAt(0).geometry;
+/*     let geom = graphicsLayer.graphics.getItemAt(0).geometry;
     let symStyle = {
       type: "polygon-3d",
       symbolLayers: [
@@ -420,7 +430,7 @@ require([
       geometry: geom,
       symbol: symStyle,
     });
-    graphicsLayer.add(p);
+    graphicsLayer.add(p); */
 
     // This did not work
     //extrudedPolygon.symbolLayers[0].size = event.value; // Update extrude size
@@ -431,6 +441,8 @@ require([
       (symbolLayer) => symbolLayer.type === "extrude"
     ).size = event.value; */
   }
+
+  view.ui.add("sketchPanel", "bottom-right");
 
   // default values for edge/move operations
   let edgeType = "split";
