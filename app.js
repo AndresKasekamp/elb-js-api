@@ -146,7 +146,6 @@ require([
 
     /**************************************
      *  Measurement 3D
-     * TODO custom expand widget ka muuta, aga initimise peab üle vaatama
      **************************************/
 
     initMeasurement.setupMeasurement(view);
@@ -156,7 +155,8 @@ require([
       view,
       document.getElementById("topbar"),
       false,
-      "top-left"
+      "top-left",
+      "plans"
     );
 
     view.ui.add(expandMeasurement, "top-left");

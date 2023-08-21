@@ -36,13 +36,21 @@ define([
       },
     }),
 
-  setupExpand: (toolTipText, view, content, expanded, group) =>
+  setupExpand: (
+    toolTipText,
+    view,
+    content,
+    expanded,
+    group,
+    expandIcon = null
+  ) =>
     new Expand({
       expandTooltip: toolTipText,
       view: view,
       content: content,
       expanded: expanded,
       group: group,
+      expandIcon: expandIcon,
     }),
 
   setupBasemapGallery: (view) =>
