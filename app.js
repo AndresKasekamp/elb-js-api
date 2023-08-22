@@ -1,4 +1,5 @@
 // TODO vahetada OF viimane tail WMS vastu välja
+// TODO elevation widget toggle teha
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -53,8 +54,13 @@ require([
 
   const graphicsLayer = initLayers.setupGraphicsLayer();
   const communicationTower = initLayers.setupInternalLayer();
+  const ortofotoWMS = initLayers.setupWMSLayer();
 
-  const scene = initScene.setupWebScene(graphicsLayer, communicationTower);
+  const scene = initScene.setupWebScene(
+    graphicsLayer,
+    communicationTower,
+    ortofotoWMS
+  );
   const view = initScene.setupWebView(scene);
 
   /**************************************
@@ -202,6 +208,25 @@ require([
       "top-left"
     );
     view.ui.add(basemapsExpand, "top-left");
+    
+    
+    // TODO päras teistpidi ka ja paranda selle funktsiooni ülesehitust
+    // Switching to WMS 
+    basemaps.watch('activeBasemap', () => {
+      if (basemaps.activeBasemap.title === "Ortofoto") {
+        view.watch('zoom', () => {
+          if (view.zoom >= 13) {
+            console.log("Need to switch")
+            scene.layers.forEach( (layer) => {
+              if (layer.title === "Ortofoto WMS") {
+                layer.visible = true;
+              }
+            })
+          }
+        })
+      }
+    })
+
 
     /**************************************
      *  Coordinate tool
@@ -340,8 +365,6 @@ require([
 
     view.ui.add(performanceMeasureBtn, "top-left");
     const performanceMeasureInfo = document.getElementById("performanceInfo");
-
-    //view.ui.remove(performanceMeasureInfo, "top-right")
     performanceMeasureBtn.addEventListener("click", () => {
       if (isPerformanceInfoVisible) {
         performanceMeasureInfo.style.display = "none";

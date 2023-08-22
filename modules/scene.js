@@ -1,10 +1,11 @@
+// TODO vaata kas siin saaks lahtipakkimisega teha
 define(["esri/WebScene", "esri/views/SceneView"], (WebScene, SceneView) => ({
-  setupWebScene: (graphics, internal) =>
+  setupWebScene: (...layers) =>
     new WebScene({
       portalItem: {
         id: "92d29869db444e28beab584f696b86c3",
       },
-      layers: [graphics, internal],
+      layers: [...layers],
     }),
 
   setupWebView: (scene) =>
