@@ -1,10 +1,14 @@
 // TODO vahetada OF viimane tail WMS vastu välja
 // TODO elevation widget toggle teha
 
+// TODO point cloud renderers: https://developers.arcgis.com/javascript/latest/sample-code/layers-pointcloud/
+
+// TODO kui geoloogia andmed lisada, siis arvatavasti erinev layerList luua
+
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
   "esri/widgets/LayerList",
-  "esri/widgets/Expand",
+
   "esri/widgets/Slider",
   "esri/widgets/Legend",
   "esri/layers/GroupLayer",
@@ -27,7 +31,7 @@ require([
 ], (
   Conversion,
   LayerList,
-  Expand,
+
   Slider,
   Legend,
   GroupLayer,
@@ -220,6 +224,67 @@ require([
         });
       });
     });
+
+    // TODO exxaggeration ka tuua üle
+    // TODO modulariseeri
+    /**************************************
+     * Elevation toolbox
+     **************************************/
+    const opacitySlider = new Slider({
+      container: "opacitySlider",
+      precision: 2,
+      min: 0,
+      max: 1,
+      steps: 0.05,
+      values: [1],
+      visibleElements: {
+        rangeLabels: true,
+      },
+    });
+
+    // Update the building layer extrusion
+    opacitySlider.on(["thumb-change", "thumb-drag"], opacityChanged);
+
+    function opacityChanged(event) {
+      const value = event.value;
+      document.getElementById("opacity").innerHTML = value;
+      scene.ground.opacity = event.value;
+    }
+
+    //const opacityInput = document.getElementById("opacityInput");
+    const navigateUndergroundInput = document.getElementById(
+      "navigationUnderground"
+    );
+    const elevationInput = document.getElementById("elevationInput");
+
+    navigateUndergroundInput.addEventListener("change", (event) => {
+      scene.ground.navigationConstraint.type = event.target.checked
+        ? "none"
+        : "stay-above";
+    });
+
+    // Elevation on /ff
+    elevationInput.addEventListener("change", updateElevation);
+
+    function updateElevation(ev) {
+      // Turn ground layers visibility on/off
+      scene.ground.layers.forEach((layer) => {
+        layer.visible = ev.target.checked;
+      });
+    }
+
+    const elevationSettingsExpand = initLayerList.setupExpand(
+      "Elevation settings",
+      view,
+      document.getElementById("elevationMenu"),
+      false,
+      "top-left",
+      "sky-plot"
+    );
+
+
+    //view.ui.add("elevationMenu", "top-right");
+    view.ui.add(elevationSettingsExpand, "top-left");
 
     /**************************************
      *  Coordinate tool
