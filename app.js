@@ -215,7 +215,7 @@ require([
       view.watch("zoom", () => {
         scene.layers.forEach((layer) => {
           if (layer.title === "Ortofoto WMS") {
-            layer.visible = isOrtofoto && view.zoom >= 13;
+            layer.visible = isOrtofoto && view.zoom >= 12.5;
           }
         });
       });

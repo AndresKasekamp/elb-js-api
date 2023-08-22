@@ -25,5 +25,6 @@ define(["esri/layers/GraphicsLayer", "esri/layers/SceneLayer", "esri/layers/WMSL
     },
     title: "Ortofoto WMS",
     visible: false,
+    listMode: "hide",
   })
 }));
