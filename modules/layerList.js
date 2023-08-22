@@ -16,7 +16,12 @@ define([
   "esri/widgets/Expand",
   "esri/Basemap",
   "esri/widgets/BasemapGallery",
-], (LayerList, Expand, Basemap, BasemapGallery) => ({
+], (
+  LayerList,
+  Expand,
+  Basemap,
+  BasemapGallery,
+) => ({
   setupLayerList: (view) =>
     new LayerList({
       view: view,

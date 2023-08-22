@@ -1,7 +1,11 @@
+// TODO vahetada OF viimane tail WMS vastu välja
+
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
   "esri/widgets/LayerList",
   "esri/widgets/Expand",
+  "esri/widgets/Slider",
+  "esri/widgets/Legend",
   "esri/layers/GroupLayer",
 
   "./modules/layers.js",
@@ -23,6 +27,8 @@ require([
   Conversion,
   LayerList,
   Expand,
+  Slider,
+  Legend,
   GroupLayer,
 
   initLayers,
@@ -54,26 +60,10 @@ require([
   /**************************************
    * Adding a layer group, expand
    **************************************/
-  // TODO kõik mõistlik läheb selle sisse
 
   view.when(() => {
     /**************************************
      * Layerlist from scene
-     **************************************/
-    /*     const layerList = initLayerList.setupLayerList(view);
-    const layerListExpand = initLayerList.setupExpand(
-      "List of Layers",
-      view,
-      layerList,
-      false,
-      "top-left"
-    );
-    view.ui.add(layerListExpand, "top-left"); */
-
-    /**************************************
-     * Layerlist version 2
-     * TODO fixi see osa modulaarsemaks
-     * TODO järjekord ja opacity peaks olema slider
      **************************************/
     //deifne a layerlist
     const layerList = new LayerList({
@@ -82,11 +72,11 @@ require([
     });
 
     // have the names of the two types of trees
-    const layer1Name = "Taimkate analüütiline";
-    const layer2Name = "Taimkate realistlik";
+    const taimkateAnalytical = "Taimkate analüütiline";
+    const taimkateRealistic = "Taimkate realistlik";
     const layersToRemove = [];
     // Build a GroupLayer
-    const groupLayer = new GroupLayer({
+    const treeGroupLayer = new GroupLayer({
       title: "Taimkate",
       visible: true,
       visibilityMode: "exclusive",
@@ -95,30 +85,74 @@ require([
     async function defineActions(event) {
       const item = event.item;
 
-      // TODO see on vaja fixida funktsiooni ssiise
       await item.layer.when();
+
+      const itemPanelDiv = document.createElement("div");
+      const sliderDiv = document.createElement("div");
+      sliderDiv.classList.add("esri-widget");
+
+      // Adds a slider for updating a group layer's opacity
+      const slider = new Slider({
+        min: 0,
+        max: 1,
+        precision: 2,
+        values: [1],
+        visibleElements: {
+          labels: true,
+          rangeLabels: true,
+        },
+        container: sliderDiv,
+      });
+
+      const legendDiv = document.createElement("div");
+      legendDiv.classList.add("esri-widget");
+      const legend = new Legend({
+        view: view,
+        layerInfos: [
+          {
+            layer: item.layer,
+          },
+        ],
+        container: legendDiv,
+      });
+
+      itemPanelDiv.append(sliderDiv, legendDiv);
+
       // when the item is the name of the tree,
       // add the layers of the items to the group layer
-      if (item.title === layer1Name || item.title === layer2Name) {
-        groupLayer.add(item.layer);
+      if (
+        item.title === taimkateAnalytical ||
+        item.title === taimkateRealistic
+      ) {
+        treeGroupLayer.add(item.layer);
         layersToRemove.push(item.layer);
       }
 
-      item.panel = {
-        content: "legend",
-      };
+      // TODO ilmselt lisada kataster ka siia
+      if (
+        item.layer.type != "group" ||
+        item.title === taimkateAnalytical ||
+        item.title === taimkateRealistic
+      ) {
+        item.panel = {
+          content: itemPanelDiv,
+          className: "esri-icon-legend",
+          open: false,
+          title: "Legend and layer opacity",
+        };
+      }
+
+      slider.on("thumb-drag", (event) => {
+        const { value } = event;
+        item.layer.opacity = value;
+      });
 
       item.actionsSections = [
         [
           {
-            title: "Increase opacity",
-            className: "esri-icon-up",
-            id: "increase-opacity",
-          },
-          {
-            title: "Decrease opacity",
-            className: "esri-icon-down",
-            id: "decrease-opacity",
+            title: "Layer information",
+            className: "esri-icon-description",
+            id: "information",
           },
         ],
       ];
@@ -130,29 +164,14 @@ require([
       // Capture the action id.
       const id = event.action.id;
 
-      if (id === "increase-opacity") {
-        // if the increase-opacity action is triggered, then
-        // increase the opacity of the GroupLayer by 0.25
-
-        if (layer.opacity < 1) {
-          layer.opacity += 0.25;
-        }
-      } else if (id === "decrease-opacity") {
-        // if the decrease-opacity action is triggered, then
-        // decrease the opacity of the GroupLayer by 0.25
-
-        if (layer.opacity > 0) {
-          layer.opacity -= 0.25;
+      if (layer.type != "group") {
+        if (id === "information") {
+          // If the information action is triggered, then
+          // open the item details page of the service layer.
+          window.open(layer.url);
         }
       }
     });
-
-    const llExpand = new Expand({
-      view: view,
-      content: layerList,
-    });
-
-    view.ui.add(llExpand, "top-left");
 
     // Remove the layers
     layersToRemove.forEach((layer) => {
@@ -160,7 +179,16 @@ require([
     });
 
     // Add the GroupLayer to view
-    view.map.add(groupLayer);
+    view.map.add(treeGroupLayer);
+
+    const layerListExpand = initLayerList.setupExpand(
+      "List of Layers",
+      view,
+      layerList,
+      false,
+      "top-left"
+    );
+    view.ui.add(layerListExpand, "top-left");
 
     /**************************************
      * Basemap gallery
