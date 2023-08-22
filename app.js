@@ -208,25 +208,18 @@ require([
       "top-left"
     );
     view.ui.add(basemapsExpand, "top-left");
-    
-    
-    // TODO päras teistpidi ka ja paranda selle funktsiooni ülesehitust
-    // Switching to WMS 
-    basemaps.watch('activeBasemap', () => {
-      if (basemaps.activeBasemap.title === "Ortofoto") {
-        view.watch('zoom', () => {
-          if (view.zoom >= 13) {
-            console.log("Need to switch")
-            scene.layers.forEach( (layer) => {
-              if (layer.title === "Ortofoto WMS") {
-                layer.visible = true;
-              }
-            })
-          }
-        })
-      }
-    })
 
+    basemaps.watch("activeBasemap", () => {
+      const isOrtofoto = basemaps.activeBasemap.title === "Ortofoto";
+
+      view.watch("zoom", () => {
+        scene.layers.forEach((layer) => {
+          if (layer.title === "Ortofoto WMS") {
+            layer.visible = isOrtofoto && view.zoom >= 13;
+          }
+        });
+      });
+    });
 
     /**************************************
      *  Coordinate tool
