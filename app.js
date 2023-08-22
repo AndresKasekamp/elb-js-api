@@ -1,9 +1,12 @@
-// TODO vahetada OF viimane tail WMS vastu välja
-// TODO elevation widget toggle teha
-
 // TODO point cloud renderers: https://developers.arcgis.com/javascript/latest/sample-code/layers-pointcloud/
 
 // TODO kui geoloogia andmed lisada, siis arvatavasti erinev layerList luua
+// TODO natuke UI teha ja vidinad paremale/in ads vasakule
+
+// TODO kui joonistatud kihi all ei ole veel ühtegi üksust, siis võtta ära menüüdst
+// TODO mingi kerge ülemine navigation bar teha (infoaken) ja proovi muuta vidiane värvi ja kujundust kasvõi natuke
+
+// TODO kihtide järjekord paika seada (miks peab olema asünkroonne?)
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -26,7 +29,6 @@ require([
   "./modules/shadowCast.js",
   "./modules/slice.js",
   "./modules/locate.js",
-  "./modules/screenShot.js",
   "./modules/memoryTest.js",
 ], (
   Conversion,
@@ -49,7 +51,6 @@ require([
   initShadowCast,
   initSlice,
   initLocate,
-  initScreenShot,
   initMemoryTest
 ) => {
   /************************************************************
@@ -225,11 +226,12 @@ require([
       });
     });
 
-    // TODO exxaggeration ka tuua üle
+    // TODO exxaggeration ka tuua üle - aga see veits keerulisem
     // TODO modulariseeri
     /**************************************
      * Elevation toolbox
      **************************************/
+
     const opacitySlider = new Slider({
       container: "opacitySlider",
       precision: 2,
@@ -281,7 +283,6 @@ require([
       "top-left",
       "sky-plot"
     );
-
 
     //view.ui.add("elevationMenu", "top-right");
     view.ui.add(elevationSettingsExpand, "top-left");
@@ -402,10 +403,6 @@ require([
 
     view.ui.add(locate, "top-left");
 
-    /**************************************
-     * Screenshot
-     **************************************/
-    initScreenShot.setupScreenshot(view);
 
     /**************************************
      * Sketching
