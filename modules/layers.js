@@ -9,12 +9,13 @@ define(["esri/layers/GraphicsLayer", "esri/layers/SceneLayer", "esri/layers/WMSL
       title: "Joonistatud kihid",
     }),
 
-  setupInternalLayer: () =>
+  setupInternalLayer: (layerID, layerTitle) =>
     new SceneLayer({
       portalItem: {
-        id: "66e382030b224ffa999249a4d1cbbf4f",
+        id: layerID,
       },
-      title: "Sidemastid",
+      title: layerTitle,
+      visible: false,
     }),
   
     // TODO seda saaks võibolla ka otse tuua teenusest üle ja proovi WMTS-ga niimoodi, äkki saaks basemap alla lisada

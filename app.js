@@ -58,12 +58,17 @@ require([
    ************************************************************/
 
   const graphicsLayer = initLayers.setupGraphicsLayer();
-  const communicationTower = initLayers.setupInternalLayer();
+  const communicationTower = initLayers.setupInternalLayer("66e382030b224ffa999249a4d1cbbf4f", "Sidemastid");
+  const boreholes = initLayers.setupInternalLayer("e1ceb1c5197b401e88deba0888f97000", "Puuraugud");
+  const constructionGeology = initLayers.setupInternalLayer("35026f30f1d94e438110ad23b8dfb1fa", "Ehitusgeoloogia");
+  //const communicationTower = initLayers.setupInternalLayer();
   const ortofotoWMS = initLayers.setupWMSLayer();
 
   const scene = initScene.setupWebScene(
     graphicsLayer,
     communicationTower,
+    boreholes,
+    constructionGeology,
     ortofotoWMS
   );
   const view = initScene.setupWebView(scene);
@@ -89,7 +94,7 @@ require([
     // Build a GroupLayer
     const treeGroupLayer = new GroupLayer({
       title: "Taimkate",
-      visible: true,
+      visible: false,
       visibilityMode: "exclusive",
     });
 
