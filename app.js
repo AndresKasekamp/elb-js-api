@@ -16,7 +16,6 @@ require([
   "esri/widgets/LayerList",
   "esri/widgets/Slider",
   "esri/widgets/Legend",
-  "esri/layers/GroupLayer",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -30,6 +29,7 @@ require([
   "./modules/measurement.js",
   "./modules/shadowCast.js",
   "./modules/slice.js",
+  "./modules/slider.js",
   "./modules/locate.js",
   "./modules/memoryTest.js",
 ], (
@@ -38,7 +38,6 @@ require([
 
   Slider,
   Legend,
-  GroupLayer,
 
   initLayers,
   initScene,
@@ -52,6 +51,7 @@ require([
   initMeasurement,
   initShadowCast,
   initSlice,
+  initSlider,
   initLocate,
   initMemoryTest
 ) => {
@@ -106,28 +106,20 @@ require([
 
     const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
 
-    async function defineActions(event) {
-      const item = event.item;
+    async function defineActions (e) {
+      const item = e.item;
 
       await item.layer.when();
-
+      
+      // TODO need on eraldi suur funktsioon
       const itemPanelDiv = document.createElement("div");
       const sliderDiv = document.createElement("div");
       sliderDiv.classList.add("esri-widget");
 
-      // Adds a slider for updating a group layer's opacity
-      const slider = new Slider({
-        min: 0,
-        max: 1,
-        precision: 2,
-        values: [1],
-        visibleElements: {
-          labels: true,
-          rangeLabels: true,
-        },
-        container: sliderDiv,
-      });
+      const slider = initSlider.setupSlider(sliderDiv);
 
+
+      // TODO see on eraldi suur funktsioon
       const legendDiv = document.createElement("div");
       legendDiv.classList.add("esri-widget");
       const legend = new Legend({
@@ -244,7 +236,10 @@ require([
      **************************************/
 
     // Creating a geology layer group
-    const geologyGroupLayer = initLayers.setupGroupLayer("Geoloogia", "independent");
+    const geologyGroupLayer = initLayers.setupGroupLayer(
+      "Geoloogia",
+      "independent"
+    );
     geologyGroupLayer.addMany([boreholes, constructionGeology]);
 
     // Adding a geology layer group to view
