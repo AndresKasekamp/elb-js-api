@@ -1,7 +1,6 @@
-
 // TODO muuda kasti natuke suuremaks
 
-const inAdsUrl =  "http://inaadress.maaamet.ee/inaadress/gazetteer/";
+const inAdsUrl = "http://inaadress.maaamet.ee/inaadress/gazetteer/";
 
 define([
   "esri/widgets/Search",

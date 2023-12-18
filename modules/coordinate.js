@@ -1,5 +1,3 @@
-
-
 const numberSearchPattern = /-?\d+[\.]?\d*/;
 
 define([
@@ -10,7 +8,7 @@ define([
 ], (CoordinateConversion, Format, Point, webMercatorUtils) => ({
   setupCoordinateWidget: (view) =>
     new CoordinateConversion({
-      view: view,
+      view,
     }),
 
   setupNewFormat: () =>

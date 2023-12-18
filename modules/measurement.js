@@ -3,7 +3,6 @@ define([
   "esri/widgets/AreaMeasurement3D",
   "esri/core/promiseUtils",
 ], (DirectLineMeasurement3D, AreaMeasurement3D, promiseUtils) => ({
-
   setupMeasurement: (view) => {
     let activeWidget = null;
 

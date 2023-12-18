@@ -16,20 +16,15 @@ define([
   "esri/widgets/Expand",
   "esri/Basemap",
   "esri/widgets/BasemapGallery",
-], (
-  LayerList,
-  Expand,
-  Basemap,
-  BasemapGallery,
-) => ({
+], (LayerList, Expand, Basemap, BasemapGallery) => ({
   setupLayerList: (view) =>
     new LayerList({
-      view: view,
+      view,
       icon: "map-contents",
       listItemCreatedFunction: (event) => {
         const item = event.item;
 
-        if (item.layer.type != "group") {
+        if (item.layer.type !== "group") {
           // don't show legend twice
           item.panel = {
             content: "legend",
@@ -51,22 +46,22 @@ define([
   ) =>
     new Expand({
       expandTooltip: toolTipText,
-      view: view,
-      content: content,
-      expanded: expanded,
-      group: group,
-      expandIcon: expandIcon,
+      view,
+      content,
+      expanded,
+      group,
+      expandIcon,
     }),
 
   setupBasemapGallery: (view) =>
     new BasemapGallery({
-      view: view,
+      view,
       icon: "layer-basemap",
       source: basemapIds.map(
         (id) =>
           new Basemap({
             portalItem: {
-              id: id,
+              id,
             },
           })
       ),

@@ -10,8 +10,8 @@
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
+  
   "esri/widgets/LayerList",
-
   "esri/widgets/Slider",
   "esri/widgets/Legend",
   "esri/layers/GroupLayer",
@@ -58,10 +58,19 @@ require([
    ************************************************************/
 
   const graphicsLayer = initLayers.setupGraphicsLayer();
-  const communicationTower = initLayers.setupInternalLayer("66e382030b224ffa999249a4d1cbbf4f", "Sidemastid");
-  const boreholes = initLayers.setupInternalLayer("e1ceb1c5197b401e88deba0888f97000", "Puuraugud");
-  const constructionGeology = initLayers.setupInternalLayer("35026f30f1d94e438110ad23b8dfb1fa", "Ehitusgeoloogia");
-  //const communicationTower = initLayers.setupInternalLayer();
+  const communicationTower = initLayers.setupInternalLayer(
+    "66e382030b224ffa999249a4d1cbbf4f",
+    "Sidemastid"
+  );
+  const boreholes = initLayers.setupInternalLayer(
+    "e1ceb1c5197b401e88deba0888f97000",
+    "Puuraugud"
+  );
+  const constructionGeology = initLayers.setupInternalLayer(
+    "35026f30f1d94e438110ad23b8dfb1fa",
+    "Ehitusgeoloogia"
+  );
+  // const communicationTower = initLayers.setupInternalLayer();
   const ortofotoWMS = initLayers.setupWMSLayer();
 
   const scene = initScene.setupWebScene(
@@ -81,9 +90,9 @@ require([
     /**************************************
      * Layerlist from scene
      **************************************/
-    //deifne a layerlist
+    // deifne a layerlist
     const layerList = new LayerList({
-      view: view,
+      view,
       listItemCreatedFunction: defineActions,
     });
 
@@ -146,7 +155,7 @@ require([
 
       // TODO ilmselt lisada kataster ka siia
       if (
-        item.layer.type != "group" ||
+        item.layer.type !== "group" ||
         item.title === taimkateAnalytical ||
         item.title === taimkateRealistic
       ) {
@@ -180,7 +189,7 @@ require([
       // Capture the action id.
       const id = event.action.id;
 
-      if (layer.type != "group") {
+      if (layer.type !== "group") {
         if (id === "information") {
           // If the information action is triggered, then
           // open the item details page of the service layer.
@@ -258,7 +267,7 @@ require([
       scene.ground.opacity = event.value;
     }
 
-    //const opacityInput = document.getElementById("opacityInput");
+    // const opacityInput = document.getElementById("opacityInput");
     const navigateUndergroundInput = document.getElementById(
       "navigationUnderground"
     );
@@ -273,10 +282,10 @@ require([
     // Elevation on /ff
     elevationInput.addEventListener("change", updateElevation);
 
-    function updateElevation(ev) {
+    function updateElevation(e) {
       // Turn ground layers visibility on/off
       scene.ground.layers.forEach((layer) => {
-        layer.visible = ev.target.checked;
+        layer.visible = e.target.checked;
       });
     }
 
@@ -289,7 +298,7 @@ require([
       "sky-plot"
     );
 
-    //view.ui.add("elevationMenu", "top-right");
+    // view.ui.add("elevationMenu", "top-right");
     view.ui.add(elevationSettingsExpand, "top-left");
 
     /**************************************
@@ -407,7 +416,6 @@ require([
     const locate = initLocate.setupLocate(view);
 
     view.ui.add(locate, "top-left");
-
 
     /**************************************
      * Sketching
