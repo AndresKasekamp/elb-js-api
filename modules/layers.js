@@ -2,7 +2,8 @@ define([
   "esri/layers/GraphicsLayer",
   "esri/layers/SceneLayer",
   "esri/layers/WMSLayer",
-], (GraphicsLayer, SceneLayer, WMSLayer) => ({
+  "esri/layers/GroupLayer"
+], (GraphicsLayer, SceneLayer, WMSLayer, GroupLayer) => ({
   setupGraphicsLayer: () =>
     new GraphicsLayer({
       elevationInfo: { mode: "absolute-height" },
@@ -28,5 +29,11 @@ define([
       title: "Ortofoto WMS",
       visible: false,
       listMode: "hide",
+    }),
+
+  setupGroupLayer: (groupName) =>
+    new GroupLayer({
+      title: groupName,
+      visible: false
     }),
 }));

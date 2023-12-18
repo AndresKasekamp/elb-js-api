@@ -1,5 +1,7 @@
 // TODO point cloud renderers: https://developers.arcgis.com/javascript/latest/sample-code/layers-pointcloud/
 
+// TODO elementide ümberjärjestmaine teha
+
 // TODO kui geoloogia andmed lisada, siis arvatavasti erinev layerList luua
 // TODO natuke UI teha ja vidinad paremale/in ads vasakule
 
@@ -10,7 +12,7 @@
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
-  
+
   "esri/widgets/LayerList",
   "esri/widgets/Slider",
   "esri/widgets/Legend",
@@ -80,6 +82,7 @@ require([
     constructionGeology,
     ortofotoWMS
   );
+
   const view = initScene.setupWebView(scene);
 
   /**************************************
@@ -239,6 +242,17 @@ require([
         });
       });
     });
+
+    /**************************************
+     * Geology layer group
+     **************************************/
+
+    // Creating a geology layer group
+    const geologyLayer = initLayers.setupGroupLayer("Geoloogia");
+    geologyLayer.addMany([boreholes, constructionGeology]);
+
+    // Adding a geology layer group to view
+    view.map.add(geologyLayer);
 
     // TODO exxaggeration ka tuua üle - aga see veits keerulisem
     // TODO modulariseeri
