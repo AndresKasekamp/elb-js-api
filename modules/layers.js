@@ -31,9 +31,10 @@ define([
       listMode: "hide",
     }),
 
-  setupGroupLayer: (groupName) =>
+  setupGroupLayer: (groupName, visibilityMode) =>
     new GroupLayer({
       title: groupName,
-      visible: false
+      visible: false,
+      visibilityMode: visibilityMode,
     }),
 }));

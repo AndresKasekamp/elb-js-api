@@ -103,12 +103,8 @@ require([
     const taimkateAnalytical = "Taimkate analüütiline";
     const taimkateRealistic = "Taimkate realistlik";
     const layersToRemove = [];
-    // Build a GroupLayer
-    const treeGroupLayer = new GroupLayer({
-      title: "Taimkate",
-      visible: false,
-      visibilityMode: "exclusive",
-    });
+
+    const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
 
     async function defineActions(event) {
       const item = event.item;
@@ -248,11 +244,11 @@ require([
      **************************************/
 
     // Creating a geology layer group
-    const geologyLayer = initLayers.setupGroupLayer("Geoloogia");
-    geologyLayer.addMany([boreholes, constructionGeology]);
+    const geologyGroupLayer = initLayers.setupGroupLayer("Geoloogia", "independent");
+    geologyGroupLayer.addMany([boreholes, constructionGeology]);
 
     // Adding a geology layer group to view
-    view.map.add(geologyLayer);
+    view.map.add(geologyGroupLayer);
 
     // TODO exxaggeration ka tuua üle - aga see veits keerulisem
     // TODO modulariseeri
