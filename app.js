@@ -109,7 +109,7 @@ require([
 
       // Slider settings
       const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle();
-      const slider = initSlider.setupSlider(sliderDiv);
+      const slider = initSlider.setupSlider(sliderDiv, true);
 
       // Legend settings
       const legendDiv = initLegend.setupLegendStyle();
@@ -219,7 +219,9 @@ require([
     /**************************************
      * Elevation toolbox
      **************************************/
-
+    
+    const opacitySlider = initSlider.setupSlider("opacitySlider", false);
+    /*
     const opacitySlider = new Slider({
       container: "opacitySlider",
       precision: 2,
@@ -231,6 +233,7 @@ require([
         rangeLabels: true,
       },
     });
+    */
 
     // Update the building layer extrusion
     opacitySlider.on(["thumb-change", "thumb-drag"], opacityChanged);

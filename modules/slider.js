@@ -1,15 +1,15 @@
 define(["esri/widgets/Slider"], (Slider) => ({
-  setupSlider: (sliderDiv) =>
+  setupSlider: (container, label) =>
     new Slider({
       min: 0,
       max: 1,
       precision: 2,
       values: [1],
       visibleElements: {
-        labels: true,
+        labels: label,
         rangeLabels: true,
       },
-      container: sliderDiv,
+      container: container,
     }),
 
   setupSliderStyle: () => {
@@ -21,3 +21,5 @@ define(["esri/widgets/Slider"], (Slider) => ({
     return [itemPanelDiv, sliderDiv];
   },
 }));
+
+
