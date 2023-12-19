@@ -84,6 +84,8 @@ require([
      * Calcite CSS/JS
      **************************************/
 
+    const shadowCast = initShadowCast.setupShadowCast(view);
+
     let activeWidget;
 
     const handleActionBarClick = ({ target }) => {
@@ -99,12 +101,18 @@ require([
       }
 
       const nextWidget = target.dataset.actionId;
+      console.log("Next widget", nextWidget);
       if (nextWidget !== activeWidget) {
         document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
         document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
         activeWidget = nextWidget;
       } else {
         activeWidget = null;
+      }
+
+      if (nextWidget === "shadowCast") {
+        shadowCast.visible = !shadowCast.visible;
+        view.ui.add(shadowCast, "top-right");
       }
     };
 
@@ -322,19 +330,19 @@ require([
      * Shadow casting
      **************************************/
     // TODO selle migreerumine ebaõnnestus, peab vaatama kas õnnestub skripti calcite ikooni avamisel runnida
-    const shadowCast = initShadowCast.setupShadowCast(view);
+    // const shadowCast = initShadowCast.setupShadowCast(view);
 
-    // const shadowCastBtn = document.getElementById("shadowcast-container");
-    const shadowCastBtn = document.getElementById("shadowCastBtn");
-    // const shadowCastBtn = document.getElementById("shadowCast");
+    // // const shadowCastBtn = document.getElementById("shadowcast-container");
+    // const shadowCastBtn = document.getElementById("shadowCastBtn");
+    // // const shadowCastBtn = document.getElementById("shadowCast");
 
-    view.ui.add(shadowCastBtn, "top-right");
+    // view.ui.add(shadowCastBtn, "top-right");
 
-    shadowCastBtn.addEventListener("click", () => {
-      console.log("Here")
-      shadowCast.visible = !shadowCast.visible;
-      view.ui.add(shadowCast, "top-right");
-    });
+    // shadowCastBtn.addEventListener("click", () => {
+    //   console.log("Here");
+    //   shadowCast.visible = !shadowCast.visible;
+    //   view.ui.add(shadowCast, "top-right");
+    // });
 
     /**************************************
      * Slicing
@@ -352,6 +360,7 @@ require([
     /**************************************
      * Sketching
      **************************************/
+    // TODO peab koodi sisse vaatama, et kuidas elemendid defineerida ja expand loogiliselt töötaks
     initSketch.setupSketch(view, graphicsLayer);
 
     /**************************************

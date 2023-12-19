@@ -37,8 +37,9 @@
                 <calcite-action data-action-id="elevationProfile" icon="altitude" text="Elevation profile">
                 </calcite-action>
                 <calcite-action data-action-id="measurement" icon="measure" text="Measurements"></calcite-action>
-                <calcite-action data-action-id="shadowCast" icon="measure-building-height-shadow" text="Shadow cast"></calcite-action>
-                <calcite-action data-action-id="slicing" icon="measure-building-height-shadow" text="Slicing"></calcite-action>
+                <calcite-action data-action-id="shadowCast" icon="measure-building-height-shadow" text="Shadow cast">
+                </calcite-action>
+                <calcite-action data-action-id="slicing" icon="slice" text="Slicing"></calcite-action>
             </calcite-action-bar>
 
             <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
@@ -95,15 +96,13 @@
                 </div>
             </calcite-panel>
 
-            <calcite-panel heading="Shadow cast" height-scale="l" data-panel-id="shadowCast" hidden>
+            <calcite-panel height-scale="l" data-panel-id="shadowCast" hidden>
 
             </calcite-panel>
 
             <calcite-panel heading="Slicing" height-scale="l" data-panel-id="slicing" hidden>
                 <div id="slicing-container"></div>
             </calcite-panel>
-
-
 
 
         </calcite-shell-panel>
@@ -119,10 +118,10 @@
 
         <button id="performanceMeasureBtn" class=" esri-widget--button esri-icon-lightbulb shadowcast-button"
             aria-label="Perfomance measure" title="Performance measure"></button>
-
+        <!-- 
         <button id="shadowCastBtn"
         class=" esri-widget--button esri-icon-measure-building-height-shadow shadowcast-button"
-        aria-label="Shadow casting" title="Shadow cast"></button>
+        aria-label="Shadow casting" title="Shadow cast"></button> -->
 
 
         <div id="sketchPanel" class="esri-widget">
