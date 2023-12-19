@@ -100,8 +100,6 @@ table {
   color: #e4e4e4;
 }
 
-
-
 .hide {
   display: none;
 }
@@ -110,7 +108,6 @@ img {
   border: 10px solid white;
   box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.5);
 }
-
 
 .action-button2 {
   padding: 0.6em;
