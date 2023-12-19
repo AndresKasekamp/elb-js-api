@@ -15,7 +15,6 @@ require([
 
   "esri/widgets/LayerList",
   "esri/widgets/Slider",
-  "esri/widgets/Legend",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -35,10 +34,9 @@ require([
   "./modules/legend.js",
 ], (
   Conversion,
-  LayerList,
 
+  LayerList,
   Slider,
-  Legend,
 
   initLayers,
   initScene,
@@ -80,8 +78,6 @@ require([
   const scene = initScene.setupWebScene(
     graphicsLayer,
     communicationTower,
-    boreholes,
-    constructionGeology,
     ortofotoWMS
   );
 
@@ -101,14 +97,12 @@ require([
       listItemCreatedFunction: defineActions,
     });
 
-    // have the names of the two types of trees
-    const taimkateAnalytical = "Taimkate analüütiline";
-    const taimkateRealistic = "Taimkate realistlik";
-    const layersToRemove = [];
-
     const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
 
     async function defineActions(e) {
+      const taimkateAnalytical = "Taimkate analüütiline";
+      const taimkateRealistic = "Taimkate realistlik";
+
       const item = e.item;
 
       await item.layer.when();
@@ -130,10 +124,9 @@ require([
         item.title === taimkateRealistic
       ) {
         treeGroupLayer.add(item.layer);
-        layersToRemove.push(item.layer);
+        view.map.remove(item.layer);
       }
 
-      // TODO ilmselt lisada kataster ka siia
       if (
         item.layer.type !== "group" ||
         item.title === taimkateAnalytical ||
@@ -163,28 +156,14 @@ require([
       ];
     }
 
-    layerList.on("trigger-action", (event) => {
-      const layer = event.item.layer;
-
-      // Capture the action id.
-      const id = event.action.id;
-
-      if (layer.type !== "group") {
-        if (id === "information") {
-          // If the information action is triggered, then
-          // open the item details page of the service layer.
-          window.open(layer.url);
-        }
-      }
-    });
-
-    // Remove the layers
-    layersToRemove.forEach((layer) => {
-      view.map.remove(layer);
-    });
-
     // Add the GroupLayer to view
     view.map.add(treeGroupLayer);
+
+    /**************************************
+     * LayerList
+     **************************************/
+
+    initLayerList.getLayerInfo(layerList);
 
     const layerListExpand = initLayerList.setupExpand(
       "List of Layers",
@@ -208,6 +187,7 @@ require([
     );
     view.ui.add(basemapsExpand, "top-left");
 
+    // Ortophoto WMS activated if zoom is close enough
     basemaps.watch("activeBasemap", () => {
       const isOrtofoto = basemaps.activeBasemap.title === "Ortofoto";
 
@@ -438,6 +418,10 @@ require([
       // Update the flag to reflect the new visibility state
       isPerformanceInfoVisible = !isPerformanceInfoVisible;
     });
+
+    // Reordering for on-the-fly layers
+    view.map.reorder(treeGroupLayer, 8);
+    view.map.reorder(geologyGroupLayer, 6);
   });
 
   const updatePerformanceInfo = () => {

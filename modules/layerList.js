@@ -66,4 +66,23 @@ define([
           })
       ),
     }),
+
+  getLayerInfo: (layerList) => {
+    layerList.on("trigger-action", (e) => {
+      const layer = e.item.layer;
+
+      // Capture the action id.
+      const id = e.action.id;
+
+      if (layer.type !== "group") {
+        if (id === "information") {
+          // If the information action is triggered, then
+          // open the item details page of the service layer.
+          window.open(layer.url);
+        }
+      }
+    });
+  },
+
+
 }));
