@@ -213,14 +213,6 @@ require([
      * Basemap gallery
      **************************************/
     const basemaps = initLayerList.setupBasemapGallery(view);
-    const basemapsExpand = initLayerList.setupExpand(
-      "List of Basemaps",
-      view,
-      basemaps,
-      false,
-      "top-right"
-    );
-    view.ui.add(basemapsExpand, "top-right");
 
     // Ortophoto WMS activated if zoom is close enough
     basemaps.watch("activeBasemap", () => {
@@ -287,11 +279,6 @@ require([
       });
     }
 
-    initLayerList.setupElevationExpand(
-      view,
-      "elevationMenu",
-    );
-
     /**************************************
      *  Coordinate tool
      **************************************/
@@ -318,8 +305,9 @@ require([
     /**************************************
      *  Daylight tool
      **************************************/
-    const dayLightWidget = initDaylight.setupDaylight(view);
-    const expandDlight = initLayerList.setupExpand(
+    initDaylight.setupDaylight(view);
+    
+/*     const expandDlight = initLayerList.setupExpand(
       "Expand daylight",
       view,
       dayLightWidget,
@@ -327,7 +315,8 @@ require([
       "top-right"
     );
 
-    view.ui.add(expandDlight, "top-right");
+    view.ui.add(expandDlight, "top-right"); */
+    
 
     /**************************************
      *  Elevation profile

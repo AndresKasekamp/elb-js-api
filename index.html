@@ -32,7 +32,8 @@
                 <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
                 <calcite-action data-action-id="basemaps" icon="layer-basemap" text="Basemaps"></calcite-action>
                 <calcite-action data-action-id="elevation" icon="sky-plot" text="Elevation"></calcite-action>
-                <calcite-action data-action-id="lineOfSight" icon="sky-plot" text="Line of Sight"></calcite-action>
+                <calcite-action data-action-id="lineOfSight" icon="line-of-sight" text="Line of Sight"></calcite-action>
+                <calcite-action data-action-id="daylight" icon="date-time" text="Daylight"></calcite-action>
             </calcite-action-bar>
 
             <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
@@ -66,6 +67,9 @@
             </calcite-panel>
             <calcite-panel heading="Line of Sight" height-scale="l" data-panel-id="lineOfSight" hidden>
                 <div id="line-of-sight-container"></div>
+            </calcite-panel>
+            <calcite-panel heading="Daylight" height-scale="l" data-panel-id="daylight" hidden>
+                <div id="daylight-container"></div>
             </calcite-panel>
 
 
