@@ -6,3 +6,6 @@ This is not an official application. Official application can be found at: https
 
 Site: https://andreskasekamp.github.io/elb-js-api/
 
+- 🤯 gamechanging
+- 👨‍👨‍👦‍👦 community-driven
+

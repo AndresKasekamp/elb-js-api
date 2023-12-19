@@ -1,4 +1,5 @@
 define(["esri/widgets/Slider"], (Slider) => ({
+
   setupSlider: (sliderDiv) =>
     new Slider({
       min: 0,

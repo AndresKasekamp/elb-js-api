@@ -32,6 +32,7 @@ require([
   "./modules/slider.js",
   "./modules/locate.js",
   "./modules/memoryTest.js",
+  "./modules/legend.js",
 ], (
   Conversion,
   LayerList,
@@ -53,7 +54,8 @@ require([
   initSlice,
   initSlider,
   initLocate,
-  initMemoryTest
+  initMemoryTest,
+  initLegend
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -106,11 +108,11 @@ require([
 
     const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
 
-    async function defineActions (e) {
+    async function defineActions(e) {
       const item = e.item;
 
       await item.layer.when();
-      
+
       // TODO need on eraldi suur funktsioon
       const itemPanelDiv = document.createElement("div");
       const sliderDiv = document.createElement("div");
@@ -118,19 +120,11 @@ require([
 
       const slider = initSlider.setupSlider(sliderDiv);
 
-
       // TODO see on eraldi suur funktsioon
       const legendDiv = document.createElement("div");
       legendDiv.classList.add("esri-widget");
-      const legend = new Legend({
-        view: view,
-        layerInfos: [
-          {
-            layer: item.layer,
-          },
-        ],
-        container: legendDiv,
-      });
+
+      const legend = initLegend.setupLegend(view, item.layer, legendDiv);
 
       itemPanelDiv.append(sliderDiv, legendDiv);
 
