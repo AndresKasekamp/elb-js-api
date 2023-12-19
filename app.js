@@ -70,7 +70,7 @@ require([
     "35026f30f1d94e438110ad23b8dfb1fa",
     "Ehitusgeoloogia"
   );
-  // const communicationTower = initLayers.setupInternalLayer();
+
   const ortofotoWMS = initLayers.setupWMSLayer();
 
   const scene = initScene.setupWebScene(
