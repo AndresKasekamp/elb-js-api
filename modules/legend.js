@@ -9,4 +9,10 @@ define(["esri/widgets/Legend"], (Legend) => ({
       ],
       container: div,
     }),
+
+  setupLegendStyle: () => {
+    const legendDiv = document.createElement("div");
+    legendDiv.classList.add("esri-widget");
+    return legendDiv;
+  },
 }));

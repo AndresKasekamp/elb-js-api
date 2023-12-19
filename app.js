@@ -113,14 +113,12 @@ require([
 
       await item.layer.when();
 
+      // Slider settings
       const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle();
-
       const slider = initSlider.setupSlider(sliderDiv);
 
-      // TODO see on eraldi suur funktsioon
-      const legendDiv = document.createElement("div");
-      legendDiv.classList.add("esri-widget");
-
+      // Legend settings
+      const legendDiv = initLegend.setupLegendStyle();
       initLegend.setupLegend(view, item.layer, legendDiv);
 
       itemPanelDiv.append(sliderDiv, legendDiv);
