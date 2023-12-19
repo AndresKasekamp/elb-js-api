@@ -1,4 +1,5 @@
 @import "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css";
+@import "https://js.arcgis.com/calcite-components/1.11.0/calcite.css";
 html,
 body,
 #viewDiv {
@@ -8,6 +9,15 @@ body,
   width: 100%;
   overflow-y: hidden;
   font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  display: flex;
+}
+
+#header-title {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 #performanceInfo {

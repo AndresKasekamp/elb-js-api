@@ -5,15 +5,14 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <title>ELB JS API testing</title>
 
-    <!-- CSS calcite -->
-    <script src="https://js.arcgis.com/calcite-components/1.11.0/calcite.esm.js" type="module"></script>
-    <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/1.11.0/calcite.css" />
-
     <!-- CSS custom -->
     <link rel="stylesheet" href="style.css" />
 
     <!-- Esri JS -->
     <script src="https://js.arcgis.com/4.27/"></script>
+
+    <!-- CSS calcite -->
+    <script src="https://js.arcgis.com/calcite-components/1.11.0/calcite.esm.js" type="module"></script>
 
     <!-- Custom widgets -->
     <script type="module" src="app.js"></script>
@@ -21,93 +20,120 @@
 
 <body>
 
-    <div id="viewDiv" class="esri-widget">
-        <div id="performanceInfo">
-            <h4 id="title"></h4>
-            <table id="memory"></table>
-            <table id="count"></table>
-        </div>
-    </div>
+    <calcite-shell content-behind>
 
-    <div id="elevationMenu" class="esri-widget">
+        <h2 id="header-title" slot="header">
+            Maa-amet 3D
+        </h2>
 
-        <div id="opacitySliderContainer">
-            <div>Ground opacity: <span id="opacity">1</span></div>
-            <div id="opacitySlider"></div>
-        </div>
+        <calcite-shell-panel slot="panel-start" display-mode="float">
 
-        <div class="button-container">
-            <input type="checkbox" id="navigationUnderground" unchecked />
-            <label for="navigationUnderground">Navigate underground</label>
-        </div>
+            <calcite-action-bar slot="action-bar">
+                <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
+                <calcite-action data-action-id="basemaps" icon="basemap" text="Basemaps"></calcite-action>
+            </calcite-action-bar>
 
-        <div class="button-container">
-            <input type="checkbox" id="elevationInput" checked />
-            <label for="elevationInput">Elevation</label>
-        </div>
-    </div>
+            <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
+            <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" hidden>
+                <div id="layers-container"></div>
+            </calcite-panel>
+            <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" hidden>
+                <div id="basemaps-container"></div>
+            </calcite-panel>
 
-    <button id="shadowCastBtn" class=" esri-widget--button esri-icon-measure-building-height-shadow shadowcast-button"
-        aria-label="Shadow casting" title="Shadow cast"></button>
 
-    <button id="performanceMeasureBtn" class=" esri-widget--button esri-icon-lightbulb shadowcast-button"
-        aria-label="Perfomance measure" title="Performance measure"></button>
-
-    <div id="topbar">
-        <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
-        <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
-            title="Measure distance between two points"></button>
-        <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
-            title="Measure area"></button>
-    </div>
-
-    <div id="sketchPanel" class="esri-widget">
-        <div id="startbuttons">
-            <button id="point" data-type="point" class="esri-button starttool">
-                Draw a point of interest
-            </button>
-            <button id="line" data-type="polyline" class="esri-button starttool">
-                Draw a route
-            </button>
-            <button id="extrudedPolygon" data-type="polygon" class="esri-button starttool">
-                Draw a building
-            </button>
-        </div>
-        <div id="actionbuttons">
-            <button id="cancel" class="esri-button">Cancel</button>
-            <button id="done" class="esri-button">Done</button>
-        </div>
-
-        <div id="edgeoperationbuttons">
-            <div id="extrudeSliderContainer">
-                <div>Extrude value: <span id="extrude">10</span></div>
-                <div id="extrudeSlider"></div>
-            </div>
-            <br />Select the edge operation:
-            <div class="update-options" id="edge">
-                <button class="esri-widget--button edge-button" id="none-edge-button" value="none">
-                    None
-                </button>
-                <button class="esri-widget--button edge-button edge-button-selected" id="split-edge-button"
-                    value="split">
-                    Split
-                </button>
-                <button class="esri-widget--button edge-button" id="offset-edge-button" value="offset">
-                    Offset
-                </button>
-            </div>
-            Select the move operation:
-            <div class="update-options" id="shape">
-                <button class="esri-widget--button shape-button" id="none-shape-button" value="none">
-                    None
-                </button>
-                <button class="esri-widget--button shape-button shape-button-selected" id="move-shape-button"
-                    value="move">
-                    Move
-                </button>
+        </calcite-shell-panel>
+        <div id="viewDiv" class="esri-widget">
+            <div id="performanceInfo">
+                <h4 id="title"></h4>
+                <table id="memory"></table>
+                <table id="count"></table>
             </div>
         </div>
-    </div>
+
+        <div id="elevationMenu" class="esri-widget">
+
+            <div id="opacitySliderContainer">
+                <div>Ground opacity: <span id="opacity">1</span></div>
+                <div id="opacitySlider"></div>
+            </div>
+
+            <div class="button-container">
+                <input type="checkbox" id="navigationUnderground" unchecked />
+                <label for="navigationUnderground">Navigate underground</label>
+            </div>
+
+            <div class="button-container">
+                <input type="checkbox" id="elevationInput" checked />
+                <label for="elevationInput">Elevation</label>
+            </div>
+        </div>
+
+        <button id="shadowCastBtn"
+            class=" esri-widget--button esri-icon-measure-building-height-shadow shadowcast-button"
+            aria-label="Shadow casting" title="Shadow cast"></button>
+
+        <button id="performanceMeasureBtn" class=" esri-widget--button esri-icon-lightbulb shadowcast-button"
+            aria-label="Perfomance measure" title="Performance measure"></button>
+
+        <div id="topbar">
+            <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
+            <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
+                title="Measure distance between two points"></button>
+            <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
+                title="Measure area"></button>
+        </div>
+
+        <div id="sketchPanel" class="esri-widget">
+            <div id="startbuttons">
+                <button id="point" data-type="point" class="esri-button starttool">
+                    Draw a point of interest
+                </button>
+                <button id="line" data-type="polyline" class="esri-button starttool">
+                    Draw a route
+                </button>
+                <button id="extrudedPolygon" data-type="polygon" class="esri-button starttool">
+                    Draw a building
+                </button>
+            </div>
+            <div id="actionbuttons">
+                <button id="cancel" class="esri-button">Cancel</button>
+                <button id="done" class="esri-button">Done</button>
+            </div>
+
+            <div id="edgeoperationbuttons">
+                <div id="extrudeSliderContainer">
+                    <div>Extrude value: <span id="extrude">10</span></div>
+                    <div id="extrudeSlider"></div>
+                </div>
+                <br />Select the edge operation:
+                <div class="update-options" id="edge">
+                    <button class="esri-widget--button edge-button" id="none-edge-button" value="none">
+                        None
+                    </button>
+                    <button class="esri-widget--button edge-button edge-button-selected" id="split-edge-button"
+                        value="split">
+                        Split
+                    </button>
+                    <button class="esri-widget--button edge-button" id="offset-edge-button" value="offset">
+                        Offset
+                    </button>
+                </div>
+                Select the move operation:
+                <div class="update-options" id="shape">
+                    <button class="esri-widget--button shape-button" id="none-shape-button" value="none">
+                        None
+                    </button>
+                    <button class="esri-widget--button shape-button shape-button-selected" id="move-shape-button"
+                        value="move">
+                        Move
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </calcite-shell>
+
 </body>
 
 </html>

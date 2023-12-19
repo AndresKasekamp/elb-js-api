@@ -20,7 +20,8 @@ define([
   setupLayerList: (view) =>
     new LayerList({
       view,
-      icon: "map-contents",
+      container: "layers-container",
+      //icon: "map-contents",
       listItemCreatedFunction: (event) => {
         const item = event.item;
 
@@ -56,7 +57,8 @@ define([
   setupBasemapGallery: (view) =>
     new BasemapGallery({
       view,
-      icon: "layer-basemap",
+      container: "basemaps-container",
+      //icon: "layer-basemap",
       source: basemapIds.map(
         (id) =>
           new Basemap({

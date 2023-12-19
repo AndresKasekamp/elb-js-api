@@ -1,14 +1,9 @@
 // TODO point cloud renderers: https://developers.arcgis.com/javascript/latest/sample-code/layers-pointcloud/
 
-// TODO elementide ümberjärjestmaine teha
 
-// TODO kui geoloogia andmed lisada, siis arvatavasti erinev layerList luua
-// TODO natuke UI teha ja vidinad paremale/in ads vasakule
+// TODO infopaneel appi kohta ka ilmselt lisada
 
-// TODO kui joonistatud kihi all ei ole veel ühtegi üksust, siis võtta ära menüüdst
-// TODO mingi kerge ülemine navigation bar teha (infoaken) ja proovi muuta vidiane värvi ja kujundust kasvõi natuke
-
-// TODO kihtide järjekord paika seada (miks peab olema asünkroonne?)
+// TODO legend ja opacity slider ei tule enam kaasa CASCADE CSS-ga
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -86,6 +81,46 @@ require([
    **************************************/
 
   view.when(() => {
+    /**************************************
+     * Calcite CSS/JS
+     **************************************/
+
+    let activeWidget;
+
+    const handleActionBarClick = ({ target }) => {
+      if (target.tagName !== "CALCITE-ACTION") {
+        return;
+      }
+
+      if (activeWidget) {
+        document.querySelector(
+          `[data-action-id=${activeWidget}]`
+        ).active = false;
+        document.querySelector(`[data-panel-id=${activeWidget}]`).hidden = true;
+      }
+
+      const nextWidget = target.dataset.actionId;
+      if (nextWidget !== activeWidget) {
+        document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
+        document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
+        activeWidget = nextWidget;
+      } else {
+        activeWidget = null;
+      }
+    };
+
+    document
+      .querySelector("calcite-action-bar")
+      .addEventListener("click", handleActionBarClick);
+
+    let actionBarExpanded = false;
+
+    document.addEventListener("calciteActionBarToggle", (event) => {
+      actionBarExpanded = !actionBarExpanded;
+      view.padding = {
+        left: actionBarExpanded ? 135 : 49,
+      };
+    });
 
     /**************************************
      * Layerlist from scene
@@ -93,6 +128,7 @@ require([
     // deifne a layerlist
     const layerList = new LayerList({
       view,
+      container: "layers-container",
       listItemCreatedFunction: defineActions,
     });
 
@@ -272,7 +308,7 @@ require([
 
     ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
 
-    view.ui.add(ccWidget, "bottom-left");
+    view.ui.add(ccWidget, "bottom-right");
 
     /**************************************
      * Initialize the LineOfSight widget
@@ -294,7 +330,7 @@ require([
      **************************************/
     const customSearchSource = initSearch.setupCustomSearchSource();
     const searchWidget = initSearch.setupSearchWidget(view, customSearchSource);
-    view.ui.add(searchWidget, "top-left");
+    view.ui.add(searchWidget, "bottom-right");
 
     /**************************************
      *  Daylight tool
@@ -411,9 +447,9 @@ require([
     view.map.reorder(treeGroupLayer, 8);
     view.map.reorder(geologyGroupLayer, 6);
 
-    view.ui.move("zoom", "top-left");
-    view.ui.move("navigation-toggle", "top-left");
-    view.ui.move("compass", "top-left");
+    view.ui.move("zoom", "bottom-right");
+    view.ui.move("navigation-toggle", "bottom-right");
+    view.ui.move("compass", "bottom-right");
   });
 
   const updatePerformanceInfo = () => {
