@@ -17,11 +17,12 @@ define([
   "esri/Basemap",
   "esri/widgets/BasemapGallery",
 ], (LayerList, Expand, Basemap, BasemapGallery) => ({
+  // TODO kui seda funktsiooni ei kasuta, siis ilmselt eemaldada
   setupLayerList: (view) =>
     new LayerList({
       view,
       container: "layers-container",
-      //icon: "map-contents",
+      icon: "map-contents",
       listItemCreatedFunction: (event) => {
         const item = event.item;
 
@@ -37,13 +38,21 @@ define([
       },
     }),
 
+  setupElevationExpand: (view, content, container=null) =>
+    new Expand({
+      view,
+      content,
+      container
+    }),
+
   setupExpand: (
     toolTipText,
     view,
     content,
     expanded,
     group,
-    expandIcon = null
+    expandIcon = null,
+    container = null
   ) =>
     new Expand({
       expandTooltip: toolTipText,
@@ -52,13 +61,14 @@ define([
       expanded,
       group,
       expandIcon,
+      container,
     }),
 
   setupBasemapGallery: (view) =>
     new BasemapGallery({
       view,
       container: "basemaps-container",
-      //icon: "layer-basemap",
+      icon: "layer-basemap",
       source: basemapIds.map(
         (id) =>
           new Basemap({

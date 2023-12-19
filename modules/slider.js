@@ -13,7 +13,6 @@ define(["esri/widgets/Slider"], (Slider) => ({
     }),
 
   setupSliderStyle: () => {
-    // TODO need on eraldi suur funktsioon
     const itemPanelDiv = document.createElement("div");
     const sliderDiv = document.createElement("div");
     sliderDiv.classList.add("esri-widget");

@@ -266,7 +266,6 @@ require([
       scene.ground.opacity = event.value;
     }
 
-    // const opacityInput = document.getElementById("opacityInput");
     const navigateUndergroundInput = document.getElementById(
       "navigationUnderground"
     );
@@ -288,16 +287,10 @@ require([
       });
     }
 
-    const elevationSettingsExpand = initLayerList.setupExpand(
-      "Elevation settings",
+    initLayerList.setupElevationExpand(
       view,
-      document.getElementById("elevationMenu"),
-      false,
-      "top-right",
-      "sky-plot"
+      "elevationMenu",
     );
-
-    view.ui.add(elevationSettingsExpand, "top-right");
 
     /**************************************
      *  Coordinate tool
@@ -313,17 +306,7 @@ require([
     /**************************************
      * Initialize the LineOfSight widget
      **************************************/
-    const lineOfSight = initLoS.setupLoS(view);
-
-    const expandLoS = initLayerList.setupExpand(
-      "Expand line of sight widget",
-      view,
-      lineOfSight,
-      false,
-      "top-right"
-    );
-
-    view.ui.add(expandLoS, "top-right");
+    initLoS.setupLoS(view);
 
     /**************************************
      * Initialize the Search Widget

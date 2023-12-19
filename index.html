@@ -30,7 +30,9 @@
 
             <calcite-action-bar slot="action-bar">
                 <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
-                <calcite-action data-action-id="basemaps" icon="basemap" text="Basemaps"></calcite-action>
+                <calcite-action data-action-id="basemaps" icon="layer-basemap" text="Basemaps"></calcite-action>
+                <calcite-action data-action-id="elevation" icon="sky-plot" text="Elevation"></calcite-action>
+                <calcite-action data-action-id="lineOfSight" icon="sky-plot" text="Line of Sight"></calcite-action>
             </calcite-action-bar>
 
             <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
@@ -40,6 +42,31 @@
             <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" hidden>
                 <div id="basemaps-container"></div>
             </calcite-panel>
+            <calcite-panel heading="Elevation" height-scale="l" data-panel-id="elevation" hidden>
+
+                <div id="elevationMenu" class="esri-widget">
+
+                    <div id="opacitySliderContainer">
+                        <div>Ground opacity: <span id="opacity">1</span></div>
+                        <div id="opacitySlider"></div>
+                    </div>
+
+                    <div class="button-container">
+                        <input type="checkbox" id="navigationUnderground" unchecked />
+                        <label for="navigationUnderground">Navigate underground</label>
+                    </div>
+
+                    <div class="button-container">
+                        <input type="checkbox" id="elevationInput" checked />
+                        <label for="elevationInput">Elevation</label>
+                    </div>
+
+                </div>
+
+            </calcite-panel>
+            <calcite-panel heading="Line of Sight" height-scale="l" data-panel-id="lineOfSight" hidden>
+                <div id="line-of-sight-container"></div>
+            </calcite-panel>
 
 
         </calcite-shell-panel>
@@ -48,24 +75,6 @@
                 <h4 id="title"></h4>
                 <table id="memory"></table>
                 <table id="count"></table>
-            </div>
-        </div>
-
-        <div id="elevationMenu" class="esri-widget">
-
-            <div id="opacitySliderContainer">
-                <div>Ground opacity: <span id="opacity">1</span></div>
-                <div id="opacitySlider"></div>
-            </div>
-
-            <div class="button-container">
-                <input type="checkbox" id="navigationUnderground" unchecked />
-                <label for="navigationUnderground">Navigate underground</label>
-            </div>
-
-            <div class="button-container">
-                <input type="checkbox" id="elevationInput" checked />
-                <label for="elevationInput">Elevation</label>
             </div>
         </div>
 
