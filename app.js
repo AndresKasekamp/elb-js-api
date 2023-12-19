@@ -121,7 +121,7 @@ require([
       const legendDiv = document.createElement("div");
       legendDiv.classList.add("esri-widget");
 
-      const legend = initLegend.setupLegend(view, item.layer, legendDiv);
+      initLegend.setupLegend(view, item.layer, legendDiv);
 
       itemPanelDiv.append(sliderDiv, legendDiv);
 
