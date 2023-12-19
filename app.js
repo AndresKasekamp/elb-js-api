@@ -113,10 +113,7 @@ require([
 
       await item.layer.when();
 
-      // TODO need on eraldi suur funktsioon
-      const itemPanelDiv = document.createElement("div");
-      const sliderDiv = document.createElement("div");
-      sliderDiv.classList.add("esri-widget");
+      const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle();
 
       const slider = initSlider.setupSlider(sliderDiv);
 
