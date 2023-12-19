@@ -14,7 +14,6 @@ require([
   "esri/widgets/CoordinateConversion/support/Conversion",
 
   "esri/widgets/LayerList",
-  "esri/widgets/Slider",
 
   "./modules/layers.js",
   "./modules/scene.js",
@@ -36,7 +35,6 @@ require([
   Conversion,
 
   LayerList,
-  Slider,
 
   initLayers,
   initScene,
@@ -170,9 +168,9 @@ require([
       view,
       layerList,
       false,
-      "top-left"
+      "top-right"
     );
-    view.ui.add(layerListExpand, "top-left");
+    view.ui.add(layerListExpand, "top-right");
 
     /**************************************
      * Basemap gallery
@@ -183,9 +181,9 @@ require([
       view,
       basemaps,
       false,
-      "top-left"
+      "top-right"
     );
-    view.ui.add(basemapsExpand, "top-left");
+    view.ui.add(basemapsExpand, "top-right");
 
     // Ortophoto WMS activated if zoom is close enough
     basemaps.watch("activeBasemap", () => {
@@ -219,21 +217,8 @@ require([
     /**************************************
      * Elevation toolbox
      **************************************/
-    
+
     const opacitySlider = initSlider.setupSlider("opacitySlider", false);
-    /*
-    const opacitySlider = new Slider({
-      container: "opacitySlider",
-      precision: 2,
-      min: 0,
-      max: 1,
-      steps: 0.05,
-      values: [1],
-      visibleElements: {
-        rangeLabels: true,
-      },
-    });
-    */
 
     // Update the building layer extrusion
     opacitySlider.on(["thumb-change", "thumb-drag"], opacityChanged);
@@ -271,12 +256,11 @@ require([
       view,
       document.getElementById("elevationMenu"),
       false,
-      "top-left",
+      "top-right",
       "sky-plot"
     );
 
-    // view.ui.add("elevationMenu", "top-right");
-    view.ui.add(elevationSettingsExpand, "top-left");
+    view.ui.add(elevationSettingsExpand, "top-right");
 
     /**************************************
      *  Coordinate tool
@@ -299,17 +283,17 @@ require([
       view,
       lineOfSight,
       false,
-      "top-left"
+      "top-right"
     );
 
-    view.ui.add(expandLoS, "top-left");
+    view.ui.add(expandLoS, "top-right");
 
     /**************************************
      * Initialize the Search Widget
      **************************************/
     const customSearchSource = initSearch.setupCustomSearchSource();
     const searchWidget = initSearch.setupSearchWidget(view, customSearchSource);
-    view.ui.add(searchWidget, "top-right");
+    view.ui.add(searchWidget, "top-left");
 
     /**************************************
      *  Daylight tool
@@ -320,10 +304,10 @@ require([
       view,
       dayLightWidget,
       false,
-      "top-left"
+      "top-right"
     );
 
-    view.ui.add(expandDlight, "top-left");
+    view.ui.add(expandDlight, "top-right");
 
     /**************************************
      *  Elevation profile
@@ -335,10 +319,10 @@ require([
       view,
       elevationProfileWidget,
       false,
-      "top-left"
+      "top-right"
     );
 
-    view.ui.add(expandEprofile, "top-left");
+    view.ui.add(expandEprofile, "top-right");
 
     /**************************************
      *  Measurement 3D
@@ -351,11 +335,11 @@ require([
       view,
       document.getElementById("topbar"),
       false,
-      "top-left",
+      "top-right",
       "plans"
     );
 
-    view.ui.add(expandMeasurement, "top-left");
+    view.ui.add(expandMeasurement, "top-right");
 
     /**************************************
      * Shadow casting
@@ -364,7 +348,7 @@ require([
 
     const shadowCastBtn = document.getElementById("shadowCastBtn");
 
-    view.ui.add(shadowCastBtn, "top-left");
+    view.ui.add(shadowCastBtn, "top-right");
 
     shadowCastBtn.addEventListener("click", () => {
       shadowCast.visible = !shadowCast.visible;
@@ -382,17 +366,17 @@ require([
       view,
       slicing,
       false,
-      "top-left"
+      "top-right"
     );
 
-    view.ui.add(expandSlicing, "top-left");
+    view.ui.add(expandSlicing, "top-right");
 
     /**************************************
      * Locate
      **************************************/
     const locate = initLocate.setupLocate(view);
 
-    view.ui.add(locate, "top-left");
+    view.ui.add(locate, "top-right");
 
     /**************************************
      * Sketching
@@ -408,7 +392,7 @@ require([
       "performanceMeasureBtn"
     );
 
-    view.ui.add(performanceMeasureBtn, "top-left");
+    view.ui.add(performanceMeasureBtn, "top-right");
     const performanceMeasureInfo = document.getElementById("performanceInfo");
     performanceMeasureBtn.addEventListener("click", () => {
       if (isPerformanceInfoVisible) {
@@ -425,6 +409,10 @@ require([
     // Reordering for on-the-fly layers
     view.map.reorder(treeGroupLayer, 8);
     view.map.reorder(geologyGroupLayer, 6);
+
+    view.ui.move("zoom", "top-left");
+    view.ui.move("navigation-toggle", "top-left");
+    view.ui.move("compass", "top-left");
   });
 
   const updatePerformanceInfo = () => {

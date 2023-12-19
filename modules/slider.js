@@ -21,5 +21,3 @@ define(["esri/widgets/Slider"], (Slider) => ({
     return [itemPanelDiv, sliderDiv];
   },
 }));
-
-
