@@ -1,6 +1,5 @@
 // TODO point cloud renderers: https://developers.arcgis.com/javascript/latest/sample-code/layers-pointcloud/
 
-
 // TODO infopaneel appi kohta ka ilmselt lisada
 
 // TODO legend ja opacity slider ei tule enam kaasa CASCADE CSS-ga
@@ -306,32 +305,12 @@ require([
      *  Daylight tool
      **************************************/
     initDaylight.setupDaylight(view);
-    
-/*     const expandDlight = initLayerList.setupExpand(
-      "Expand daylight",
-      view,
-      dayLightWidget,
-      false,
-      "top-right"
-    );
-
-    view.ui.add(expandDlight, "top-right"); */
-    
 
     /**************************************
      *  Elevation profile
      **************************************/
-    const elevationProfileWidget =
-      initElevationProfile.setupElevationProfile(view);
-    const expandEprofile = initLayerList.setupExpand(
-      "Expand elevation profile",
-      view,
-      elevationProfileWidget,
-      false,
-      "top-right"
-    );
 
-    view.ui.add(expandEprofile, "top-right");
+    initElevationProfile.setupElevationProfile(view);
 
     /**************************************
      *  Measurement 3D
@@ -339,27 +318,20 @@ require([
 
     initMeasurement.setupMeasurement(view);
 
-    const expandMeasurement = initLayerList.setupExpand(
-      "Measurement toolbar",
-      view,
-      document.getElementById("topbar"),
-      false,
-      "top-right",
-      "plans"
-    );
-
-    view.ui.add(expandMeasurement, "top-right");
-
     /**************************************
      * Shadow casting
      **************************************/
+    // TODO selle migreerumine ebaõnnestus, peab vaatama kas õnnestub skripti calcite ikooni avamisel runnida
     const shadowCast = initShadowCast.setupShadowCast(view);
 
+    // const shadowCastBtn = document.getElementById("shadowcast-container");
     const shadowCastBtn = document.getElementById("shadowCastBtn");
+    // const shadowCastBtn = document.getElementById("shadowCast");
 
     view.ui.add(shadowCastBtn, "top-right");
 
     shadowCastBtn.addEventListener("click", () => {
+      console.log("Here")
       shadowCast.visible = !shadowCast.visible;
       view.ui.add(shadowCast, "top-right");
     });
@@ -368,17 +340,7 @@ require([
      * Slicing
      **************************************/
 
-    const slicing = initSlice.setupSlice(view);
-
-    const expandSlicing = initLayerList.setupExpand(
-      "Slicing",
-      view,
-      slicing,
-      false,
-      "top-right"
-    );
-
-    view.ui.add(expandSlicing, "top-right");
+    initSlice.setupSlice(view);
 
     /**************************************
      * Locate

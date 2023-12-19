@@ -4,6 +4,7 @@ define(["esri/widgets/ElevationProfile"], (ElevationProfile) => ({
   setupElevationProfile: (view) =>
     new ElevationProfile({
       view,
+      container: "elevation-profile-container",
       profiles: [
         {
           type: "ground",

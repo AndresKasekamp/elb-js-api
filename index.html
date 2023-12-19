@@ -34,6 +34,11 @@
                 <calcite-action data-action-id="elevation" icon="sky-plot" text="Elevation"></calcite-action>
                 <calcite-action data-action-id="lineOfSight" icon="line-of-sight" text="Line of Sight"></calcite-action>
                 <calcite-action data-action-id="daylight" icon="date-time" text="Daylight"></calcite-action>
+                <calcite-action data-action-id="elevationProfile" icon="altitude" text="Elevation profile">
+                </calcite-action>
+                <calcite-action data-action-id="measurement" icon="measure" text="Measurements"></calcite-action>
+                <calcite-action data-action-id="shadowCast" icon="measure-building-height-shadow" text="Shadow cast"></calcite-action>
+                <calcite-action data-action-id="slicing" icon="measure-building-height-shadow" text="Slicing"></calcite-action>
             </calcite-action-bar>
 
             <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
@@ -72,6 +77,34 @@
                 <div id="daylight-container"></div>
             </calcite-panel>
 
+            <calcite-panel heading="Elevation profile" height-scale="l" data-panel-id="elevationProfile" hidden>
+                <div id="elevation-profile-container"></div>
+            </calcite-panel>
+
+            <calcite-panel heading="Measurements" height-scale="l" data-panel-id="measurement" hidden>
+                <div id="measurement-container">
+
+                    <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
+                        title="Measure distance between two points"></button>
+                    <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
+                        title="Measure area"></button>
+
+                    <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
+
+
+                </div>
+            </calcite-panel>
+
+            <calcite-panel heading="Shadow cast" height-scale="l" data-panel-id="shadowCast" hidden>
+
+            </calcite-panel>
+
+            <calcite-panel heading="Slicing" height-scale="l" data-panel-id="slicing" hidden>
+                <div id="slicing-container"></div>
+            </calcite-panel>
+
+
+
 
         </calcite-shell-panel>
         <div id="viewDiv" class="esri-widget">
@@ -82,20 +115,15 @@
             </div>
         </div>
 
-        <button id="shadowCastBtn"
-            class=" esri-widget--button esri-icon-measure-building-height-shadow shadowcast-button"
-            aria-label="Shadow casting" title="Shadow cast"></button>
+
 
         <button id="performanceMeasureBtn" class=" esri-widget--button esri-icon-lightbulb shadowcast-button"
             aria-label="Perfomance measure" title="Performance measure"></button>
 
-        <div id="topbar">
-            <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
-            <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
-                title="Measure distance between two points"></button>
-            <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
-                title="Measure area"></button>
-        </div>
+        <button id="shadowCastBtn"
+        class=" esri-widget--button esri-icon-measure-building-height-shadow shadowcast-button"
+        aria-label="Shadow casting" title="Shadow cast"></button>
+
 
         <div id="sketchPanel" class="esri-widget">
             <div id="startbuttons">
