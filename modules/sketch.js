@@ -202,11 +202,11 @@ define([
       view: view,
       content: document.getElementById("sketchPanel"),
       expanded: false,
-      group: "top-right",
+      group: "bottom-right",
       expandIcon: "freehand",
     });
 
-    view.ui.add(expandSketch, "top-right");
+    view.ui.add(expandSketch, "bottom-right");
 
     // default values for edge/move operations
     let edgeType = "split";

@@ -2,11 +2,9 @@
 
 // TODO infopaneel appi kohta ka ilmselt lisada
 
-// TODO legend ja opacity slider ei tule enam kaasa CASCADE CSS-ga
 
 // TODO elevation migration
 
-// TODO daylight ja measurements eraldi tõsta
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -82,6 +80,13 @@ require([
    **************************************/
 
   view.when(() => {
+
+    /**************************************
+   * Built-in UI components
+   **************************************/
+    view.ui.move("zoom", "top-right");
+    view.ui.move("navigation-toggle", "top-right");
+    view.ui.move("compass", "top-right");
     /**************************************
      * Calcite CSS/JS
      **************************************/
@@ -320,7 +325,7 @@ require([
       "performanceMeasureBtn"
     );
 
-    view.ui.add(performanceMeasureBtn, "top-right");
+    view.ui.add(performanceMeasureBtn, "bottom-right");
     const performanceMeasureInfo = document.getElementById("performanceInfo");
     performanceMeasureBtn.addEventListener("click", () => {
       if (isPerformanceInfoVisible) {
@@ -342,9 +347,6 @@ require([
     const rajatisedGroup = view.map.findLayerById("180fa46104d-layer-35");
     rajatisedGroup.add(communicationTower);
 
-    view.ui.move("zoom", "bottom-right");
-    view.ui.move("navigation-toggle", "bottom-right");
-    view.ui.move("compass", "bottom-right");
   });
 
   const updatePerformanceInfo = () => {
