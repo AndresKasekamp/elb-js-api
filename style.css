@@ -18,6 +18,7 @@ body {
 #header-title {
   margin-left: 1rem;
   margin-right: 1rem;
+  color: #ffffff;
 }
 
 #performanceInfo {
@@ -168,4 +169,9 @@ img {
 #elevationInput,
 #navigationUnderground{
   margin-left: 0.5em; /* Adds margin at the top of the div element */
+}
+
+#calcite-shell {
+  background: #32774e;
+  background: linear-gradient(to right bottom, #648880, #32774e);
 }

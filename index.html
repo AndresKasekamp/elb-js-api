@@ -20,7 +20,7 @@
 
 <body>
 
-    <calcite-shell content-behind>
+    <calcite-shell content-behind id="calcite-shell">
 
         <h2 id="header-title" slot="header">
             Maa-amet 3D
@@ -43,7 +43,7 @@
             </calcite-action-bar>
 
             <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
-            <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" hidden>
+            <calcite-panel  heading="Layers" height-scale="l" data-panel-id="layers" hidden>
                 <div id="layers-container"></div>
             </calcite-panel>
             <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" hidden>
