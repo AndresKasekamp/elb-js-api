@@ -4,6 +4,10 @@
 
 // TODO legend ja opacity slider ei tule enam kaasa CASCADE CSS-ga
 
+// TODO elevation migration
+
+// TODO daylight ja measurements eraldi tõsta
+
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
 
@@ -85,6 +89,7 @@ require([
      **************************************/
 
     const shadowCast = initShadowCast.setupShadowCast(view);
+    const daylight = initDaylight.setupDaylight(view);
 
     let activeWidget;
 
@@ -114,6 +119,12 @@ require([
         shadowCast.visible = !shadowCast.visible;
         view.ui.add(shadowCast, "top-right");
       }
+
+      if (nextWidget === "daylight") {
+        daylight.visible = !daylight.visible;
+        view.ui.add(daylight, "top-right");
+      }
+
     };
 
     document

@@ -49,33 +49,32 @@
             <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" hidden>
                 <div id="basemaps-container"></div>
             </calcite-panel>
-            <calcite-panel heading="Elevation" height-scale="l" data-panel-id="elevation" hidden>
+            <calcite-panel heading="Elevation settings" height-scale="l" data-panel-id="elevation" hidden>
 
-                <div id="elevationMenu" class="esri-widget">
+                <!-- <div id="elevationMenu" class="esri-widget"> -->
 
-                    <div id="opacitySliderContainer">
-                        <div>Ground opacity: <span id="opacity">1</span></div>
-                        <div id="opacitySlider"></div>
-                    </div>
-
-                    <div class="button-container">
-                        <input type="checkbox" id="navigationUnderground" unchecked />
-                        <label for="navigationUnderground">Navigate underground</label>
-                    </div>
-
-                    <div class="button-container">
-                        <input type="checkbox" id="elevationInput" checked />
-                        <label for="elevationInput">Elevation</label>
-                    </div>
-
+                <div id="opacitySliderContainer">
+                    <div>Ground opacity: <span id="opacity">1</span></div>
+                    <div id="opacitySlider"></div>
                 </div>
+
+                <div class="button-container">
+                    <input type="checkbox" id="navigationUnderground" unchecked />
+                    <label for="navigationUnderground">Navigate underground</label>
+                </div>
+
+                <div class="button-container">
+                    <input type="checkbox" id="elevationInput" checked />
+                    <label for="elevationInput">Elevation</label>
+                </div>
+
+                <!-- </div> -->
 
             </calcite-panel>
             <calcite-panel heading="Line of Sight" height-scale="l" data-panel-id="lineOfSight" hidden>
                 <div id="line-of-sight-container"></div>
             </calcite-panel>
-            <calcite-panel heading="Daylight" height-scale="l" data-panel-id="daylight" hidden>
-                <div id="daylight-container"></div>
+            <calcite-panel height-scale="l" data-panel-id="daylight" hidden>
             </calcite-panel>
 
             <calcite-panel heading="Elevation profile" height-scale="l" data-panel-id="elevationProfile" hidden>
@@ -113,6 +112,25 @@
                 <table id="count"></table>
             </div>
         </div>
+
+        <!-- <div id="elevationMenu" class="esri-widget">
+
+            <div id="opacitySliderContainer">
+                <div>Ground opacity: <span id="opacity">1</span></div>
+                <div id="opacitySlider"></div>
+            </div>
+
+            <div class="button-container">
+                <input type="checkbox" id="navigationUnderground" unchecked />
+                <label for="navigationUnderground">Navigate underground</label>
+            </div>
+
+            <div class="button-container">
+                <input type="checkbox" id="elevationInput" checked />
+                <label for="elevationInput">Elevation</label>
+            </div>
+
+        </div> -->
 
 
 

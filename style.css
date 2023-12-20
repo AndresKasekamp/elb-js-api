@@ -143,29 +143,21 @@ img {
   border: 0;
 }
 
-
-/* #elevationDiv {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 12px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-} */
-
-#elevationMenu {
-  /* padding: 1em; */
-  text-align: center;
-  /* overflow-y: hidden; */
-}
-
 .button-container {
-  margin: 10px 0; /* Add spacing between buttons */
+  margin: 5px 0; /* Add spacing between buttons */
   text-align: left;
 }
 
+#opacitySliderContainer {
+  text-align: center;
+  padding: 1em;
+  margin-bottom: 20px;
+}
 
+#opacity {
+  margin-bottom: 0.5em; /* Adds margin at the bottom of the span element */
+}
 
-/* .esri-slider {
-  height: 50%;
-} */
+#opacitySlider {
+  margin-top: 0.5em; /* Adds margin at the top of the div element */
+}
