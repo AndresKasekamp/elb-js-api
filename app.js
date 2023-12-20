@@ -75,7 +75,6 @@ require([
 
   const scene = initScene.setupWebScene(
     graphicsLayer,
-    communicationTower,
     ortofotoWMS
   );
 
@@ -86,6 +85,9 @@ require([
    **************************************/
 
   view.when(() => {
+
+
+
     /**************************************
      * Calcite CSS/JS
      **************************************/
@@ -108,7 +110,6 @@ require([
       }
 
       const nextWidget = target.dataset.actionId;
-      console.log("Next widget", nextWidget);
       if (nextWidget !== activeWidget) {
         document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
         document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
@@ -261,7 +262,6 @@ require([
     view.map.add(geologyGroupLayer);
 
     // TODO exxaggeration ka tuua üle - aga see veits keerulisem
-    // TODO modulariseeri
     /**************************************
      * Elevation toolbox
      **************************************/
@@ -309,24 +309,6 @@ require([
     initMeasurement.setupMeasurement(view);
 
     /**************************************
-     * Shadow casting
-     **************************************/
-    // TODO selle migreerumine ebaõnnestus, peab vaatama kas õnnestub skripti calcite ikooni avamisel runnida
-    // const shadowCast = initShadowCast.setupShadowCast(view);
-
-    // // const shadowCastBtn = document.getElementById("shadowcast-container");
-    // const shadowCastBtn = document.getElementById("shadowCastBtn");
-    // // const shadowCastBtn = document.getElementById("shadowCast");
-
-    // view.ui.add(shadowCastBtn, "top-right");
-
-    // shadowCastBtn.addEventListener("click", () => {
-    //   console.log("Here");
-    //   shadowCast.visible = !shadowCast.visible;
-    //   view.ui.add(shadowCast, "top-right");
-    // });
-
-    /**************************************
      * Slicing
      **************************************/
 
@@ -371,6 +353,10 @@ require([
     // Reordering for on-the-fly layers
     view.map.reorder(treeGroupLayer, 8);
     view.map.reorder(geologyGroupLayer, 6);
+
+    // Replacing sidemastid location, adding to correct group
+    const rajatisedGroup = view.map.findLayerById("180fa46104d-layer-35");
+    rajatisedGroup.add(communicationTower);
 
     view.ui.move("zoom", "bottom-right");
     view.ui.move("navigation-toggle", "bottom-right");
