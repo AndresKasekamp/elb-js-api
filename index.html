@@ -50,11 +50,12 @@
                 <div id="basemaps-container"></div>
             </calcite-panel>
             <calcite-panel heading="Elevation settings" height-scale="l" data-panel-id="elevation" hidden>
-
-                <div id="opacitySliderContainer">
+                
+                <calcite-slider id="opacitySlider" label-handles min=0 max=100 step=1 value=100></calcite-slider>
+                <!-- <div id="opacitySliderContainer">
                     <div>Ground opacity: <span id="opacity">1</span></div>
                     <div id="opacitySlider"></div>
-                </div>
+                </div> -->
 
                 <calcite-label layout="inline">
                     <calcite-checkbox id="navigationUnderground" unchecked></calcite-checkbox>
@@ -84,19 +85,6 @@
                 <calcite-action id="areaButton" icon="measure-area" text="Measure area" text-enabled></calcite-action>
                 <calcite-action id="clearButton" icon="trash" text="Clear" text-enabled></calcite-action>
 
-                <!-- <calcite-action-group>
-
-                </calcite-action-group> -->
-                <!-- <div id="measurement-container">
-
-                    <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
-                        title="Measure distance between two points"></button>
-                    <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
-                        title="Measure area"></button>
-
-                    <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
-
-                </div> -->
             </calcite-panel>
 
             <calcite-panel height-scale="l" data-panel-id="shadowCast" hidden>
@@ -117,45 +105,8 @@
             </div>
         </div>
 
-        <!-- <div id="measurement-container">
-
-            <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
-                title="Measure distance between two points"></button>
-            <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
-                title="Measure area"></button>
-
-            <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
-
-        </div> -->
-
-        <!-- <div id="elevationMenu" class="esri-widget">
-
-            <div id="opacitySliderContainer">
-                <div>Ground opacity: <span id="opacity">1</span></div>
-                <div id="opacitySlider"></div>
-            </div>
-
-            <div class="button-container">
-                <input type="checkbox" id="navigationUnderground" unchecked />
-                <label for="navigationUnderground">Navigate underground</label>
-            </div>
-
-            <div class="button-container">
-                <input type="checkbox" id="elevationInput" checked />
-                <label for="elevationInput">Elevation</label>
-            </div>
-
-        </div> -->
-
-
-
         <button id="performanceMeasureBtn" class=" esri-widget--button esri-icon-lightbulb shadowcast-button"
             aria-label="Perfomance measure" title="Performance measure"></button>
-        <!-- 
-        <button id="shadowCastBtn"
-        class=" esri-widget--button esri-icon-measure-building-height-shadow shadowcast-button"
-        aria-label="Shadow casting" title="Shadow cast"></button> -->
-
 
         <div id="sketchPanel" class="esri-widget">
             <div id="startbuttons">

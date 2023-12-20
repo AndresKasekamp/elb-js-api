@@ -160,6 +160,9 @@ img {
 
 #opacitySlider {
   margin-top: 0.5em; /* Adds margin at the top of the div element */
+  margin-bottom: 0.5em; /* Adds margin at the top of the div element */
+  margin-right: 2em; /* Adds margin at the top of the div element */
+  margin-left: 2em; /* Adds margin at the top of the div element */
 }
 
 #elevationInput,

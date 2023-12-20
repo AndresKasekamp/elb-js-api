@@ -73,10 +73,7 @@ require([
 
   const ortofotoWMS = initLayers.setupWMSLayer();
 
-  const scene = initScene.setupWebScene(
-    graphicsLayer,
-    ortofotoWMS
-  );
+  const scene = initScene.setupWebScene(graphicsLayer, ortofotoWMS);
 
   const view = initScene.setupWebView(scene);
 
@@ -85,9 +82,6 @@ require([
    **************************************/
 
   view.when(() => {
-
-
-
     /**************************************
      * Calcite CSS/JS
      **************************************/
@@ -163,8 +157,7 @@ require([
       await item.layer.when();
 
       // Slider settings
-      const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle();
-      const slider = initSlider.setupSlider(sliderDiv, true);
+      const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle(item);
 
       // Legend settings
       const legendDiv = initLegend.setupLegendStyle();
@@ -195,8 +188,8 @@ require([
         };
       }
 
-      slider.on("thumb-drag", (event) => {
-        const { value } = event;
+      sliderDiv.addEventListener("calciteSliderInput", () => {
+        const value = sliderDiv.value / 100;
         item.layer.opacity = value;
       });
 
@@ -219,15 +212,6 @@ require([
      **************************************/
 
     initLayerList.getLayerInfo(layerList);
-
-    const layerListExpand = initLayerList.setupExpand(
-      "List of Layers",
-      view,
-      layerList,
-      false,
-      "top-right"
-    );
-    view.ui.add(layerListExpand, "top-right");
 
     /**************************************
      * Basemap gallery

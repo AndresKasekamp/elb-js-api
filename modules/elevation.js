@@ -1,15 +1,10 @@
 define(["./modules/slider.js"], (initSlider) => ({
   elevationManipulation: (scene) => {
-    const opacitySlider = initSlider.setupSlider("opacitySlider", false);
-
-    // Update the building layer extrusion
-    opacitySlider.on(["thumb-change", "thumb-drag"], opacityChanged);
-
-    function opacityChanged(event) {
-      const value = event.value;
-      document.getElementById("opacity").innerHTML = value;
-      scene.ground.opacity = event.value;
-    }
+    const opacitySlider = document.getElementById("opacitySlider");
+    opacitySlider.addEventListener("calciteSliderInput", () => {
+      const value = opacitySlider.value / 100;
+      scene.ground.opacity = value;
+    });
 
     const navigateUndergroundInput = document.getElementById(
       "navigationUnderground"
