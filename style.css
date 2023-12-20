@@ -15,6 +15,10 @@ body {
   display: flex;
 }
 
+.esri-view .esri-view-surface--touch-none:focus::after {
+  outline: none !important;
+}
+
 #header {
   display: flex;
   justify-content: space-between;
@@ -192,3 +196,9 @@ img {
   margin-left: 1rem;
   margin-right: 1rem;
 }
+
+
+/* .esri-view .esri-view-surface--inset-outline:focus::after {
+  outline: none !important;
+}‍‍‍ */
+
