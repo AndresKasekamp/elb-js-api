@@ -2,9 +2,7 @@
 
 // TODO infopaneel appi kohta ka ilmselt lisada
 
-
 // TODO elevation migration
-
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -80,10 +78,15 @@ require([
    **************************************/
 
   view.when(() => {
+    const { title, description, thumbnailUrl, avgRating } = scene.portalItem;
+    document.querySelector("#header-title").textContent = title;
+    document.querySelector("#item-description").innerHTML = description;
+    document.querySelector("#item-thumbnail").src = thumbnailUrl;
+    document.querySelector("#item-rating").value = avgRating;
 
     /**************************************
-   * Built-in UI components
-   **************************************/
+     * Built-in UI components
+     **************************************/
     view.ui.move("zoom", "top-right");
     view.ui.move("navigation-toggle", "top-right");
     view.ui.move("compass", "top-right");
@@ -346,7 +349,6 @@ require([
     // Replacing sidemastid location, adding to correct group
     const rajatisedGroup = view.map.findLayerById("180fa46104d-layer-35");
     rajatisedGroup.add(communicationTower);
-
   });
 
   const updatePerformanceInfo = () => {
