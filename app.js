@@ -280,8 +280,7 @@ require([
      * Initialize the Search Widget
      **************************************/
     const customSearchSource = initSearch.setupCustomSearchSource();
-    const searchWidget = initSearch.setupSearchWidget(view, customSearchSource);
-    view.ui.add(searchWidget, "bottom-right");
+    initSearch.setupSearchWidget(view, customSearchSource);
 
     /**************************************
      *  Daylight tool

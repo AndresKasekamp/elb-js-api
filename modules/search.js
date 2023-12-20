@@ -77,5 +77,6 @@ define([
       view: view,
       sources: [sources],
       includeDefaultSources: false,
+      container: "in-ads-container",
     }),
 }));
