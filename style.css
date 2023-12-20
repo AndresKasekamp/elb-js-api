@@ -188,8 +188,6 @@ img {
 
 #information-panel {
   padding: 0.25em;
-  //margin-left: 0.5em;
-  //margin-right: 0.5em;
 }
 
 #in-ads-container {
@@ -198,7 +196,4 @@ img {
 }
 
 
-/* .esri-view .esri-view-surface--inset-outline:focus::after {
-  outline: none !important;
-}‍‍‍ */
 
