@@ -29,6 +29,7 @@ require([
   "./modules/locate.js",
   "./modules/memoryTest.js",
   "./modules/legend.js",
+  "./modules/elevation.js",
 ], (
   Conversion,
 
@@ -49,7 +50,8 @@ require([
   initSlider,
   initLocate,
   initMemoryTest,
-  initLegend
+  initLegend,
+  initELevation
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -124,7 +126,6 @@ require([
         daylight.visible = !daylight.visible;
         view.ui.add(daylight, "top-right");
       }
-
     };
 
     document
@@ -265,47 +266,7 @@ require([
      * Elevation toolbox
      **************************************/
 
-    const opacitySlider = initSlider.setupSlider("opacitySlider", false);
-
-    // Update the building layer extrusion
-    opacitySlider.on(["thumb-change", "thumb-drag"], opacityChanged);
-    // opacitySlider.on(["calciteSliderChange"], opacityChanged);
-
-    function opacityChanged(event) {
-      const value = event.value;
-      document.getElementById("opacity").innerHTML = value;
-      scene.ground.opacity = event.value;
-    }
-
-    const navigateUndergroundInput = document.getElementById(
-      "navigationUnderground"
-    );
-    const elevationInput = document.getElementById("elevationInput");
-
-    navigateUndergroundInput.addEventListener("calciteCheckboxChange", (event) => {
-      console.log("Navigation changed")
-      scene.ground.navigationConstraint.type = event.target.checked
-        ? "none"
-        : "stay-above";
-    });
-
-    // navigateUndergroundInput.addEventListener("change", (event) => {
-    //   console.log("Navigation changed")
-    //   scene.ground.navigationConstraint.type = event.target.checked
-    //     ? "none"
-    //     : "stay-above";
-    // });
-
-    // Elevation on /ff
-    // elevationInput.addEventListener("change", updateElevation);
-    elevationInput.addEventListener("calciteCheckboxChange", updateElevation);
-
-    function updateElevation(e) {
-      // Turn ground layers visibility on/off
-      scene.ground.layers.forEach((layer) => {
-        layer.visible = e.target.checked;
-      });
-    }
+    initELevation.elevationManipulation(scene);
 
     /**************************************
      *  Coordinate tool
