@@ -51,24 +51,20 @@
             </calcite-panel>
             <calcite-panel heading="Elevation settings" height-scale="l" data-panel-id="elevation" hidden>
 
-                <!-- <div id="elevationMenu" class="esri-widget"> -->
-
                 <div id="opacitySliderContainer">
                     <div>Ground opacity: <span id="opacity">1</span></div>
                     <div id="opacitySlider"></div>
                 </div>
 
-                <div class="button-container">
-                    <input type="checkbox" id="navigationUnderground" unchecked />
-                    <label for="navigationUnderground">Navigate underground</label>
-                </div>
+                <calcite-label layout="inline">
+                    <calcite-checkbox id="navigationUnderground" unchecked></calcite-checkbox>
+                    Navigate underground
+                </calcite-label>
 
-                <div class="button-container">
-                    <input type="checkbox" id="elevationInput" checked />
-                    <label for="elevationInput">Elevation</label>
-                </div>
-
-                <!-- </div> -->
+                <calcite-label layout="inline">
+                    <calcite-checkbox id="elevationInput" checked></calcite-checkbox>
+                    Elevation
+                </calcite-label>
 
             </calcite-panel>
             <calcite-panel heading="Line of Sight" height-scale="l" data-panel-id="lineOfSight" hidden>
@@ -81,8 +77,17 @@
                 <div id="elevation-profile-container"></div>
             </calcite-panel>
 
-            <calcite-panel heading="Measurements" height-scale="l" data-panel-id="measurement" hidden>
-                <div id="measurement-container">
+            <calcite-panel heading="Measurements" width-scale="s" height-scale="l" data-panel-id="measurement" hidden>
+
+                <calcite-action id="distanceButton" icon="measure-line" text="Measure line" text-enabled>
+                </calcite-action>
+                <calcite-action id="areaButton" icon="measure-area" text="Measure area" text-enabled></calcite-action>
+                <calcite-action id="clearButton" icon="trash" text="Clear" text-enabled></calcite-action>
+
+                <!-- <calcite-action-group>
+
+                </calcite-action-group> -->
+                <!-- <div id="measurement-container">
 
                     <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
                         title="Measure distance between two points"></button>
@@ -91,8 +96,7 @@
 
                     <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
 
-
-                </div>
+                </div> -->
             </calcite-panel>
 
             <calcite-panel height-scale="l" data-panel-id="shadowCast" hidden>
@@ -112,6 +116,17 @@
                 <table id="count"></table>
             </div>
         </div>
+
+        <!-- <div id="measurement-container">
+
+            <button class="action-button esri-icon-measure-line" id="distanceButton" type="button"
+                title="Measure distance between two points"></button>
+            <button class="action-button esri-icon-measure-area" id="areaButton" type="button"
+                title="Measure area"></button>
+
+            <button id="clearButton" class="action-button esri-icon-trash" title="Clear Measurements"></button>
+
+        </div> -->
 
         <!-- <div id="elevationMenu" class="esri-widget">
 

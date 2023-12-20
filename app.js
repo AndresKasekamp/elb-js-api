@@ -269,6 +269,7 @@ require([
 
     // Update the building layer extrusion
     opacitySlider.on(["thumb-change", "thumb-drag"], opacityChanged);
+    // opacitySlider.on(["calciteSliderChange"], opacityChanged);
 
     function opacityChanged(event) {
       const value = event.value;
@@ -281,14 +282,23 @@ require([
     );
     const elevationInput = document.getElementById("elevationInput");
 
-    navigateUndergroundInput.addEventListener("change", (event) => {
+    navigateUndergroundInput.addEventListener("calciteCheckboxChange", (event) => {
+      console.log("Navigation changed")
       scene.ground.navigationConstraint.type = event.target.checked
         ? "none"
         : "stay-above";
     });
 
+    // navigateUndergroundInput.addEventListener("change", (event) => {
+    //   console.log("Navigation changed")
+    //   scene.ground.navigationConstraint.type = event.target.checked
+    //     ? "none"
+    //     : "stay-above";
+    // });
+
     // Elevation on /ff
-    elevationInput.addEventListener("change", updateElevation);
+    // elevationInput.addEventListener("change", updateElevation);
+    elevationInput.addEventListener("calciteCheckboxChange", updateElevation);
 
     function updateElevation(e) {
       // Turn ground layers visibility on/off

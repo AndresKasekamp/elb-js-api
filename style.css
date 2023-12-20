@@ -161,3 +161,8 @@ img {
 #opacitySlider {
   margin-top: 0.5em; /* Adds margin at the top of the div element */
 }
+
+#elevationInput,
+#navigationUnderground{
+  margin-left: 0.5em; /* Adds margin at the top of the div element */
+}
