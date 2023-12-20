@@ -175,3 +175,9 @@ img {
   background: #32774e;
   background: linear-gradient(to right bottom, #648880, #32774e);
 }
+
+#information-panel {
+  padding: 0.25em;
+  //margin-left: 0.5em;
+  //margin-right: 0.5em;
+}
