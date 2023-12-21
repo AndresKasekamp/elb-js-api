@@ -28,7 +28,7 @@ require([
   "./modules/memoryTest.js",
   "./modules/legend.js",
   "./modules/elevation.js",
-  "esri/geometry/Point",
+
   "./modules/goToLocation.js",
 ], (
   Conversion,
@@ -52,7 +52,6 @@ require([
   initMemoryTest,
   initLegend,
   initELevation,
-  Point,
   goToLocation
 ) => {
   /************************************************************
@@ -77,35 +76,19 @@ require([
 
   const scene = initScene.setupWebScene(graphicsLayer, ortofotoWMS);
 
-  // TODO ilmselt uurida kas center ka töötab
   const view = initScene.setupWebView(scene);
 
   /**************************************
    * Adding a layer group, expand
    **************************************/
-
   view.when(() => {
     // Going to specified location at runtime
-    //const [locationX, locationY, locationZ] = goToLocation.getLocation();
     const locationArray = goToLocation.getLocation();
 
     if (locationArray !== null) {
-      const [locationX, locationY, locationZ] = locationArray;
-      const point = new Point({
-        x: locationX,
-        y: locationY,
-        z: locationZ,
-        spatialReference: {
-          wkid: 3301,
-        },
-      });
-
-      view.goTo(point);
+      const viewpoint = goToLocation.setupViewPoint(locationArray);
+      view.goTo(viewpoint);
     }
-
-    // TODO nupp mis jagab, meetodid, mis korjavad stseentilt, funktsioon, mis parsib ja funktsioon, mis suhtleb koordinaati tööriistaga (temast sõltub)
-    // TODO algus on siit ilmselt
-    // TODO kaameranurk ja muu selline ka...
 
     //console.log(view.viewpoint)
 
@@ -166,9 +149,13 @@ require([
         view.ui.add(daylight, "top-right");
       }
 
-      if (nextWidget === "information") {
+      if (nextWidget === "share") {
         const sharedLocation = goToLocation.createURL(view);
         goToLocation.copyTextToClipboard(sharedLocation);
+
+        // Displaying popup
+        const shareMapAlert = document.getElementById("share-map-alert");
+        shareMapAlert.open = "true";
       }
     };
 

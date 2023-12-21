@@ -32,25 +32,40 @@
         </div>
 
 
-        
+
 
 
         <calcite-shell-panel slot="panel-start" display-mode="float">
 
             <calcite-action-bar slot="action-bar">
-                <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
-                <calcite-action data-action-id="basemaps" icon="layer-basemap" text="Basemaps"></calcite-action>
-                <calcite-action data-action-id="elevation" icon="sky-plot" text="Elevation"></calcite-action>
-                <calcite-action data-action-id="lineOfSight" icon="line-of-sight" text="Line of Sight"></calcite-action>
-                <calcite-action data-action-id="daylight" icon="date-time" text="Daylight"></calcite-action>
-                <calcite-action data-action-id="elevationProfile" icon="altitude" text="Elevation profile">
+                <calcite-action data-action-id="layers" icon="layers" text="Layers" scale="l"></calcite-action>
+                <calcite-action data-action-id="basemaps" icon="layer-basemap" text="Basemaps" scale="l">
                 </calcite-action>
-                <calcite-action data-action-id="measurement" icon="measure" text="Measurements"></calcite-action>
-                <calcite-action data-action-id="shadowCast" icon="measure-building-height-shadow" text="Shadow cast">
+                <calcite-action data-action-id="elevation" icon="sky-plot" text="Elevation" scale="l"></calcite-action>
+                <calcite-action data-action-id="lineOfSight" icon="line-of-sight" text="Line of Sight" scale="l">
                 </calcite-action>
-                <calcite-action data-action-id="slicing" icon="slice" text="Slicing"></calcite-action>
-                <calcite-action data-action-id="information" icon="information" text="Information"></calcite-action>
+                <calcite-action data-action-id="daylight" icon="date-time" text="Daylight" scale="l"></calcite-action>
+                <calcite-action data-action-id="elevationProfile" icon="altitude" text="Elevation profile" scale="l">
+                </calcite-action>
+                <calcite-action data-action-id="measurement" icon="measure" text="Measurements" scale="l">
+                </calcite-action>
+                <calcite-action data-action-id="shadowCast" icon="measure-building-height-shadow" text="Shadow cast"
+                    scale="l">
+                </calcite-action>
+                <calcite-action data-action-id="slicing" icon="slice" text="Slicing" scale="l"></calcite-action>
+                <calcite-action data-action-id="information" icon="information" text="Information" scale="l">
+                </calcite-action>
+                <calcite-action id="share-tooltip" data-action-id="share" icon="share" text="Share" scale="l">
+                </calcite-action>
+                <calcite-tooltip reference-element="share-tooltip">
+                    <span>Share a map</span>
+                </calcite-tooltip>
+
             </calcite-action-bar>
+
+            <calcite-alert id="share-map-alert" auto-close auto-close-duration="fast" kind="success">
+                <div slot="message">Copied map location to the clipboard</div>
+            </calcite-alert>
 
             <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
             <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" hidden>
@@ -115,6 +130,9 @@
                         </calcite-rating>
                     </calcite-label>
                 </div>
+            </calcite-panel>
+
+            <calcite-panel height-scale="l" data-panel-id="share" hidden closed>
             </calcite-panel>
 
 
