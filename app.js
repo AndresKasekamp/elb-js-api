@@ -1,10 +1,5 @@
 // TODO point cloud renderers: https://developers.arcgis.com/javascript/latest/sample-code/layers-pointcloud/
-
-// TODO infopaneel appi kohta ka ilmselt lisada
-
-// TODO elevation migration
-
-// TODO kaameranurga, tilti määramine, eraldi nupp + väike popup snackbar ka.
+// TODO scrolling panel ei tööta?
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -65,6 +60,8 @@ require([
     "66e382030b224ffa999249a4d1cbbf4f",
     "Sidemastid"
   );
+  communicationTower.visible = true;
+
   const boreholes = initLayers.setupInternalLayer(
     "e1ceb1c5197b401e88deba0888f97000",
     "Puuraugud"
