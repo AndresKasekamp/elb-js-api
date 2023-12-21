@@ -4,6 +4,8 @@
 
 // TODO elevation migration
 
+// TODO kaameranurga, tilti määramine, eraldi nupp + väike popup snackbar ka.
+
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
 
@@ -26,6 +28,8 @@ require([
   "./modules/memoryTest.js",
   "./modules/legend.js",
   "./modules/elevation.js",
+  "esri/geometry/Point",
+  "./modules/goToLocation.js",
 ], (
   Conversion,
 
@@ -47,7 +51,9 @@ require([
   initLocate,
   initMemoryTest,
   initLegend,
-  initELevation
+  initELevation,
+  Point,
+  goToLocation
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -71,6 +77,7 @@ require([
 
   const scene = initScene.setupWebScene(graphicsLayer, ortofotoWMS);
 
+  // TODO ilmselt uurida kas center ka töötab
   const view = initScene.setupWebView(scene);
 
   /**************************************
@@ -78,11 +85,40 @@ require([
    **************************************/
 
   view.when(() => {
+    // Going to specified location at runtime
+    //const [locationX, locationY, locationZ] = goToLocation.getLocation();
+    const locationArray = goToLocation.getLocation();
+
+    if (locationArray !== null) {
+      const [locationX, locationY, locationZ] = locationArray;
+      const point = new Point({
+        x: locationX,
+        y: locationY,
+        z: locationZ,
+        spatialReference: {
+          wkid: 3301,
+        },
+      });
+
+      view.goTo(point);
+    }
+
+    // TODO nupp mis jagab, meetodid, mis korjavad stseentilt, funktsioon, mis parsib ja funktsioon, mis suhtleb koordinaati tööriistaga (temast sõltub)
+    // TODO algus on siit ilmselt
+    // TODO kaameranurk ja muu selline ka...
+
+    //console.log(view.viewpoint)
+
     const { title, description, thumbnailUrl, avgRating } = scene.portalItem;
     document.querySelector("#header-title").textContent = title;
     document.querySelector("#item-description").innerHTML = description;
     document.querySelector("#item-thumbnail").src = thumbnailUrl;
     document.querySelector("#item-rating").value = avgRating;
+
+    //let currentURL = window.location.href;
+
+    // Log the current URL to the console
+    //console.log("Current URL:", currentURL);
 
     /**************************************
      * Built-in UI components
@@ -128,6 +164,11 @@ require([
       if (nextWidget === "daylight") {
         daylight.visible = !daylight.visible;
         view.ui.add(daylight, "top-right");
+      }
+
+      if (nextWidget === "information") {
+        const sharedLocation = goToLocation.createURL(view);
+        goToLocation.copyTextToClipboard(sharedLocation);
       }
     };
 
