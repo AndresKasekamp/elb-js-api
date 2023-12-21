@@ -27,5 +27,6 @@ Improvements compared to official map application:
   - Draw multiple buildings and extrude them
   - Draw lines
   - Draw points
+- Ability to share a map location
 
 

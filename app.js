@@ -87,7 +87,7 @@ require([
 
     if (locationArray !== null) {
       const viewpoint = goToLocation.setupViewPoint(locationArray);
-      view.goTo(viewpoint);
+      view.goTo(viewpoint, {animate: false});
     }
 
     //console.log(view.viewpoint)
