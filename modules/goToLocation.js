@@ -3,6 +3,7 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
   Camera,
   Point
 ) => ({
+  // TODO ilmselt kui liidestada 2D-ga, peab mingit default kaamera parameetrid määrama kui neid pole
   getLocation: () => {
     // Sample URL with parameters
     const urlString = window.location.href;

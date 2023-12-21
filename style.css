@@ -1,4 +1,4 @@
-@import "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css";
+@import "https://js.arcgis.com/4.28/@arcgis/core/assets/esri/themes/light/main.css";
 @import "https://js.arcgis.com/calcite-components/1.11.0/calcite.css";
 html,
 body,
@@ -205,3 +205,7 @@ img {
 .esri-coordinate-conversion__row {
   padding: 0 5px 0 5px;
 }
+
+/* .esri-component.esri-measurement {
+  width: 500px;
+}  */

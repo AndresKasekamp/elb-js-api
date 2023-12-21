@@ -30,6 +30,7 @@ require([
   "./modules/elevation.js",
 
   "./modules/goToLocation.js",
+  "esri/widgets/Measurement",
 ], (
   Conversion,
 
@@ -52,7 +53,8 @@ require([
   initMemoryTest,
   initLegend,
   initELevation,
-  goToLocation
+  goToLocation,
+  Measurement
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
@@ -87,7 +89,7 @@ require([
 
     if (locationArray !== null) {
       const viewpoint = goToLocation.setupViewPoint(locationArray);
-      view.goTo(viewpoint, {animate: false});
+      view.goTo(viewpoint, { animate: false });
     }
 
     //console.log(view.viewpoint)
@@ -324,8 +326,12 @@ require([
     /**************************************
      *  Measurement 3D
      **************************************/
+    const measurement = new Measurement({
+      view,
+      container: "measurement-container",
+    });
 
-    initMeasurement.setupMeasurement(view);
+    initMeasurement.setupMeasurement(measurement);
 
     /**************************************
      * Slicing

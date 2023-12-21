@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="style.css" />
 
     <!-- Esri JS -->
-    <script src="https://js.arcgis.com/4.27/"></script>
+    <script src="https://js.arcgis.com/4.28/"></script>
 
     <!-- CSS calcite -->
     <script src="https://js.arcgis.com/calcite-components/1.11.0/calcite.esm.js" type="module"></script>
@@ -100,11 +100,12 @@
             </calcite-panel>
 
             <calcite-panel heading="Measurements" width-scale="s" height-scale="l" data-panel-id="measurement" hidden>
-
+                
                 <calcite-action id="distanceButton" icon="measure-line" text="Measure line" text-enabled>
                 </calcite-action>
                 <calcite-action id="areaButton" icon="measure-area" text="Measure area" text-enabled></calcite-action>
                 <calcite-action id="clearButton" icon="trash" text="Clear" text-enabled></calcite-action>
+                <div id="measurement-container"></div>
 
             </calcite-panel>
 
