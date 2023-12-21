@@ -12,7 +12,7 @@ define([
 ], (Search, SearchSource, Graphic, Point, esriRequest, geometryEngine) => ({
   setupCustomSearchSource: () =>
     new SearchSource({
-      placeholder: "Find address with IN-ADS API",
+      placeholder: "Search address",
       // Provide a getSuggestions method
       // to provide suggestions to the Search widget
       getSuggestions: (params) => {
@@ -60,7 +60,7 @@ define([
               extent: buffer.extent,
               feature: graphic,
               //name: address.pikkaadress,
-              name: `${address.pikkaadress}\n(ads_oid=${address.ads_oid})`,
+              name: `${address.pikkaadress}`,
             };
 
             return searchResult;
