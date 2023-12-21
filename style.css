@@ -177,7 +177,7 @@ img {
 }
 
 #elevationInput,
-#navigationUnderground{
+#navigationUnderground {
   margin-left: 0.5em; /* Adds margin at the top of the div element */
 }
 
@@ -196,5 +196,12 @@ img {
   width: 350px;
 }
 
+.esri-component.esri-coordinate-conversion.esri-widget {
+  width: 350px;
+  font-size: 11px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
 
-
+.esri-coordinate-conversion__row {
+  padding: 0 5px 0 5px;
+}
