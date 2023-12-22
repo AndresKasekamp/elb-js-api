@@ -219,7 +219,8 @@ img {
 } */
 
 
-#daylight-container {
+#daylight-container,
+#shadowcast-container {
   width: 100%; /* Ensure the widget container takes full width */
   height: 100%; /* Ensure the widget container takes full height */
 }
