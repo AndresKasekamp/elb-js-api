@@ -49,6 +49,8 @@
                     scale="l">
                 </calcite-action>
                 <calcite-action data-action-id="slicing" icon="slice" text="Slicing" scale="l"></calcite-action>
+                <calcite-action data-action-id="sketching" icon="freehand" text="Sketch" scale="l">
+                </calcite-action>
                 <calcite-action data-action-id="information" icon="information" text="Information" scale="l">
                 </calcite-action>
                 <calcite-action id="share-tooltip" data-action-id="share" icon="share" text="Share" scale="l">
@@ -56,6 +58,7 @@
                 <calcite-tooltip reference-element="share-tooltip">
                     <span>Share a map</span>
                 </calcite-tooltip>
+
 
             </calcite-action-bar>
 
@@ -113,6 +116,56 @@
                 <div id="slicing-container"></div>
             </calcite-panel>
 
+            <calcite-panel heading="Sketching" height-scale="l" data-panel-id="sketching" hidden>
+                <div id="sketchPanel" class="esri-widget">
+                    <div id="startbuttons">
+                        <button id="point" data-type="point" class="esri-button starttool">
+                            Draw a point of interest
+                        </button>
+                        <button id="line" data-type="polyline" class="esri-button starttool">
+                            Draw a route
+                        </button>
+                        <button id="extrudedPolygon" data-type="polygon" class="esri-button starttool">
+                            Draw a building
+                        </button>
+                    </div>
+                    <div id="actionbuttons">
+                        <button id="cancel" class="esri-button">Cancel</button>
+                        <button id="done" class="esri-button">Done</button>
+                    </div>
+
+                    <div id="edgeoperationbuttons">
+                        <div id="extrudeSliderContainer">
+                            <div>Extrude value: <span id="extrude">10</span></div>
+                            <div id="extrudeSlider"></div>
+                        </div>
+                        <br />Select the edge operation:
+                        <div class="update-options" id="edge">
+                            <button class="esri-widget--button edge-button" id="none-edge-button" value="none">
+                                None
+                            </button>
+                            <button class="esri-widget--button edge-button edge-button-selected" id="split-edge-button"
+                                value="split">
+                                Split
+                            </button>
+                            <button class="esri-widget--button edge-button" id="offset-edge-button" value="offset">
+                                Offset
+                            </button>
+                        </div>
+                        Select the move operation:
+                        <div class="update-options" id="shape">
+                            <button class="esri-widget--button shape-button" id="none-shape-button" value="none">
+                                None
+                            </button>
+                            <button class="esri-widget--button shape-button shape-button-selected"
+                                id="move-shape-button" value="move">
+                                Move
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </calcite-panel>
+
             <!-- Info panel (populates with info from the web map) -->
             <calcite-panel id="information-panel" heading="Details" data-panel-id="information" hidden>
                 <div id="info-content">
@@ -132,57 +185,8 @@
             <calcite-panel height-scale="l" data-panel-id="share" hidden closed>
             </calcite-panel>
 
-
         </calcite-shell-panel>
         <div id="viewDiv" class="esri-widget">
-        </div>
-
-        <div id="sketchPanel" class="esri-widget">
-            <div id="startbuttons">
-                <button id="point" data-type="point" class="esri-button starttool">
-                    Draw a point of interest
-                </button>
-                <button id="line" data-type="polyline" class="esri-button starttool">
-                    Draw a route
-                </button>
-                <button id="extrudedPolygon" data-type="polygon" class="esri-button starttool">
-                    Draw a building
-                </button>
-            </div>
-            <div id="actionbuttons">
-                <button id="cancel" class="esri-button">Cancel</button>
-                <button id="done" class="esri-button">Done</button>
-            </div>
-
-            <div id="edgeoperationbuttons">
-                <div id="extrudeSliderContainer">
-                    <div>Extrude value: <span id="extrude">10</span></div>
-                    <div id="extrudeSlider"></div>
-                </div>
-                <br />Select the edge operation:
-                <div class="update-options" id="edge">
-                    <button class="esri-widget--button edge-button" id="none-edge-button" value="none">
-                        None
-                    </button>
-                    <button class="esri-widget--button edge-button edge-button-selected" id="split-edge-button"
-                        value="split">
-                        Split
-                    </button>
-                    <button class="esri-widget--button edge-button" id="offset-edge-button" value="offset">
-                        Offset
-                    </button>
-                </div>
-                Select the move operation:
-                <div class="update-options" id="shape">
-                    <button class="esri-widget--button shape-button" id="none-shape-button" value="none">
-                        None
-                    </button>
-                    <button class="esri-widget--button shape-button shape-button-selected" id="move-shape-button"
-                        value="move">
-                        Move
-                    </button>
-                </div>
-            </div>
         </div>
 
     </calcite-shell>

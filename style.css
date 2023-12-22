@@ -208,12 +208,9 @@ img {
   padding: 0.25em;
 }
 
-/* #daylight-container {
-  width: 300px;
-} */
-
 #daylight-container,
-#shadowcast-container {
+#shadowcast-container,
+#sketchPanel {
   width: 100%; /* Ensure the widget container takes full width */
   height: 100%; /* Ensure the widget container takes full height */
 }

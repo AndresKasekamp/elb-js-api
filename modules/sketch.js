@@ -197,17 +197,6 @@ define([
       extrudedPolygon.symbol = updatedSymbol;
     }
 
-    const expandSketch = new Expand({
-      expandTooltip: "Sketching",
-      view: view,
-      content: document.getElementById("sketchPanel"),
-      expanded: false,
-      group: "bottom-right",
-      expandIcon: "freehand",
-    });
-
-    view.ui.add(expandSketch, "bottom-right");
-
     // default values for edge/move operations
     let edgeType = "split";
     let shapeType = "move";
