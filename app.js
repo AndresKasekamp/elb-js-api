@@ -113,7 +113,7 @@ require([
      **************************************/
 
     const shadowCast = initShadowCast.setupShadowCast(view);
-    const daylight = initDaylight.setupDaylight(view);
+    
 
     let activeWidget;
 
@@ -143,10 +143,6 @@ require([
         view.ui.add(shadowCast, "top-right");
       }
 
-      if (nextWidget === "daylight") {
-        daylight.visible = !daylight.visible;
-        view.ui.add(daylight, "top-right");
-      }
 
       if (nextWidget === "share") {
         const sharedLocation = goToLocation.createURL(view);
@@ -309,9 +305,10 @@ require([
     const customSearchSource = initSearch.setupCustomSearchSource();
     initSearch.setupSearchWidget(view, customSearchSource);
 
-    /**************************************
-     *  Daylight tool
+      /**************************************
+     * Initialize daylight
      **************************************/
+
     initDaylight.setupDaylight(view);
 
     /**************************************

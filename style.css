@@ -208,3 +208,18 @@ img {
 .esri-coordinate-conversion__row {
   padding: 0 5px 0 5px;
 }
+
+#navigationUnderground,
+#elevationInput {
+  padding: 0.25em;
+}
+
+/* #daylight-container {
+  width: 300px;
+} */
+
+
+#daylight-container {
+  width: 100%; /* Ensure the widget container takes full width */
+  height: 100%; /* Ensure the widget container takes full height */
+}

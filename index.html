@@ -69,10 +69,11 @@
             </calcite-panel>
             <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" hidden>
                 <div id="basemaps-container"></div>
+                <calcite-slider id="opacitySlider" label-handles min=0 max=100 step=1 value=100></calcite-slider>
             </calcite-panel>
             <calcite-panel heading="Elevation settings" height-scale="l" data-panel-id="elevation" hidden>
 
-                <calcite-slider id="opacitySlider" label-handles min=0 max=100 step=1 value=100></calcite-slider>
+
 
                 <calcite-label layout="inline">
                     <calcite-checkbox id="navigationUnderground" unchecked></calcite-checkbox>
@@ -89,6 +90,7 @@
                 <div id="line-of-sight-container"></div>
             </calcite-panel>
             <calcite-panel height-scale="l" data-panel-id="daylight" hidden>
+                <div id="daylight-container"></div>
             </calcite-panel>
 
             <calcite-panel heading="Elevation profile" height-scale="l" data-panel-id="elevationProfile" hidden>
@@ -141,6 +143,8 @@
                 <table id="count"></table>
             </div>
         </div>
+
+        <!-- <div id="daylight-container"></div> -->
 
         <button id="performanceMeasureBtn" class=" esri-widget--button esri-icon-lightbulb shadowcast-button"
             aria-label="Perfomance measure" title="Performance measure"></button>
