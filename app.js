@@ -1,5 +1,7 @@
 // TODO point cloud renderers: https://developers.arcgis.com/javascript/latest/sample-code/layers-pointcloud/
 // TODO scrolling panel ei tööta?
+// TODO ilmselt WMS kihid eraldi gruppi lisada, kataster ja kpo jne
+// TODO kas remove või hide ilmselt või disable layerile
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -20,7 +22,7 @@ require([
   "./modules/slice.js",
   "./modules/slider.js",
   "./modules/locate.js",
-  "./modules/memoryTest.js",
+
   "./modules/legend.js",
   "./modules/elevation.js",
 
@@ -45,7 +47,6 @@ require([
   initSlice,
   initSlider,
   initLocate,
-  initMemoryTest,
   initLegend,
   initELevation,
   goToLocation,
@@ -56,7 +57,7 @@ require([
    ************************************************************/
 
   const graphicsLayer = initLayers.setupGraphicsLayer();
-  
+
   const communicationTower = initLayers.setupInternalLayer(
     "66e382030b224ffa999249a4d1cbbf4f",
     "Sidemastid"
@@ -92,18 +93,11 @@ require([
       view.goTo(viewpoint, { animate: false });
     }
 
-    //console.log(view.viewpoint)
-
     const { title, description, thumbnailUrl, avgRating } = scene.portalItem;
     document.querySelector("#header-title").textContent = title;
     document.querySelector("#item-description").innerHTML = description;
     document.querySelector("#item-thumbnail").src = thumbnailUrl;
     document.querySelector("#item-rating").value = avgRating;
-
-    //let currentURL = window.location.href;
-
-    // Log the current URL to the console
-    //console.log("Current URL:", currentURL);
 
     /**************************************
      * Built-in UI components
@@ -180,6 +174,7 @@ require([
     const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
 
     async function defineActions(e) {
+
       const taimkateAnalytical = "Taimkate analüütiline";
       const taimkateRealistic = "Taimkate realistlik";
 
@@ -196,6 +191,9 @@ require([
 
       itemPanelDiv.append(sliderDiv, legendDiv);
 
+      if (item.title === "Kataster" || item.title === "Kitsendused" || item.title === "Kitsendusi põhjustavad objektid") {
+        item.hidden = true;
+      }
       // when the item is the name of the tree,
       // add the layers of the items to the group layer
       if (
@@ -243,6 +241,54 @@ require([
      **************************************/
 
     initLayerList.getLayerInfo(layerList);
+
+    /**************************************
+     * WMS layerlist gallery
+     **************************************/
+    // define a layerlist
+    const wmsLayerList = new LayerList({
+      view,
+      container: "wms-layers-container",
+      listItemCreatedFunction: defineActions2,
+    });
+
+    async function defineActions2(e) {
+      const item = e.item;
+
+      await item.layer.when();
+
+      // Slider settings
+      const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle(item);
+
+      // Legend settings
+      const legendDiv = initLegend.setupLegendStyle();
+      initLegend.setupLegend(view, item.layer, legendDiv);
+
+      itemPanelDiv.append(sliderDiv, legendDiv);
+
+      if (item.title !== "Kataster" && item.title !== "Kitsendused" && item.title !== "Kitsendusi põhjustavad objektid") {
+        item.hidden = true;
+      }
+      // when the item is the name of the tree,
+      // add the layers of the items to the group layer
+
+      sliderDiv.addEventListener("calciteSliderInput", () => {
+        const value = sliderDiv.value / 100;
+        item.layer.opacity = value;
+      });
+
+      item.actionsSections = [
+        [
+          {
+            title: "Layer information",
+            className: "esri-icon-description",
+            id: "information",
+          },
+        ],
+      ];
+    }
+
+    initLayerList.getLayerInfo(wmsLayerList);
 
     /**************************************
      * Basemap gallery

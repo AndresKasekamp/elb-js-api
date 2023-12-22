@@ -35,6 +35,7 @@
 
             <calcite-action-bar slot="action-bar">
                 <calcite-action data-action-id="layers" icon="layers" text="Layers" scale="l"></calcite-action>
+                <calcite-action data-action-id="layers-wms" icon="image-layer" text="WMS" scale="l"></calcite-action>
                 <calcite-action data-action-id="basemaps" icon="layer-basemap" text="Basemaps" scale="l">
                 </calcite-action>
                 <calcite-action data-action-id="elevation" icon="sky-plot" text="Elevation" scale="l"></calcite-action>
@@ -69,6 +70,9 @@
             <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
             <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" hidden>
                 <div id="layers-container"></div>
+            </calcite-panel>
+            <calcite-panel heading="WMS" height-scale="l" data-panel-id="layers-wms" hidden>
+                <div id="wms-layers-container"></div>
             </calcite-panel>
             <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" hidden>
                 <div id="basemaps-container"></div>
