@@ -34,12 +34,6 @@ body {
   color: #ffffff;
 }
 
-#performanceInfo {
-  display: none;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 1em;
-}
-
 table {
   margin: 1em 0;
 }
@@ -217,7 +211,6 @@ img {
 /* #daylight-container {
   width: 300px;
 } */
-
 
 #daylight-container,
 #shadowcast-container {

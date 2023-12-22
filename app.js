@@ -343,29 +343,6 @@ require([
     // TODO peab koodi sisse vaatama, et kuidas elemendid defineerida ja expand loogiliselt töötaks
     initSketch.setupSketch(view, graphicsLayer);
 
-    /**************************************
-     * Perfomance info
-     **************************************/
-
-    let isPerformanceInfoVisible = false;
-    const performanceMeasureBtn = document.getElementById(
-      "performanceMeasureBtn"
-    );
-
-    view.ui.add(performanceMeasureBtn, "bottom-right");
-    const performanceMeasureInfo = document.getElementById("performanceInfo");
-    performanceMeasureBtn.addEventListener("click", () => {
-      if (isPerformanceInfoVisible) {
-        performanceMeasureInfo.style.display = "none";
-      } else {
-        updatePerformanceInfo();
-        performanceMeasureInfo.style.display = "inline";
-        view.ui.add(performanceMeasureInfo, "top-right");
-      }
-      // Update the flag to reflect the new visibility state
-      isPerformanceInfoVisible = !isPerformanceInfoVisible;
-    });
-
     // Reordering for on-the-fly layers
     view.map.reorder(treeGroupLayer, 8);
     view.map.reorder(geologyGroupLayer, 6);
@@ -374,16 +351,4 @@ require([
     const rajatisedGroup = view.map.findLayerById("180fa46104d-layer-35");
     rajatisedGroup.add(communicationTower);
   });
-
-  const updatePerformanceInfo = () => {
-    const performanceInfo = view.performanceInfo;
-
-    initMemoryTest.updateMemoryTitle(
-      performanceInfo.usedMemory,
-      performanceInfo.totalMemory,
-      performanceInfo.quality
-    );
-    initMemoryTest.updateTables(performanceInfo);
-    setTimeout(updatePerformanceInfo, 1000);
-  };
 });
