@@ -28,6 +28,7 @@ require([
 
   "./modules/goToLocation.js",
   "esri/widgets/Measurement",
+  "./modules/mediaQuery.js"
 ], (
   Conversion,
 
@@ -50,11 +51,15 @@ require([
   initLegend,
   initELevation,
   goToLocation,
-  Measurement
+  Measurement,
+  initMediaQuery
 ) => {
   /************************************************************
    * Init scene (/w layers) and view
    ************************************************************/
+  // const mediaQuery = window.matchMedia('(max-width: 768px)');
+  // initMediaQuery.handleMediaQueryChange(mediaQuery)
+  // mediaQuery.addEventListener(initMediaQuery.handleMediaQueryChange);
 
   const graphicsLayer = initLayers.setupGraphicsLayer();
 
@@ -81,10 +86,15 @@ require([
 
   const view = initScene.setupWebView(scene);
 
+
+
   /**************************************
    * Adding a layer group, expand
    **************************************/
   view.when(() => {
+    // Media query
+
+
     // Going to specified location at runtime
     const locationArray = goToLocation.getLocation();
 
