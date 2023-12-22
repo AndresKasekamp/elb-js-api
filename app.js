@@ -56,6 +56,7 @@ require([
    ************************************************************/
 
   const graphicsLayer = initLayers.setupGraphicsLayer();
+  
   const communicationTower = initLayers.setupInternalLayer(
     "66e382030b224ffa999249a4d1cbbf4f",
     "Sidemastid"
@@ -63,13 +64,15 @@ require([
   communicationTower.visible = true;
 
   const boreholes = initLayers.setupInternalLayer(
-    "e1ceb1c5197b401e88deba0888f97000",
+    "3636989db65e4f749dea778829bf30b5",
     "Puuraugud"
   );
+  boreholes.visible = true;
   const constructionGeology = initLayers.setupInternalLayer(
-    "35026f30f1d94e438110ad23b8dfb1fa",
+    "faab65d9d2d84e45a704b33ab763166a",
     "Ehitusgeoloogia"
   );
+  constructionGeology.visible = true;
 
   const ortofotoWMS = initLayers.setupWMSLayer();
 
