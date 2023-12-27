@@ -90,6 +90,7 @@ require([
     ortofotoWMS
   );
 
+
   //const geologyScene = initScene.setupWebScene("da15a55042b54c31b0208ba98c1647fc");
 
   const apDTM = initELevation.setupElevationLayer(
@@ -368,7 +369,7 @@ require([
      * Elevation toolbox
      **************************************/
 
-    initELevation.elevationManipulation(scene);
+    initELevation.elevationManipulation(view);
 
     /**************************************
      *  Coordinate tool

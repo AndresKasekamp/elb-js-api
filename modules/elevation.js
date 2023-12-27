@@ -1,10 +1,10 @@
 // TODO kas siin saaks sisendina deklareerida kohe view.map scene asemel, et konstukrutori ülesannet kergemaks teha
 define(["esri/layers/ElevationLayer"], (ElevationLayer) => ({
-  elevationManipulation: (scene) => {
+  elevationManipulation: (view) => {
     const opacitySlider = document.getElementById("opacitySlider");
     opacitySlider.addEventListener("calciteSliderInput", () => {
       const value = opacitySlider.value / 100;
-      scene.ground.opacity = value;
+      view.map.ground.opacity = value;
     });
 
     const navigateUndergroundInput = document.getElementById(
@@ -15,7 +15,7 @@ define(["esri/layers/ElevationLayer"], (ElevationLayer) => ({
     navigateUndergroundInput.addEventListener(
       "calciteCheckboxChange",
       (event) => {
-        scene.ground.navigationConstraint.type = event.target.checked
+        view.map.ground.navigationConstraint.type = event.target.checked
           ? "none"
           : "stay-above";
       }
@@ -26,7 +26,7 @@ define(["esri/layers/ElevationLayer"], (ElevationLayer) => ({
 
     function updateElevation(e) {
       // Turn ground layers visibility on/off
-      scene.ground.layers.forEach((layer) => {
+      view.map.ground.layers.forEach((layer) => {
         layer.visible = e.target.checked;
       });
     }
@@ -38,7 +38,7 @@ define(["esri/layers/ElevationLayer"], (ElevationLayer) => ({
       () => {
         const selectedItem = elevationLayerGroup.selectedItem.value;
 
-        scene.ground.layers.forEach((layer) => {
+        view.map.ground.layers.forEach((layer) => {
           layer.visible = layer.id === selectedItem;
         });
       }
