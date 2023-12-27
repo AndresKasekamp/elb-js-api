@@ -2,7 +2,7 @@ define([
   "esri/layers/GraphicsLayer",
   "esri/layers/SceneLayer",
   "esri/layers/WMSLayer",
-  "esri/layers/GroupLayer"
+  "esri/layers/GroupLayer",
 ], (GraphicsLayer, SceneLayer, WMSLayer, GroupLayer) => ({
   setupGraphicsLayer: () =>
     new GraphicsLayer({
@@ -10,13 +10,12 @@ define([
       title: "Joonistatud kihid",
     }),
 
-  setupInternalLayer: (layerID, layerTitle) =>
+  setupInternalLayer: (id, title) =>
     new SceneLayer({
       portalItem: {
-        id: layerID,
+        id,
       },
-      title: layerTitle,
-      visible: false,
+      title,
     }),
 
   setupWMSLayer: () =>
@@ -29,10 +28,31 @@ define([
       listMode: "hide",
     }),
 
-  setupGroupLayer: (groupName, visibilityMode) =>
+  setupGroupLayer: (title, visibilityMode) =>
     new GroupLayer({
-      title: groupName,
+      title,
       visible: false,
-      visibilityMode: visibilityMode,
+      visibilityMode,
     }),
+
+  getGeologyLayers: (view) => {
+    const geologyLayerTitles = [
+      "Puurkaevud/puuraugud",
+      "Ehitusgeoloogia",
+      "Geoloogia WMS",
+    ];
+
+    const geologyLayers = {};
+    view.map.layers.forEach((layer) => {
+      const layerTitle = layer.title;
+      if (geologyLayerTitles.includes(layerTitle)) {
+        geologyLayers[layerTitle] = layer;
+      }
+    });
+
+    const returnLayers = geologyLayerTitles
+      .map((title) => geologyLayers[title])
+      .filter(Boolean);
+    return { items: returnLayers };
+  },
 }));

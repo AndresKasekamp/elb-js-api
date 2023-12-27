@@ -69,18 +69,6 @@ require([
     "66e382030b224ffa999249a4d1cbbf4f",
     "Sidemastid"
   );
-  communicationTower.visible = true;
-
-  const boreholes = initLayers.setupInternalLayer(
-    "3636989db65e4f749dea778829bf30b5",
-    "Puuraugud"
-  );
-  boreholes.visible = true;
-  const constructionGeology = initLayers.setupInternalLayer(
-    "faab65d9d2d84e45a704b33ab763166a",
-    "Ehitusgeoloogia"
-  );
-  constructionGeology.visible = true;
 
   const ortofotoWMS = initLayers.setupWMSLayer();
 
@@ -90,9 +78,13 @@ require([
     ortofotoWMS
   );
 
+  const geologyScene = initScene.setupWebScene(
+    "da15a55042b54c31b0208ba98c1647fc"
+  );
 
-  //const geologyScene = initScene.setupWebScene("da15a55042b54c31b0208ba98c1647fc");
+  const geologyView = initScene.setupWebView(geologyScene);
 
+  // TODO elevation layer ka niimoodi tuua?
   const apDTM = initELevation.setupElevationLayer(
     "https://tiles.arcgis.com/tiles/ZYGCYltwz5ExeoGm/arcgis/rest/services/APR_50m_Eesti_tif/ImageServer",
     "Aluspõhi 50m"
@@ -108,6 +100,18 @@ require([
    * Adding a layer group, expand
    **************************************/
   view.when(() => {
+    const geologyLayers = initLayers.getGeologyLayers(geologyView);
+    const boreholes = geologyLayers.items.find(
+      (layer) => layer.title === "Puurkaevud/puuraugud"
+    );
+    const constructionGeology = geologyLayers.items.find(
+      (layer) => layer.title === "Ehitusgeoloogia"
+    );
+    const geologyWMS = geologyLayers.items.find(
+      (layer) => layer.title === "Geoloogia WMS"
+    );
+    geologyWMS.visible = false;
+
     // Adding other DTM layers layers
     view.map.ground.layers.addMany([apDTM, akDTM]);
 
@@ -219,7 +223,8 @@ require([
       if (
         item.title === "Kataster" ||
         item.title === "Kitsendused" ||
-        item.title === "Kitsendusi põhjustavad objektid"
+        item.title === "Kitsendusi põhjustavad objektid" ||
+        item.title === "Geoloogia WMS"
       ) {
         item.hidden = true;
       }
@@ -298,7 +303,8 @@ require([
       if (
         item.title !== "Kataster" &&
         item.title !== "Kitsendused" &&
-        item.title !== "Kitsendusi põhjustavad objektid"
+        item.title !== "Kitsendusi põhjustavad objektid" &&
+        item.title !== "Geoloogia WMS"
       ) {
         item.hidden = true;
       }
@@ -363,6 +369,9 @@ require([
 
     // Adding a geology layer group to view
     view.map.add(geologyGroupLayer);
+
+    // Geology WMS
+    view.map.add(geologyWMS);
 
     // TODO exxaggeration ka tuua üle - aga see veits keerulisem
     /**************************************
@@ -437,6 +446,7 @@ require([
     // Reordering for on-the-fly layers
     view.map.reorder(treeGroupLayer, 8);
     view.map.reorder(geologyGroupLayer, 6);
+    view.map.reorder(geologyWMS, -1);
 
     // Replacing sidemastid location, adding to correct group
     const rajatisedGroup = view.map.findLayerById("180fa46104d-layer-35");
