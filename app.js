@@ -1,10 +1,10 @@
 // TODO point cloud renderers: https://developers.arcgis.com/javascript/latest/sample-code/layers-pointcloud/
-// TODO scrolling panel ei tööta?
-// TODO ilmselt WMS kihid eraldi gruppi lisada, kataster ja kpo jne
-// TODO kas remove või hide ilmselt või disable layerile
+
 // TODO võrkmudelile luua oma lokaator
 
-// TODO kaardijagamine luua ka maa-alla ja hiljem proovida ka vajalike kihtide koosseis säilitada
+// TODO hiljem proovida ka vajalike kihtide koosseis säilitada
+// TODO seda peaks ilmselt tegema hard codega esialgse seisuga ja siis listide võrdlemine
+// TODO geoloogia WMS miskipärast ei lae ära, ilmselt liiga suur algne skaala
 
 
 require([
@@ -125,11 +125,10 @@ require([
       view.goTo(viewpoint, { animate: false });
     }
 
-    const { title, description, thumbnailUrl, avgRating } = scene.portalItem;
-    document.querySelector("#header-title").textContent = title;
-    document.querySelector("#item-description").innerHTML = description;
-    document.querySelector("#item-thumbnail").src = thumbnailUrl;
-    document.querySelector("#item-rating").value = avgRating;
+    // TODO kui kakskeelseks teha, siis peaks ilmselt läbi portaali ära kaotama ja tekstid kuhugi lisama
+    const { description } = scene.portalItem;
+    const itemDesc = document.querySelector("#item-description")
+    itemDesc.innerHTML = description;
 
     /**************************************
      * Built-in UI components
@@ -433,8 +432,12 @@ require([
     /**************************************
      * Sketching
      **************************************/
-    // TODO peab koodi sisse vaatama, et kuidas elemendid defineerida ja expand loogiliselt töötaks
+
     initSketch.setupSketch(view, graphicsLayer);
+
+    /**************************************
+     * Reordering layers
+     **************************************/
 
     // Reordering for on-the-fly layers
     view.map.reorder(treeGroupLayer, 8);

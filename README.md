@@ -19,6 +19,7 @@ Improvements compared to official map application:
 - Elevation settings can be modified
   - Elevation on/off
   - Navigation underground
+  - Multiple elevation services
 - Shadow analysis widget
 - Slicing widget
 - Line of Sight analysis widget
@@ -28,5 +29,7 @@ Improvements compared to official map application:
   - Draw lines
   - Draw points
 - Ability to share a map location
+  - Underground
+  
 
 
