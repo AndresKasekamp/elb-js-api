@@ -1,4 +1,5 @@
-define(["./modules/slider.js"], (initSlider) => ({
+// TODO kas siin saaks sisendina deklareerida kohe view.map scene asemel, et konstukrutori ülesannet kergemaks teha
+define(["esri/layers/ElevationLayer"], (ElevationLayer) => ({
   elevationManipulation: (scene) => {
     const opacitySlider = document.getElementById("opacitySlider");
     opacitySlider.addEventListener("calciteSliderInput", () => {
@@ -14,13 +15,13 @@ define(["./modules/slider.js"], (initSlider) => ({
     navigateUndergroundInput.addEventListener(
       "calciteCheckboxChange",
       (event) => {
-        console.log("Navigation changed");
         scene.ground.navigationConstraint.type = event.target.checked
           ? "none"
           : "stay-above";
       }
     );
 
+    // TODO arrow function ümber teha
     elevationInput.addEventListener("calciteCheckboxChange", updateElevation);
 
     function updateElevation(e) {
@@ -29,5 +30,25 @@ define(["./modules/slider.js"], (initSlider) => ({
         layer.visible = e.target.checked;
       });
     }
+
+    const elevationLayerGroup = document.getElementById("elevationModels");
+
+    elevationLayerGroup.addEventListener(
+      "calciteRadioButtonGroupChange",
+      () => {
+        const selectedItem = elevationLayerGroup.selectedItem.value;
+
+        scene.ground.layers.forEach((layer) => {
+          layer.visible = layer.id === selectedItem;
+        });
+      }
+    );
   },
+
+  setupElevationLayer: (url, title) =>
+    new ElevationLayer({
+      url,
+      title,
+      visible: false,
+    }),
 }));

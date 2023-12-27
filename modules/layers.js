@@ -19,8 +19,6 @@ define([
       visible: false,
     }),
 
-  // TODO seda saaks võibolla ka otse tuua teenusest üle ja proovi WMTS-ga niimoodi, äkki saaks basemap alla lisada
-  // TODO ilmselt hidden ka sisse lülitada (aga pärast)
   setupWMSLayer: () =>
     new WMSLayer({
       portalItem: {

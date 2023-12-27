@@ -3,6 +3,8 @@
 // TODO ilmselt WMS kihid eraldi gruppi lisada, kataster ja kpo jne
 // TODO kas remove või hide ilmselt või disable layerile
 
+// TODO lisada rohkem kõrgusmudeleid, luua neile oma grupp + tuua sisse geoloogia kihid oma scene-st oma eriliste omadustega
+
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
 
@@ -28,7 +30,7 @@ require([
 
   "./modules/goToLocation.js",
   "esri/widgets/Measurement",
-  "./modules/mediaQuery.js"
+  "./modules/mediaQuery.js",
 ], (
   Conversion,
 
@@ -82,18 +84,31 @@ require([
 
   const ortofotoWMS = initLayers.setupWMSLayer();
 
-  const scene = initScene.setupWebScene(graphicsLayer, ortofotoWMS);
+  const scene = initScene.setupWebScene(
+    "92d29869db444e28beab584f696b86c3",
+    graphicsLayer,
+    ortofotoWMS
+  );
+
+  //const geologyScene = initScene.setupWebScene("da15a55042b54c31b0208ba98c1647fc");
+
+  const apDTM = initELevation.setupElevationLayer(
+    "https://tiles.arcgis.com/tiles/ZYGCYltwz5ExeoGm/arcgis/rest/services/APR_50m_Eesti_tif/ImageServer",
+    "Aluspõhi 50m"
+  );
+  const akDTM = initELevation.setupElevationLayer(
+    "https://tiles.arcgis.com/tiles/ZYGCYltwz5ExeoGm/arcgis/rest/services/AKR_50m_2/ImageServer",
+    "Aluskord 50m"
+  );
 
   const view = initScene.setupWebView(scene);
-
-
 
   /**************************************
    * Adding a layer group, expand
    **************************************/
   view.when(() => {
-    // Media query
-
+    // Adding other DTM layers layers
+    view.map.ground.layers.addMany([apDTM, akDTM]);
 
     // Going to specified location at runtime
     const locationArray = goToLocation.getLocation();
@@ -184,7 +199,6 @@ require([
     const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
 
     async function defineActions(e) {
-
       const taimkateAnalytical = "Taimkate analüütiline";
       const taimkateRealistic = "Taimkate realistlik";
 
@@ -201,7 +215,11 @@ require([
 
       itemPanelDiv.append(sliderDiv, legendDiv);
 
-      if (item.title === "Kataster" || item.title === "Kitsendused" || item.title === "Kitsendusi põhjustavad objektid") {
+      if (
+        item.title === "Kataster" ||
+        item.title === "Kitsendused" ||
+        item.title === "Kitsendusi põhjustavad objektid"
+      ) {
         item.hidden = true;
       }
       // when the item is the name of the tree,
@@ -276,7 +294,11 @@ require([
 
       itemPanelDiv.append(sliderDiv, legendDiv);
 
-      if (item.title !== "Kataster" && item.title !== "Kitsendused" && item.title !== "Kitsendusi põhjustavad objektid") {
+      if (
+        item.title !== "Kataster" &&
+        item.title !== "Kitsendused" &&
+        item.title !== "Kitsendusi põhjustavad objektid"
+      ) {
         item.hidden = true;
       }
       // when the item is the name of the tree,
@@ -299,6 +321,15 @@ require([
     }
 
     initLayerList.getLayerInfo(wmsLayerList);
+
+    /**************************************
+     * Elevation layers
+     **************************************/
+    // const elevationLayers = new LayerList({
+    //   view,
+    //   container: "elevation-container",
+    //   listItemCreatedFunction: defineActions,
+    // });
 
     /**************************************
      * Basemap gallery
