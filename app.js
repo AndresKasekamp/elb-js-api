@@ -2,8 +2,10 @@
 // TODO scrolling panel ei tööta?
 // TODO ilmselt WMS kihid eraldi gruppi lisada, kataster ja kpo jne
 // TODO kas remove või hide ilmselt või disable layerile
+// TODO võrkmudelile luua oma lokaator
 
-// TODO lisada rohkem kõrgusmudeleid, luua neile oma grupp + tuua sisse geoloogia kihid oma scene-st oma eriliste omadustega
+// TODO kaardijagamine luua ka maa-alla ja hiljem proovida ka vajalike kihtide koosseis säilitada
+
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -84,7 +86,6 @@ require([
 
   const geologyView = initScene.setupWebView(geologyScene);
 
-  // TODO elevation layer ka niimoodi tuua?
   const apDTM = initELevation.setupElevationLayer(
     "https://tiles.arcgis.com/tiles/ZYGCYltwz5ExeoGm/arcgis/rest/services/APR_50m_Eesti_tif/ImageServer",
     "Aluspõhi 50m"
@@ -117,6 +118,7 @@ require([
 
     // Going to specified location at runtime
     const locationArray = goToLocation.getLocation();
+    goToLocation.getUndergroundInfo(view);
 
     if (locationArray !== null) {
       const viewpoint = goToLocation.setupViewPoint(locationArray);
@@ -328,15 +330,6 @@ require([
     }
 
     initLayerList.getLayerInfo(wmsLayerList);
-
-    /**************************************
-     * Elevation layers
-     **************************************/
-    // const elevationLayers = new LayerList({
-    //   view,
-    //   container: "elevation-container",
-    //   listItemCreatedFunction: defineActions,
-    // });
 
     /**************************************
      * Basemap gallery

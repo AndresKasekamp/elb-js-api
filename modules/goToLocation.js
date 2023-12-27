@@ -3,22 +3,33 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
   Camera,
   Point
 ) => ({
-  // TODO ilmselt kui liidestada 2D-ga, peab mingit default kaamera parameetrid määrama kui neid pole
-  getLocation: () => {
-    // Sample URL with parameters
+  getUndergroundInfo: (view) => {
     const urlString = window.location.href;
 
     // Create a URL object
-    const url = new URL(urlString);
+    const url = new URLSearchParams(urlString);
 
-    // Get the value of the 'viewpoint' parameter from the URL
-    const viewpointParam = url.searchParams.get("viewpoint");
+    const undergroundParam = url.get("underground");
+
+    if (undergroundParam === "true") {
+      view.map.ground.navigationConstraint.type = "none";
+    }
+  },
+
+  getLocation: () => {
+    // Sample URL with parameters
+    const urlString = new URL(window.location.href);
+
+    // Create a URL object
+    const url = new URLSearchParams(urlString.search);
+
+    // Get the value of the 'view' parameter from the URL
+    const viewpointParam = url.get("view");
 
     // Split the viewpoint parameter to extract x, y, and z values
     if (viewpointParam) {
-      const [x, y, z, heading, tilt, rotation, scale] = viewpointParam
-        .split(":")[1]
-        .split(",");
+      const [x, y, z, heading, tilt, rotation, scale] =
+        viewpointParam.split(",");
 
       // Convert strings to numbers if needed
       const parsedX = parseFloat(x);
@@ -39,6 +50,7 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
         parsedScale,
       ];
     }
+
     return null;
   },
 
@@ -46,10 +58,8 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
     try {
       await navigator.clipboard.writeText(text);
       console.log("Text copied to clipboard:", text);
-      // You can show a success message or perform other actions after copying
     } catch (err) {
       console.error("Error copying text to clipboard:", err);
-      // Handle any errors that may occur while copying
     }
   },
 
@@ -58,15 +68,29 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
     const currentURL = window.location.href;
 
     // Remove parameters from the URL
-    const urlWithoutParams = currentURL.split("?")[0];
+    const urlWithoutParams = new URL(currentURL.split("?")[0]);
 
     const viewpoint = view.viewpoint;
     const { rotation, scale } = viewpoint;
     const { heading, tilt } = viewpoint.camera;
     const { x, y, z } = viewpoint.camera.position;
-    const viewPointParameter = "?viewpoint=cam:";
-    const sharedLocation = `${urlWithoutParams}${viewPointParameter}${x}${x},${y},${z},${heading},${tilt},${rotation},${scale}`;
-    return sharedLocation;
+
+    // Construct the URL parameters
+    const queryParams = new URLSearchParams();
+    queryParams.set(
+      "view",
+      `${x},${y},${z},${heading},${tilt},${rotation},${scale}`
+    );
+
+    // Check underground navigation
+    if (view.map.ground.navigationConstraint.type === "none") {
+      queryParams.set("underground", "true");
+    }
+
+    // Append parameters to the URL
+    urlWithoutParams.search = queryParams.toString();
+
+    return urlWithoutParams.toString();
   },
 
   setupViewPoint: (locationArray) => {
