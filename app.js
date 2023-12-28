@@ -2,6 +2,8 @@
 
 // TODO võrkmudelile luua oma lokaator
 
+// TODO calcite slider sketchile
+
 // TODO hiljem proovida ka vajalike kihtide koosseis säilitada
 // TODO seda peaks ilmselt tegema hard codega esialgse seisuga ja siis listide võrdlemine
 // TODO los arendus
@@ -197,6 +199,7 @@ require([
      * Line of Sight analysis custom
      **************************************/
     initLoS.getStartPoint(view);
+
     /**************************************
      * Layerlist from scene
      **************************************/
@@ -263,6 +266,8 @@ require([
         item.layer.opacity = value;
       });
 
+      // Common section for both conditions
+
       if (item.layer.type !== "group") {
         item.actionsSections = [
           [
@@ -274,6 +279,22 @@ require([
           ],
         ];
       }
+
+      const extentsNeeded = [
+        "Nõmme",
+        "Pärnu",
+        "Tallinn",
+        "Tartu",
+        "Kuressaare",
+        "Kohtuhoone tekstuuriga (Tallinn)",
+      ];
+      if (extentsNeeded.includes(item.title)) {
+        item.actionsSections.items[0].push({
+          title: "Zoom to extent",
+          className: "esri-icon-zoom-out-fixed",
+          id: "zoomTo",
+        });
+      }
     }
 
     // Add the GroupLayer to view
@@ -283,7 +304,7 @@ require([
      * LayerList
      **************************************/
 
-    initLayerList.getLayerInfo(layerList);
+    initLayerList.getLayerInfo(layerList, view);
 
     /**************************************
      * WMS layerlist gallery
@@ -347,7 +368,7 @@ require([
       }
     }
 
-    initLayerList.getLayerInfo(wmsLayerList);
+    initLayerList.getLayerInfo(wmsLayerList, view);
 
     /**************************************
      * Basemap gallery
