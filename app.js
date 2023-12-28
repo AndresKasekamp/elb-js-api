@@ -243,7 +243,7 @@ require([
         treeGroupLayer.add(item.layer);
         view.map.remove(item.layer);
       }
-      
+
       // TODO kui muuta legendi overflow dünaamiliselt peaks ilmselt trigger-actioni itempaneldivile kirjutama, mis vastavalt muudab viewporti
       if (
         item.layer.type !== "group" ||
@@ -354,18 +354,7 @@ require([
      **************************************/
     const basemaps = initLayerList.setupBasemapGallery(view);
 
-    // Ortophoto WMS activated if zoom is close enough
-    basemaps.watch("activeBasemap", () => {
-      const isOrtofoto = basemaps.activeBasemap.title === "Ortofoto";
-
-      view.watch("zoom", () => {
-        scene.layers.forEach((layer) => {
-          if (layer.title === "Ortofoto WMS") {
-            layer.visible = isOrtofoto && view.zoom >= 12.5;
-          }
-        });
-      });
-    });
+    initLayerList.loadWMStile(basemaps, view);
 
     /**************************************
      * Geology layer group

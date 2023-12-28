@@ -38,11 +38,11 @@ define([
       },
     }),
 
-  setupElevationExpand: (view, content, container=null) =>
+  setupElevationExpand: (view, content, container = null) =>
     new Expand({
       view,
       content,
-      container
+      container,
     }),
 
   setupExpand: (
@@ -78,6 +78,20 @@ define([
           })
       ),
     }),
+
+  loadWMStile: (basemaps, view) => {
+    basemaps.watch("activeBasemap", () => {
+      const isOrtofoto = basemaps.activeBasemap.title === "Ortofoto";
+
+      view.watch("zoom", () => {
+        view.map.layers.forEach((layer) => {
+          if (layer.title === "Ortofoto WMS") {
+            layer.visible = isOrtofoto && view.zoom >= 12.5;
+          }
+        });
+      });
+    });
+  },
 
   getLayerInfo: (layerList) => {
     layerList.on("trigger-action", (e) => {
