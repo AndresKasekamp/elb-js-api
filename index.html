@@ -106,8 +106,23 @@
                 </calcite-label>
 
             </calcite-panel>
-            <calcite-panel heading="Line of Sight" height-scale="l" data-panel-id="lineOfSight" hidden>
+            <calcite-panel heading="Line of Sight" height-scale="l" data-panel-id="lineOfSight">
                 <div id="line-of-sight-container"></div>
+                <calcite-label>
+                    Start coordinates
+                    <form id="losForm">
+                        <calcite-input-text id="xLOSstart" name="xLOSstart" prefix-text="X-coordinate" value="">
+                        </calcite-input-text>
+                        <calcite-input-text id="yLOSstart" name="yLOSstart" prefix-text="Y-coordinate" value="">
+                        </calcite-input-text>
+                        <calcite-input-text id="zLoSstart" name="zLOSstart" prefix-text="Z-coordinate" value="">
+                        </calcite-input-text>
+                    </form>
+                    <calcite-button form="losForm" id="LoSstartBtn" name="LoSstartBtn" width="half">Submit
+                    </calcite-button>
+
+                </calcite-label>
+
             </calcite-panel>
             <calcite-panel height-scale="l" data-panel-id="daylight" hidden>
                 <div id="daylight-container"></div>

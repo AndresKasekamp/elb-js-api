@@ -4,8 +4,8 @@
 
 // TODO hiljem proovida ka vajalike kihtide koosseis säilitada
 // TODO seda peaks ilmselt tegema hard codega esialgse seisuga ja siis listide võrdlemine
+// TODO los arendus
 // TODO geoloogia WMS miskipärast ei lae ära, ilmselt liiga suur algne skaala
-
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -127,7 +127,7 @@ require([
 
     // TODO kui kakskeelseks teha, siis peaks ilmselt läbi portaali ära kaotama ja tekstid kuhugi lisama
     const { description } = scene.portalItem;
-    const itemDesc = document.querySelector("#item-description")
+    const itemDesc = document.querySelector("#item-description");
     itemDesc.innerHTML = description;
 
     /**************************************
@@ -193,6 +193,10 @@ require([
     });
 
     /**************************************
+     * Line of Sight analysis custom
+     **************************************/
+    initLoS.getStartPoint(view);
+    /**************************************
      * Layerlist from scene
      **************************************/
     // deifne a layerlist
@@ -257,15 +261,17 @@ require([
         item.layer.opacity = value;
       });
 
-      item.actionsSections = [
-        [
-          {
-            title: "Layer information",
-            className: "esri-icon-description",
-            id: "information",
-          },
-        ],
-      ];
+      if (item.layer.type !== "group") {
+        item.actionsSections = [
+          [
+            {
+              title: "Layer information",
+              className: "esri-icon-description",
+              id: "information",
+            },
+          ],
+        ];
+      }
     }
 
     // Add the GroupLayer to view
@@ -309,6 +315,15 @@ require([
       ) {
         item.hidden = true;
       }
+
+      if (item.layer.type !== "group") {
+        item.panel = {
+          content: itemPanelDiv,
+          className: "esri-icon-legend",
+          open: false,
+          title: "Legend and layer opacity",
+        };
+      }
       // when the item is the name of the tree,
       // add the layers of the items to the group layer
 
@@ -317,15 +332,17 @@ require([
         item.layer.opacity = value;
       });
 
-      item.actionsSections = [
-        [
-          {
-            title: "Layer information",
-            className: "esri-icon-description",
-            id: "information",
-          },
-        ],
-      ];
+      if (item.title !== "Geoloogia WMS") {
+        item.actionsSections = [
+          [
+            {
+              title: "Layer information",
+              className: "esri-icon-description",
+              id: "information",
+            },
+          ],
+        ];
+      }
     }
 
     initLayerList.getLayerInfo(wmsLayerList);
