@@ -7,7 +7,7 @@
 // TODO hiljem proovida ka vajalike kihtide koosseis säilitada
 // TODO seda peaks ilmselt tegema hard codega esialgse seisuga ja siis listide võrdlemine
 // TODO los arendus
-// TODO kui määrata id ja jagada läbi selle?
+// TODO kui määrata id title asemel (töökindlam), määrata vb ka kuskil failis? ja jagada läbi selle?
 // TODO fronti nupud jäävad jagamisele muutmata, kuidagi peab lahendama, et topelt muutus ei tuleks
 
 require([
