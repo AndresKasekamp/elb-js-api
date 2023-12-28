@@ -16,24 +16,84 @@ define([
   "esri/widgets/Expand",
   "esri/Basemap",
   "esri/widgets/BasemapGallery",
-], (LayerList, Expand, Basemap, BasemapGallery) => ({
+  "./modules/slider.js",
+  "./modules/legend.js",
+], (LayerList, Expand, Basemap, BasemapGallery, initSlider, initLegend) => ({
   // TODO kui seda funktsiooni ei kasuta, siis ilmselt eemaldada
-  setupLayerList: (view) =>
+  setupLayerListMain: (view) =>
     new LayerList({
       view,
       container: "layers-container",
-      icon: "map-contents",
-      listItemCreatedFunction: (event) => {
-        const item = event.item;
+      listItemCreatedFunction: async (e) => {
+        const item = e.item;
+
+        await item.layer.when();
+
+        // Slider settings
+        const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle(item);
+
+        // Legend settings
+        const legendDiv = initLegend.setupLegendStyle();
+        initLegend.setupLegend(view, item.layer, legendDiv);
+
+        itemPanelDiv.append(sliderDiv, legendDiv);
+
+        if (
+          item.title === "Kataster" ||
+          item.title === "Kitsendused" ||
+          item.title === "Kitsendusi põhjustavad objektid" ||
+          item.title === "Geoloogia WMS"
+        ) {
+          item.hidden = true;
+        }
+
+        // TODO kui muuta legendi overflow dünaamiliselt peaks ilmselt trigger-actioni itempaneldivile kirjutama, mis vastavalt muudab viewporti
+        if (
+          item.layer.type !== "group" ||
+          item.title === "Taimkate analüütiline" ||
+          item.title === "Taimkate realistlik"
+        ) {
+          item.panel = {
+            content: itemPanelDiv,
+            className: "esri-icon-legend",
+            open: false,
+            title: "Legend and layer opacity",
+          };
+        }
+
+        sliderDiv.addEventListener("calciteSliderInput", () => {
+          const value = sliderDiv.value / 100;
+          item.layer.opacity = value;
+        });
+
+        // Common section for both conditions
 
         if (item.layer.type !== "group") {
-          // don't show legend twice
-          item.panel = {
-            content: "legend",
-            open: false,
-            className: "esri-icon-legend",
-            title: "Leppemärgid",
-          };
+          item.actionsSections = [
+            [
+              {
+                title: "Layer information",
+                className: "esri-icon-description",
+                id: "information",
+              },
+            ],
+          ];
+        }
+
+        const extentsNeeded = [
+          "Nõmme",
+          "Pärnu",
+          "Tallinn",
+          "Tartu",
+          "Kuressaare",
+          "Kohtuhoone tekstuuriga (Tallinn)",
+        ];
+        if (extentsNeeded.includes(item.title)) {
+          item.actionsSections.items[0].push({
+            title: "Zoom to extent",
+            className: "esri-icon-zoom-out-fixed",
+            id: "zoomTo",
+          });
         }
       },
     }),

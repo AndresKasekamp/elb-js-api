@@ -7,8 +7,6 @@
 // TODO hiljem proovida ka vajalike kihtide koosseis säilitada
 // TODO seda peaks ilmselt tegema hard codega esialgse seisuga ja siis listide võrdlemine
 // TODO los arendus
-// TODO geoloogia WMS miskipärast ei lae ära, ilmselt liiga suur algne skaala
-// TODO empty basemap otsida
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -208,98 +206,14 @@ require([
 
     initLayers.taimkateWorkaround(treeGroupLayer, view);
 
-    const taimkateAnalyticalTitle = "Taimkate analüütiline";
-    const taimkateRealisticTitle = "Taimkate realistlik";
-
-    /**************************************
-     * Layerlist from scene
-     **************************************/
-    // deifne a layerlist
-    const layerList = new LayerList({
-      view,
-      container: "layers-container",
-      listItemCreatedFunction: defineActions,
-    });
-
-    async function defineActions(e) {
-      const item = e.item;
-
-      await item.layer.when();
-
-      // Slider settings
-      const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle(item);
-
-      // Legend settings
-      const legendDiv = initLegend.setupLegendStyle();
-      initLegend.setupLegend(view, item.layer, legendDiv);
-
-      itemPanelDiv.append(sliderDiv, legendDiv);
-
-      if (
-        item.title === "Kataster" ||
-        item.title === "Kitsendused" ||
-        item.title === "Kitsendusi põhjustavad objektid" ||
-        item.title === "Geoloogia WMS"
-      ) {
-        item.hidden = true;
-      }
-
-      // TODO kui muuta legendi overflow dünaamiliselt peaks ilmselt trigger-actioni itempaneldivile kirjutama, mis vastavalt muudab viewporti
-      if (
-        item.layer.type !== "group" ||
-        item.title === taimkateAnalyticalTitle ||
-        item.title === taimkateRealisticTitle
-      ) {
-        item.panel = {
-          content: itemPanelDiv,
-          className: "esri-icon-legend",
-          open: false,
-          title: "Legend and layer opacity",
-        };
-      }
-
-      sliderDiv.addEventListener("calciteSliderInput", () => {
-        const value = sliderDiv.value / 100;
-        item.layer.opacity = value;
-      });
-
-      // Common section for both conditions
-
-      if (item.layer.type !== "group") {
-        item.actionsSections = [
-          [
-            {
-              title: "Layer information",
-              className: "esri-icon-description",
-              id: "information",
-            },
-          ],
-        ];
-      }
-
-      const extentsNeeded = [
-        "Nõmme",
-        "Pärnu",
-        "Tallinn",
-        "Tartu",
-        "Kuressaare",
-        "Kohtuhoone tekstuuriga (Tallinn)",
-      ];
-      if (extentsNeeded.includes(item.title)) {
-        item.actionsSections.items[0].push({
-          title: "Zoom to extent",
-          className: "esri-icon-zoom-out-fixed",
-          id: "zoomTo",
-        });
-      }
-    }
-
     // Add the GroupLayer to view
     view.map.add(treeGroupLayer);
 
     /**************************************
-     * LayerList
+     * Layerlist from scene
      **************************************/
+
+    const layerList = initLayerList.setupLayerListMain(view);
 
     initLayerList.getLayerInfo(layerList, view);
 

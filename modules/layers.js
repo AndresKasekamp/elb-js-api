@@ -36,16 +36,14 @@ define([
     }),
 
   taimkateWorkaround: (treeGroupLayer, view) => {
-    const taimkateAnalyticalTitle = "Taimkate analüütiline";
-    const taimkateRealisticTitle = "Taimkate realistlik";
 
     const taimkateAnalytical = view.map.allLayers.items.find(
-      (layer) => layer.title === taimkateAnalyticalTitle
+      (layer) => layer.title === "Taimkate analüütiline"
     );
     taimkateAnalytical.visible = true;
 
     const taimkateRealistic = view.map.allLayers.items.find(
-      (layer) => layer.title === taimkateRealisticTitle
+      (layer) => layer.title === "Taimkate realistlik"
     );
 
     treeGroupLayer.addMany([taimkateAnalytical, taimkateRealistic]);
