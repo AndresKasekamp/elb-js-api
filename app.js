@@ -201,6 +201,17 @@ require([
     initLoS.getStartPoint(view);
 
     /**************************************
+     * Reworking taimkate logic
+     **************************************/
+
+    const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
+
+    initLayers.taimkateWorkaround(treeGroupLayer, view);
+
+    const taimkateAnalyticalTitle = "Taimkate analüütiline";
+    const taimkateRealisticTitle = "Taimkate realistlik";
+
+    /**************************************
      * Layerlist from scene
      **************************************/
     // deifne a layerlist
@@ -210,12 +221,7 @@ require([
       listItemCreatedFunction: defineActions,
     });
 
-    const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
-
     async function defineActions(e) {
-      const taimkateAnalytical = "Taimkate analüütiline";
-      const taimkateRealistic = "Taimkate realistlik";
-
       const item = e.item;
 
       await item.layer.when();
@@ -237,21 +243,12 @@ require([
       ) {
         item.hidden = true;
       }
-      // when the item is the name of the tree,
-      // add the layers of the items to the group layer
-      if (
-        item.title === taimkateAnalytical ||
-        item.title === taimkateRealistic
-      ) {
-        treeGroupLayer.add(item.layer);
-        view.map.remove(item.layer);
-      }
 
       // TODO kui muuta legendi overflow dünaamiliselt peaks ilmselt trigger-actioni itempaneldivile kirjutama, mis vastavalt muudab viewporti
       if (
         item.layer.type !== "group" ||
-        item.title === taimkateAnalytical ||
-        item.title === taimkateRealistic
+        item.title === taimkateAnalyticalTitle ||
+        item.title === taimkateRealisticTitle
       ) {
         item.panel = {
           content: itemPanelDiv,
@@ -469,7 +466,7 @@ require([
      **************************************/
 
     // Reordering for on-the-fly layers
-    view.map.reorder(treeGroupLayer, 8);
+    view.map.reorder(treeGroupLayer, 6);
     view.map.reorder(geologyGroupLayer, 6);
     view.map.reorder(geologyWMS, -1);
 

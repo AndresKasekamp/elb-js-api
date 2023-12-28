@@ -28,12 +28,29 @@ define([
       listMode: "hide",
     }),
 
-  setupGroupLayer: (title, visibilityMode) =>
+  setupGroupLayer: (title, visibilityMode, visible = false) =>
     new GroupLayer({
       title,
-      visible: false,
+      visible,
       visibilityMode,
     }),
+
+  taimkateWorkaround: (treeGroupLayer, view) => {
+    const taimkateAnalyticalTitle = "Taimkate analüütiline";
+    const taimkateRealisticTitle = "Taimkate realistlik";
+
+    const taimkateAnalytical = view.map.allLayers.items.find(
+      (layer) => layer.title === taimkateAnalyticalTitle
+    );
+    taimkateAnalytical.visible = true;
+
+    const taimkateRealistic = view.map.allLayers.items.find(
+      (layer) => layer.title === taimkateRealisticTitle
+    );
+
+    treeGroupLayer.addMany([taimkateAnalytical, taimkateRealistic]);
+    view.map.removeMany([taimkateAnalytical, taimkateRealistic]);
+  },
 
   getGeologyLayers: (view) => {
     const geologyLayerTitles = [
