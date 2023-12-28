@@ -36,6 +36,28 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
     }
   },
 
+  getElevationVisibility: (view) => {
+    const urlString = new URL(window.location.href);
+
+    // Create a URL object
+    const url = new URLSearchParams(urlString.search);
+
+    // TODO mis juhtub, kui on puudu ja kas on mingid probleemid ka id parsimiga?
+    const layersParamStr = url.get("elevation");
+
+    // Changing layer visibility back and front end
+    if (layersParamStr !== null) {
+      const layersParamArr = layersParamStr.split(","); // Splitting the string at commas
+
+      view.map.ground.layers.forEach((obj) => {
+        if (layersParamArr.includes(obj.title)) {
+          obj.visible = !obj.visible;
+        }   
+      });
+
+    }
+  },
+
   // TODO mis juhtub kui üks element jääb puud, ilmselt kasutada ka ; kui on kaamera parameetrid?
   getLocation: () => {
     // Sample URL with parameters
@@ -76,15 +98,10 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
   },
 
   async copyTextToClipboard(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      console.log("Text copied to clipboard:", text);
-    } catch (err) {
-      console.error("Error copying text to clipboard:", err);
-    }
+    await navigator.clipboard.writeText(text);
   },
 
-  createURL: (view, layerVisibility) => {
+  createURL: (view, regularLayers, elevationLayers) => {
     // Get the current URL
     const currentURL = window.location.href;
 
@@ -108,9 +125,15 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
       queryParams.set("underground", "true");
     }
 
-    if (layerVisibility.length !== 0) {
-      const layerVisibilityJoined = layerVisibility.join(",");
-      queryParams.set("layers", layerVisibilityJoined);
+    
+    if (regularLayers.length !== 0) {
+      const regularLayerVisibilityJoined = regularLayers.join(",");
+      queryParams.set("layers", regularLayerVisibilityJoined);
+    }
+
+    if (elevationLayers.length !== 0) {
+      const elevationLayerVisibilityJoined = elevationLayers.join(",");
+      queryParams.set("elevation", elevationLayerVisibilityJoined);
     }
 
     // Append parameters to the URL

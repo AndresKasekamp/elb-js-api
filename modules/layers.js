@@ -70,21 +70,43 @@ define([
     return { items: returnLayers };
   },
 
-  // TODO ilmselt not visible välja võtta
   getVisibleLayers: (view) => {
     const { items } = view.map.allLayers;
-    const { initVisible, initNotVisible } = items.reduce(
+    const { initVisible } = items.reduce(
       (acc, obj) => {
         if (obj.visible === true) {
           acc.initVisible.push(obj);
-        } else {
-          acc.initNotVisible.push(obj);
         }
         return acc;
       },
-      { initVisible: [], initNotVisible: [] }
+      { initVisible: [] }
     );
 
     return initVisible;
+  },
+
+  compareVisibleLayers: (initVisibleLayers, visibleLayersCurrently) => {
+    const difference1 = initVisibleLayers.filter(
+      (item) => !visibleLayersCurrently.includes(item)
+    );
+    const difference2 = visibleLayersCurrently.filter(
+      (item) => !initVisibleLayers.includes(item)
+    );
+
+    const getTitle = (obj) => obj.title;
+    const layerVisibilityChanged = [
+      ...difference1.map(getTitle),
+      ...difference2.map(getTitle),
+    ];
+
+    const elevationTitles = ["Kõrgusmudel", "Aluspõhi 50m", "Aluskord 50m"];
+    const regularLayers = layerVisibilityChanged.filter(
+      (item) => !elevationTitles.includes(item)
+    );
+    const elevationChanged = layerVisibilityChanged.filter((item) =>
+      elevationTitles.includes(item)
+    );
+
+    return [regularLayers, elevationChanged];
   },
 }));

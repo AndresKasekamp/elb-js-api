@@ -7,6 +7,8 @@
 // TODO hiljem proovida ka vajalike kihtide koosseis säilitada
 // TODO seda peaks ilmselt tegema hard codega esialgse seisuga ja siis listide võrdlemine
 // TODO los arendus
+// TODO kui määrata id ja jagada läbi selle?
+// TODO fronti nupud jäävad jagamisele muutmata, kuidagi peab lahendama, et topelt muutus ei tuleks
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -127,7 +129,6 @@ require([
     view.ui.move("zoom", "top-right");
     view.ui.move("navigation-toggle", "top-right");
     view.ui.move("compass", "top-right");
-
 
     /**************************************
      * Line of Sight analysis custom
@@ -267,12 +268,9 @@ require([
     rajatisedGroup.add(communicationTower);
 
     /**************************************
-     * Collecting visible layers
+     * Collecting visible layers before modification and rerendering
      **************************************/
-
-    // TODO see on pärast funktsiooniks teha
     const initVisibleLayers = initLayers.getVisibleLayers(view);
-    console.log("Initial visibilit", initVisibleLayers)
 
     /**************************************
      * Calcite CSS/JS
@@ -310,17 +308,20 @@ require([
 
       if (nextWidget === "share") {
         const visibleLayersCurrently = initLayers.getVisibleLayers(view);
-        console.log("Visible layers now", visibleLayersCurrently)
-        
-        const difference1 = initVisibleLayers.filter(item => !visibleLayersCurrently.includes(item));
-        const difference2 = visibleLayersCurrently.filter(item => !initVisibleLayers.includes(item));
 
-        const layerVisibilityChanged = [];
-        layerVisibilityChanged.push(...difference1.map(obj => obj.title));
-        layerVisibilityChanged.push(...difference2.map(obj => obj.title));
+        const [regularLayers, elevationChanged] =
+          initLayers.compareVisibleLayers(
+            initVisibleLayers,
+            visibleLayersCurrently
+          );
+        console.log(regularLayers);
+        console.log(elevationChanged);
 
-        console.log(layerVisibilityChanged)
-        const sharedLocation = goToLocation.createURL(view, layerVisibilityChanged);
+        const sharedLocation = goToLocation.createURL(
+          view,
+          regularLayers,
+          elevationChanged
+        );
         goToLocation.copyTextToClipboard(sharedLocation);
 
         // Displaying popup
@@ -349,7 +350,8 @@ require([
     // Going to specified location at runtime
     const locationArray = goToLocation.getLocation();
     goToLocation.getUndergroundInfo(view);
-    goToLocation.getLayerVisibility(view)
+    goToLocation.getLayerVisibility(view);
+    goToLocation.getElevationVisibility(view);
 
     if (locationArray !== null) {
       const viewpoint = goToLocation.setupViewPoint(locationArray);
