@@ -4,10 +4,10 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
   Point
 ) => ({
   getUndergroundInfo: (view) => {
-    const urlString = window.location.href;
+    const urlString = new URL(window.location.href);
 
     // Create a URL object
-    const url = new URLSearchParams(urlString);
+    const url = new URLSearchParams(urlString.search);
 
     const undergroundParam = url.get("underground");
 
@@ -16,6 +16,27 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
     }
   },
 
+  getLayerVisibility: (view) => {
+    const urlString = new URL(window.location.href);
+
+    // Create a URL object
+    const url = new URLSearchParams(urlString.search);
+
+    // TODO mis juhtub, kui on puudu ja kas on mingid probleemid ka id parsimiga?
+    const layersParamStr = url.get("layers");
+
+    if (layersParamStr !== null) {
+      const layersParamArr = layersParamStr.split(","); // Splitting the string at commas
+
+      view.map.allLayers.items.forEach((obj) => {
+        if (layersParamArr.includes(obj.title)) {
+          obj.visible = !obj.visible;
+        }
+      });
+    }
+  },
+
+  // TODO mis juhtub kui üks element jääb puud, ilmselt kasutada ka ; kui on kaamera parameetrid?
   getLocation: () => {
     // Sample URL with parameters
     const urlString = new URL(window.location.href);
@@ -63,7 +84,7 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
     }
   },
 
-  createURL: (view) => {
+  createURL: (view, layerVisibility) => {
     // Get the current URL
     const currentURL = window.location.href;
 
@@ -85,6 +106,11 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
     // Check underground navigation
     if (view.map.ground.navigationConstraint.type === "none") {
       queryParams.set("underground", "true");
+    }
+
+    if (layerVisibility.length !== 0) {
+      const layerVisibilityJoined = layerVisibility.join(",");
+      queryParams.set("layers", layerVisibilityJoined);
     }
 
     // Append parameters to the URL

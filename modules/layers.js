@@ -36,7 +36,6 @@ define([
     }),
 
   taimkateWorkaround: (treeGroupLayer, view) => {
-
     const taimkateAnalytical = view.map.allLayers.items.find(
       (layer) => layer.title === "Taimkate analüütiline"
     );
@@ -69,5 +68,23 @@ define([
       .map((title) => geologyLayers[title])
       .filter(Boolean);
     return { items: returnLayers };
+  },
+
+  // TODO ilmselt not visible välja võtta
+  getVisibleLayers: (view) => {
+    const { items } = view.map.allLayers;
+    const { initVisible, initNotVisible } = items.reduce(
+      (acc, obj) => {
+        if (obj.visible === true) {
+          acc.initVisible.push(obj);
+        } else {
+          acc.initNotVisible.push(obj);
+        }
+        return acc;
+      },
+      { initVisible: [], initNotVisible: [] }
+    );
+
+    return initVisible;
   },
 }));

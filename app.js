@@ -11,8 +11,6 @@
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
 
-  "esri/widgets/LayerList",
-
   "./modules/layers.js",
   "./modules/scene.js",
   "./modules/layerList.js",
@@ -25,10 +23,9 @@ require([
   "./modules/measurement.js",
   "./modules/shadowCast.js",
   "./modules/slice.js",
-  "./modules/slider.js",
+
   "./modules/locate.js",
 
-  "./modules/legend.js",
   "./modules/elevation.js",
 
   "./modules/goToLocation.js",
@@ -36,8 +33,6 @@ require([
   "./modules/mediaQuery.js",
 ], (
   Conversion,
-
-  LayerList,
 
   initLayers,
   initScene,
@@ -51,9 +46,9 @@ require([
   initMeasurement,
   initShadowCast,
   initSlice,
-  initSlider,
+
   initLocate,
-  initLegend,
+
   initELevation,
   goToLocation,
   Measurement,
@@ -98,10 +93,10 @@ require([
 
   const view = initScene.setupWebView(scene);
 
-  /**************************************
-   * Adding a layer group, expand
-   **************************************/
   view.when(() => {
+    /**************************************
+     * Geology layer setup
+     **************************************/
     const geologyLayers = initLayers.getGeologyLayers(geologyView);
     const boreholes = geologyLayers.items.find(
       (layer) => layer.title === "Puurkaevud/puuraugud"
@@ -117,14 +112,9 @@ require([
     // Adding other DTM layers layers
     view.map.ground.layers.addMany([apDTM, akDTM]);
 
-    // Going to specified location at runtime
-    const locationArray = goToLocation.getLocation();
-    goToLocation.getUndergroundInfo(view);
-
-    if (locationArray !== null) {
-      const viewpoint = goToLocation.setupViewPoint(locationArray);
-      view.goTo(viewpoint, { animate: false });
-    }
+    /**************************************
+     * Desc info
+     **************************************/
 
     // TODO kui kakskeelseks teha, siis peaks ilmselt läbi portaali ära kaotama ja tekstid kuhugi lisama
     const { description } = scene.portalItem;
@@ -137,61 +127,7 @@ require([
     view.ui.move("zoom", "top-right");
     view.ui.move("navigation-toggle", "top-right");
     view.ui.move("compass", "top-right");
-    /**************************************
-     * Calcite CSS/JS
-     **************************************/
 
-    const shadowCast = initShadowCast.setupShadowCast(view);
-
-    let activeWidget;
-
-    const handleActionBarClick = ({ target }) => {
-      if (target.tagName !== "CALCITE-ACTION") {
-        return;
-      }
-
-      if (activeWidget) {
-        document.querySelector(
-          `[data-action-id=${activeWidget}]`
-        ).active = false;
-        document.querySelector(`[data-panel-id=${activeWidget}]`).hidden = true;
-      }
-
-      const nextWidget = target.dataset.actionId;
-      if (nextWidget !== activeWidget) {
-        document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
-        document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
-        activeWidget = nextWidget;
-      } else {
-        activeWidget = null;
-      }
-
-      if (nextWidget === "shadowCast") {
-        shadowCast.visible = !shadowCast.visible;
-      }
-
-      if (nextWidget === "share") {
-        const sharedLocation = goToLocation.createURL(view);
-        goToLocation.copyTextToClipboard(sharedLocation);
-
-        // Displaying popup
-        const shareMapAlert = document.getElementById("share-map-alert");
-        shareMapAlert.open = "true";
-      }
-    };
-
-    document
-      .querySelector("calcite-action-bar")
-      .addEventListener("click", handleActionBarClick);
-
-    let actionBarExpanded = false;
-
-    document.addEventListener("calciteActionBarToggle", (event) => {
-      actionBarExpanded = !actionBarExpanded;
-      view.padding = {
-        left: actionBarExpanded ? 135 : 49,
-      };
-    });
 
     /**************************************
      * Line of Sight analysis custom
@@ -329,5 +265,95 @@ require([
     // Replacing sidemastid location, adding to correct group
     const rajatisedGroup = view.map.findLayerById("180fa46104d-layer-35");
     rajatisedGroup.add(communicationTower);
+
+    /**************************************
+     * Collecting visible layers
+     **************************************/
+
+    // TODO see on pärast funktsiooniks teha
+    const initVisibleLayers = initLayers.getVisibleLayers(view);
+    console.log("Initial visibilit", initVisibleLayers)
+
+    /**************************************
+     * Calcite CSS/JS
+     **************************************/
+
+    // TODO võiks ka eraldi calcite funktsioonideks kirjutada
+    const shadowCast = initShadowCast.setupShadowCast(view);
+
+    let activeWidget;
+
+    const handleActionBarClick = ({ target }) => {
+      if (target.tagName !== "CALCITE-ACTION") {
+        return;
+      }
+
+      if (activeWidget) {
+        document.querySelector(
+          `[data-action-id=${activeWidget}]`
+        ).active = false;
+        document.querySelector(`[data-panel-id=${activeWidget}]`).hidden = true;
+      }
+
+      const nextWidget = target.dataset.actionId;
+      if (nextWidget !== activeWidget) {
+        document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
+        document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
+        activeWidget = nextWidget;
+      } else {
+        activeWidget = null;
+      }
+
+      if (nextWidget === "shadowCast") {
+        shadowCast.visible = !shadowCast.visible;
+      }
+
+      if (nextWidget === "share") {
+        const visibleLayersCurrently = initLayers.getVisibleLayers(view);
+        console.log("Visible layers now", visibleLayersCurrently)
+        
+        const difference1 = initVisibleLayers.filter(item => !visibleLayersCurrently.includes(item));
+        const difference2 = visibleLayersCurrently.filter(item => !initVisibleLayers.includes(item));
+
+        const layerVisibilityChanged = [];
+        layerVisibilityChanged.push(...difference1.map(obj => obj.title));
+        layerVisibilityChanged.push(...difference2.map(obj => obj.title));
+
+        console.log(layerVisibilityChanged)
+        const sharedLocation = goToLocation.createURL(view, layerVisibilityChanged);
+        goToLocation.copyTextToClipboard(sharedLocation);
+
+        // Displaying popup
+        const shareMapAlert = document.getElementById("share-map-alert");
+        shareMapAlert.open = "true";
+      }
+    };
+
+    document
+      .querySelector("calcite-action-bar")
+      .addEventListener("click", handleActionBarClick);
+
+    let actionBarExpanded = false;
+
+    document.addEventListener("calciteActionBarToggle", (event) => {
+      actionBarExpanded = !actionBarExpanded;
+      view.padding = {
+        left: actionBarExpanded ? 135 : 49,
+      };
+    });
+
+    /**************************************
+     * Parsing URL if sharing is used
+     **************************************/
+
+    // Going to specified location at runtime
+    const locationArray = goToLocation.getLocation();
+    goToLocation.getUndergroundInfo(view);
+    goToLocation.getLayerVisibility(view)
+
+    if (locationArray !== null) {
+      const viewpoint = goToLocation.setupViewPoint(locationArray);
+      view.goTo(viewpoint, { animate: false });
+    }
   });
 });
