@@ -98,6 +98,63 @@ define([
       },
     }),
 
+  setupLayerListWMS: (view) =>
+    new LayerList({
+      view,
+      container: "wms-layers-container",
+      listItemCreatedFunction: async (e) => {
+        const item = e.item;
+
+        await item.layer.when();
+
+        // Slider settings
+        const [itemPanelDiv, sliderDiv] = initSlider.setupSliderStyle(item);
+
+        // Legend settings
+        const legendDiv = initLegend.setupLegendStyle();
+        initLegend.setupLegend(view, item.layer, legendDiv);
+
+        itemPanelDiv.append(sliderDiv, legendDiv);
+
+        if (
+          item.title !== "Kataster" &&
+          item.title !== "Kitsendused" &&
+          item.title !== "Kitsendusi põhjustavad objektid" &&
+          item.title !== "Geoloogia WMS"
+        ) {
+          item.hidden = true;
+        }
+
+        if (item.layer.type !== "group") {
+          item.panel = {
+            content: itemPanelDiv,
+            className: "esri-icon-legend",
+            open: false,
+            title: "Legend and layer opacity",
+          };
+        }
+        // when the item is the name of the tree,
+        // add the layers of the items to the group layer
+
+        sliderDiv.addEventListener("calciteSliderInput", () => {
+          const value = sliderDiv.value / 100;
+          item.layer.opacity = value;
+        });
+
+        if (item.title !== "Geoloogia WMS") {
+          item.actionsSections = [
+            [
+              {
+                title: "Layer information",
+                className: "esri-icon-description",
+                id: "information",
+              },
+            ],
+          ];
+        }
+      },
+    }),
+
   setupElevationExpand: (view, content, container = null) =>
     new Expand({
       view,
