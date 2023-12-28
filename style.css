@@ -22,6 +22,16 @@ body {
   outline: none !important;
 }
 
+/* ::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: #aaa;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+} */
+
 #header {
   display: flex;
   justify-content: space-between;
@@ -209,7 +219,6 @@ img {
   padding: 0.25em;
 }
 
-
 #daylight-container,
 #shadowcast-container,
 #sketchPanel {
@@ -219,6 +228,13 @@ img {
 
 .responsive-action-bar {
   flex-wrap: wrap;
+}
+
+#layers-container,
+#wms-layers-container {
+  overflow-y: auto;
+  display: block;
+  height: 50vh;
 }
 
 /*

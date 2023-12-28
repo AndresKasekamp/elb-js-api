@@ -6,6 +6,7 @@
 // TODO seda peaks ilmselt tegema hard codega esialgse seisuga ja siis listide võrdlemine
 // TODO los arendus
 // TODO geoloogia WMS miskipärast ei lae ära, ilmselt liiga suur algne skaala
+// TODO empty basemap otsida
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -242,7 +243,8 @@ require([
         treeGroupLayer.add(item.layer);
         view.map.remove(item.layer);
       }
-
+      
+      // TODO kui muuta legendi overflow dünaamiliselt peaks ilmselt trigger-actioni itempaneldivile kirjutama, mis vastavalt muudab viewporti
       if (
         item.layer.type !== "group" ||
         item.title === taimkateAnalytical ||
