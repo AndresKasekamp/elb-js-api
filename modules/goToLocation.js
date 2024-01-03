@@ -7,6 +7,11 @@ const getUndergroundInfo = (view) => {
   const url = new URLSearchParams(urlString.search);
   const undergroundParam = url.get("underground");
   if (undergroundParam === "true") {
+    // Changing visualisation and settings in back end
+    const navigateUndergroundInput = document.getElementById(
+      "navigationUnderground"
+    );
+    navigateUndergroundInput.checked = true;
     view.map.ground.navigationConstraint.type = "none";
   }
 };
@@ -31,6 +36,22 @@ const getElevationVisibility = (view) => {
   const layersParamStr = url.get("elevation");
   if (layersParamStr !== null) {
     const layersParamArr = layersParamStr.split(",");
+
+    // Front end
+    layersParamArr.forEach((obj) => {
+      if (obj === "Kõrgusmudel") {
+        const elevationModel = document.getElementById("dtmElevation");
+        elevationModel.checked = "false";
+      } else if (obj === "Aluspõhi 50m") {
+        const elevationModel = document.getElementById("apElevation");
+        elevationModel.checked = "true";
+      } else if (obj === "Aluskord 50m") {
+        const elevationModel = document.getElementById("akElevation");
+        elevationModel.checked = "true";
+      }
+    });
+
+    // Back end
     view.map.ground.layers.forEach((obj) => {
       if (layersParamArr.includes(obj.title)) {
         obj.visible = !obj.visible;

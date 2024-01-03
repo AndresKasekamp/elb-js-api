@@ -75,21 +75,26 @@
                 <div id="basemaps-container">
                 </div>
 
+                <calcite-label layout="inline">
+                    <calcite-checkbox id="basemapSwitch"></calcite-checkbox>
+                    No basemap
+                </calcite-label>
+
                 <calcite-slider id="opacitySlider" label-handles min=0 max=100 step=1 value=100></calcite-slider>
             </calcite-panel>
             <calcite-panel heading="Elevation settings" height-scale="l" data-panel-id="elevation" hidden>
 
                 <calcite-radio-button-group id="elevationModels" name="ElevationModels" layout="vertical">
                     <calcite-label layout="inline">
-                        <calcite-radio-button value="987798be0faa561d" checked></calcite-radio-button>
+                        <calcite-radio-button id="dtmElevation" value="987798be0faa561d" checked></calcite-radio-button>
                         DTM
                     </calcite-label>
                     <calcite-label layout="inline">
-                        <calcite-radio-button value="bae50815bbab6ded"></calcite-radio-button>
+                        <calcite-radio-button id="apElevation" value="bae50815bbab6ded"></calcite-radio-button>
                         Aluspõhi 50m
                     </calcite-label>
                     <calcite-label layout="inline">
-                        <calcite-radio-button value="974102ce30be63bb"></calcite-radio-button>
+                        <calcite-radio-button id="akElevation" value="974102ce30be63bb"></calcite-radio-button>
                         Aluskord 50m
                     </calcite-label>
                 </calcite-radio-button-group>

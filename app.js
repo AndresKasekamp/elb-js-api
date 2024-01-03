@@ -230,10 +230,7 @@ view.when(() => {
   /**************************************
    *  Measurement 3D
    **************************************/
-  // const measurement = new Measurement({
-  //   view,
-  //   container: "measurement-container",
-  // });
+
 
   setupMeasurement(view);
 
@@ -273,6 +270,22 @@ view.when(() => {
    * Collecting visible layers before modification and rerendering
    **************************************/
   const initVisibleLayers = getVisibleLayers(view);
+
+  const basemapSwitch = document.getElementById("basemapSwitch");
+  basemapSwitch.addEventListener("calciteCheckboxChange", () => {
+    basemaps.disabled = !basemaps.disabled;
+
+    view.map.allLayers.forEach((layer) => {
+
+      // TODO kuidagi peab määrama orto wms ka
+      if (layer.type === "web-tile") {
+        layer.visible = !layer.visible
+      }
+
+      })
+
+  });
+
 
   /**************************************
    * Calcite CSS/JS
