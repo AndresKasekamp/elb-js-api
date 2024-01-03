@@ -1,17 +1,22 @@
-// TODO vaata kas siin saaks lahtipakkimisega teha
-define(["esri/WebScene", "esri/views/SceneView"], (WebScene, SceneView) => ({
-  setupWebScene: (id, ...layers) =>
-    new WebScene({
-      portalItem: {
-        id,
-      },
-      layers: [...layers],
-    }),
+import WebScene from "@arcgis/core/WebScene.js";
+import SceneView from "@arcgis/core/views/SceneView.js";
 
-  setupWebView: (scene) =>
-    new SceneView({
-      map: scene,
-      container: "viewDiv",
-      qualityProfile: "high",
-    }),
-}));
+// TODO vaata kas siin saaks lahtipakkimisega teha
+const setupWebScene = (id, ...layers) => {
+  return new WebScene({
+    portalItem: {
+      id,
+    },
+    layers: [...layers],
+  });
+};
+
+const setupWebView = (scene) => {
+  return new SceneView({
+    map: scene,
+    container: "viewDiv",
+    qualityProfile: "high",
+  });
+};
+
+export { setupWebScene, setupWebView };

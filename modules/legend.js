@@ -1,18 +1,21 @@
-define(["esri/widgets/Legend"], (Legend) => ({
-  setupLegend: (view, layer, div) =>
-    new Legend({
-      view: view,
-      layerInfos: [
-        {
-          layer: layer,
-        },
-      ],
-      container: div,
-    }),
+import Legend from "@arcgis/core/widgets/Legend.js";
 
-  setupLegendStyle: () => {
-    const legendDiv = document.createElement("div");
-    legendDiv.classList.add("esri-widget");
-    return legendDiv;
-  },
-}));
+const setupLegend = (view, layer, div) => {
+  return new Legend({
+    view: view,
+    layerInfos: [
+      {
+        layer: layer,
+      },
+    ],
+    container: div,
+  });
+};
+
+const setupLegendStyle = () => {
+  const legendDiv = document.createElement("div");
+  legendDiv.classList.add("esri-widget");
+  return legendDiv;
+};
+
+export { setupLegend, setupLegendStyle };

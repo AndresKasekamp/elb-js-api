@@ -1,5 +1,7 @@
 # Estonian Land Board 3D Web Application
-
+![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000&style=flat)
+![ArcGIS Badge](https://img.shields.io/badge/ArcGIS-2C7AC3?logo=arcgis&logoColor=fff&style=flat)
+![Vite Badge](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff&style=flat)
 ## Introduction
 Using ArcGIS Maps SDK for JavaScript. \
 This is not an official application. Official application can be found at: https://3d.maaamet.ee/kaart/

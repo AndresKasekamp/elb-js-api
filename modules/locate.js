@@ -1,6 +1,9 @@
-define(["esri/widgets/Locate"], (Locate) => ({
-  setupLocate: (view) =>
-    new Locate({
-      view,
-    }),
-}));
+import Locate from "@arcgis/core/widgets/Locate.js";
+
+const setupLocate = (view) => {
+  return new Locate({
+    view,
+  });
+};
+
+export { setupLocate };

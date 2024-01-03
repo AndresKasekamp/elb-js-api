@@ -1,10 +1,11 @@
+import ShadowCast from "@arcgis/core/widgets/ShadowCast.js";
 
+const setupShadowCast = (view) => {
+  return new ShadowCast({
+    view: view,
+    visible: false,
+    container: "shadowcast-container",
+  });
+};
 
-define(["esri/widgets/ShadowCast"], (ShadowCast) => ({
-  setupShadowCast: (view) =>
-    new ShadowCast({
-      view: view,
-      visible: false,
-      container: "shadowcast-container",
-    }),
-}));
+export { setupShadowCast };

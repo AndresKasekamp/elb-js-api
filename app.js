@@ -13,353 +13,344 @@
 // TODO uurida mis state on ja kuidas seda kasutada, et teha tühi basemap võimalus kasutajale, ilmselt peab basemaps ka eraldi parameetrina välja tooma
 // TODO ilmselt peab muutma activeBasemap hübriidiks vms
 
-require([
-  "esri/widgets/CoordinateConversion/support/Conversion",
+// Esri imports
+import Conversion from "@arcgis/core/widgets/CoordinateConversion/support/Conversion.js";
+import Measurement from "@arcgis/core/widgets/Measurement.js";
 
-  "./modules/layers.js",
-  "./modules/scene.js",
-  "./modules/layerList.js",
-  "./modules/coordinate.js",
-  "./modules/lineOfSight.js",
-  "./modules/search.js",
-  "./modules/sketch.js",
-  "./modules/daylight.js",
-  "./modules/elevationProfile.js",
-  "./modules/measurement.js",
-  "./modules/shadowCast.js",
-  "./modules/slice.js",
+// Local imports
+import {
+  setupGraphicsLayer,
+  setupInternalLayer,
+  setupWMSLayer,
+  getGeologyLayers,
+  setupGroupLayer,
+  taimkateWorkaround,
+  getVisibleLayers,
+  compareVisibleLayers,
+} from "./modules/layers.js";
+import { setupWebScene, setupWebView } from "./modules/scene.js";
+import {
+  setupLayerListMain,
+  setupLayerListWMS,
+  setupBasemapGallery,
+  loadWMStile,
+  getLayerInfo,
+} from "./modules/layerList";
+import { setupCoordinateWidget, setupNewFormat } from "./modules/coordinate.js";
+import { setupLoS, getStartPoint } from "./modules/lineOfSight.js";
+import {
+  setupCustomSearchSource,
+  setupSearchWidget,
+} from "./modules/search.js";
+import { setupSketch } from "./modules/sketch.js";
+import { setupDaylight } from "./modules/daylight.js";
+import { setupElevationProfile } from "./modules/elevationProfile.js";
+import { setupMeasurement } from "./modules/measurement.js";
+import { setupShadowCast } from "./modules/shadowCast.js";
+import { setupSlice } from "./modules/slice.js";
+import { setupLocate } from "./modules/locate.js";
+import {
+  elevationManipulation,
+  setupElevationLayer,
+} from "./modules/elevation.js";
+import {
+  getUndergroundInfo,
+  getLayerVisibility,
+  getElevationVisibility,
+  getLocation,
+  copyTextToClipboard,
+  createURL,
+  setupViewPoint,
+} from "./modules/goToLocation.js";
 
-  "./modules/locate.js",
+/************************************************************
+ * Init scene (/w layers) and view
+ ************************************************************/
+// const mediaQuery = window.matchMedia('(max-width: 768px)');
+// initMediaQuery.handleMediaQueryChange(mediaQuery)
+// mediaQuery.addEventListener(initMediaQuery.handleMediaQueryChange);
 
-  "./modules/elevation.js",
+const graphicsLayer = setupGraphicsLayer();
 
-  "./modules/goToLocation.js",
-  "esri/widgets/Measurement",
-  "./modules/mediaQuery.js",
-], (
-  Conversion,
+const communicationTower = setupInternalLayer(
+  "66e382030b224ffa999249a4d1cbbf4f",
+  "Sidemastid"
+);
 
-  initLayers,
-  initScene,
-  initLayerList,
-  initCoordinates,
-  initLoS,
-  initSearch,
-  initSketch,
-  initDaylight,
-  initElevationProfile,
-  initMeasurement,
-  initShadowCast,
-  initSlice,
+const ortofotoWMS = setupWMSLayer();
 
-  initLocate,
+const scene = setupWebScene(
+  "92d29869db444e28beab584f696b86c3",
+  graphicsLayer,
+  ortofotoWMS
+);
 
-  initELevation,
-  goToLocation,
-  Measurement,
-  initMediaQuery
-) => {
-  /************************************************************
-   * Init scene (/w layers) and view
-   ************************************************************/
-  // const mediaQuery = window.matchMedia('(max-width: 768px)');
-  // initMediaQuery.handleMediaQueryChange(mediaQuery)
-  // mediaQuery.addEventListener(initMediaQuery.handleMediaQueryChange);
+const geologyScene = setupWebScene("da15a55042b54c31b0208ba98c1647fc");
 
-  const graphicsLayer = initLayers.setupGraphicsLayer();
+const geologyView = setupWebView(geologyScene);
 
-  const communicationTower = initLayers.setupInternalLayer(
-    "66e382030b224ffa999249a4d1cbbf4f",
-    "Sidemastid"
+const apDTM = setupElevationLayer(
+  "https://tiles.arcgis.com/tiles/ZYGCYltwz5ExeoGm/arcgis/rest/services/APR_50m_Eesti_tif/ImageServer",
+  "Aluspõhi 50m"
+);
+const akDTM = setupElevationLayer(
+  "https://tiles.arcgis.com/tiles/ZYGCYltwz5ExeoGm/arcgis/rest/services/AKR_50m_2/ImageServer",
+  "Aluskord 50m"
+);
+
+const view = setupWebView(scene);
+
+view.when(() => {
+  /**************************************
+   * Geology layer setup
+   **************************************/
+  const geologyLayers = getGeologyLayers(geologyView);
+  const boreholes = geologyLayers.items.find(
+    (layer) => layer.title === "Puurkaevud/puuraugud"
   );
-
-  const ortofotoWMS = initLayers.setupWMSLayer();
-
-  const scene = initScene.setupWebScene(
-    "92d29869db444e28beab584f696b86c3",
-    graphicsLayer,
-    ortofotoWMS
+  const constructionGeology = geologyLayers.items.find(
+    (layer) => layer.title === "Ehitusgeoloogia"
   );
-
-  const geologyScene = initScene.setupWebScene(
-    "da15a55042b54c31b0208ba98c1647fc"
+  const geologyWMS = geologyLayers.items.find(
+    (layer) => layer.title === "Geoloogia WMS"
   );
+  geologyWMS.visible = false;
 
-  const geologyView = initScene.setupWebView(geologyScene);
+  // Adding other DTM layers layers
+  view.map.ground.layers.addMany([apDTM, akDTM]);
 
-  const apDTM = initELevation.setupElevationLayer(
-    "https://tiles.arcgis.com/tiles/ZYGCYltwz5ExeoGm/arcgis/rest/services/APR_50m_Eesti_tif/ImageServer",
-    "Aluspõhi 50m"
-  );
-  const akDTM = initELevation.setupElevationLayer(
-    "https://tiles.arcgis.com/tiles/ZYGCYltwz5ExeoGm/arcgis/rest/services/AKR_50m_2/ImageServer",
-    "Aluskord 50m"
-  );
+  /**************************************
+   * Desc info
+   **************************************/
 
-  const view = initScene.setupWebView(scene);
+  // TODO kui kakskeelseks teha, siis peaks ilmselt läbi portaali ära kaotama ja tekstid kuhugi lisama
+  const { description } = scene.portalItem;
+  const itemDesc = document.querySelector("#item-description");
+  itemDesc.innerHTML = description;
 
-  view.when(() => {
-    /**************************************
-     * Geology layer setup
-     **************************************/
-    const geologyLayers = initLayers.getGeologyLayers(geologyView);
-    const boreholes = geologyLayers.items.find(
-      (layer) => layer.title === "Puurkaevud/puuraugud"
-    );
-    const constructionGeology = geologyLayers.items.find(
-      (layer) => layer.title === "Ehitusgeoloogia"
-    );
-    const geologyWMS = geologyLayers.items.find(
-      (layer) => layer.title === "Geoloogia WMS"
-    );
-    geologyWMS.visible = false;
+  /**************************************
+   * Built-in UI components
+   **************************************/
+  view.ui.move("zoom", "top-right");
+  view.ui.move("navigation-toggle", "top-right");
+  view.ui.move("compass", "top-right");
 
-    // Adding other DTM layers layers
-    view.map.ground.layers.addMany([apDTM, akDTM]);
+  /**************************************
+   * Line of Sight analysis custom
+   **************************************/
+  getStartPoint(view);
 
-    /**************************************
-     * Desc info
-     **************************************/
+  /**************************************
+   * Reworking taimkate logic
+   **************************************/
 
-    // TODO kui kakskeelseks teha, siis peaks ilmselt läbi portaali ära kaotama ja tekstid kuhugi lisama
-    const { description } = scene.portalItem;
-    const itemDesc = document.querySelector("#item-description");
-    itemDesc.innerHTML = description;
+  const treeGroupLayer = setupGroupLayer("Taimkate", "exclusive");
 
-    /**************************************
-     * Built-in UI components
-     **************************************/
-    view.ui.move("zoom", "top-right");
-    view.ui.move("navigation-toggle", "top-right");
-    view.ui.move("compass", "top-right");
+  taimkateWorkaround(treeGroupLayer, view);
 
-    /**************************************
-     * Line of Sight analysis custom
-     **************************************/
-    initLoS.getStartPoint(view);
+  // Add the GroupLayer to view
+  view.map.add(treeGroupLayer);
 
-    /**************************************
-     * Reworking taimkate logic
-     **************************************/
+  /**************************************
+   * Layerlist from scene
+   **************************************/
+  const layerList = setupLayerListMain(view);
 
-    const treeGroupLayer = initLayers.setupGroupLayer("Taimkate", "exclusive");
+  getLayerInfo(layerList, view);
 
-    initLayers.taimkateWorkaround(treeGroupLayer, view);
+  /**************************************
+   * WMS layerlist gallery
+   **************************************/
+  const wmsLayerList = setupLayerListWMS(view);
 
-    // Add the GroupLayer to view
-    view.map.add(treeGroupLayer);
+  getLayerInfo(wmsLayerList, view);
 
-    /**************************************
-     * Layerlist from scene
-     **************************************/
-    const layerList = initLayerList.setupLayerListMain(view);
+  /**************************************
+   * Basemap gallery
+   **************************************/
+  const basemaps = setupBasemapGallery(view);
 
-    initLayerList.getLayerInfo(layerList, view);
+  loadWMStile(basemaps, view);
 
-    /**************************************
-     * WMS layerlist gallery
-     **************************************/
-    const wmsLayerList = initLayerList.setupLayerListWMS(view);
+  /**************************************
+   * Geology layer group
+   **************************************/
 
-    initLayerList.getLayerInfo(wmsLayerList, view);
+  // Creating a geology layer group
+  const geologyGroupLayer = setupGroupLayer("Geoloogia", "independent");
+  geologyGroupLayer.addMany([boreholes, constructionGeology]);
 
-    /**************************************
-     * Basemap gallery
-     **************************************/
-    const basemaps = initLayerList.setupBasemapGallery(view);
+  // Adding a geology layer group to view
+  view.map.add(geologyGroupLayer);
 
-    initLayerList.loadWMStile(basemaps, view);
+  // Geology WMS
+  view.map.add(geologyWMS);
 
-    /**************************************
-     * Geology layer group
-     **************************************/
+  // TODO exxaggeration ka tuua üle - aga see veits keerulisem
+  /**************************************
+   * Elevation toolbox
+   **************************************/
 
-    // Creating a geology layer group
-    const geologyGroupLayer = initLayers.setupGroupLayer(
-      "Geoloogia",
-      "independent"
-    );
-    geologyGroupLayer.addMany([boreholes, constructionGeology]);
+  elevationManipulation(view);
 
-    // Adding a geology layer group to view
-    view.map.add(geologyGroupLayer);
+  /**************************************
+   *  Coordinate tool
+   **************************************/
+  const ccWidget = setupCoordinateWidget(view);
+  const newFormat = setupNewFormat();
+  ccWidget.formats.add(newFormat);
 
-    // Geology WMS
-    view.map.add(geologyWMS);
+  ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
 
-    // TODO exxaggeration ka tuua üle - aga see veits keerulisem
-    /**************************************
-     * Elevation toolbox
-     **************************************/
+  view.ui.add(ccWidget, "bottom-right");
 
-    initELevation.elevationManipulation(view);
+  /**************************************
+   * Initialize the LineOfSight widget
+   **************************************/
+  setupLoS(view);
 
-    /**************************************
-     *  Coordinate tool
-     **************************************/
-    const ccWidget = initCoordinates.setupCoordinateWidget(view);
-    const newFormat = initCoordinates.setupNewFormat();
-    ccWidget.formats.add(newFormat);
+  /**************************************
+   * Initialize the Search Widget
+   **************************************/
+  const customSearchSource = setupCustomSearchSource();
+  setupSearchWidget(view, customSearchSource);
 
-    ccWidget.conversions.splice(0, 0, new Conversion({ format: newFormat }));
+  /**************************************
+   * Initialize daylight
+   **************************************/
 
-    view.ui.add(ccWidget, "bottom-right");
+  setupDaylight(view);
 
-    /**************************************
-     * Initialize the LineOfSight widget
-     **************************************/
-    initLoS.setupLoS(view);
+  /**************************************
+   *  Elevation profile
+   **************************************/
 
-    /**************************************
-     * Initialize the Search Widget
-     **************************************/
-    const customSearchSource = initSearch.setupCustomSearchSource();
-    initSearch.setupSearchWidget(view, customSearchSource);
+  setupElevationProfile(view);
 
-    /**************************************
-     * Initialize daylight
-     **************************************/
-
-    initDaylight.setupDaylight(view);
-
-    /**************************************
-     *  Elevation profile
-     **************************************/
-
-    initElevationProfile.setupElevationProfile(view);
-
-    /**************************************
-     *  Measurement 3D
-     **************************************/
-    const measurement = new Measurement({
-      view,
-      container: "measurement-container",
-    });
-
-    initMeasurement.setupMeasurement(measurement);
-
-    /**************************************
-     * Slicing
-     **************************************/
-
-    initSlice.setupSlice(view);
-
-    /**************************************
-     * Locate
-     **************************************/
-    const locate = initLocate.setupLocate(view);
-
-    view.ui.add(locate, "top-right");
-
-    /**************************************
-     * Sketching
-     **************************************/
-
-    initSketch.setupSketch(view, graphicsLayer);
-
-    /**************************************
-     * Reordering layers
-     **************************************/
-
-    // Reordering for on-the-fly layers
-    view.map.reorder(treeGroupLayer, 6);
-    view.map.reorder(geologyGroupLayer, 6);
-    view.map.reorder(geologyWMS, -1);
-
-    // Replacing sidemastid location, adding to correct group
-    const rajatisedGroup = view.map.findLayerById("180fa46104d-layer-35");
-    rajatisedGroup.add(communicationTower);
-
-    /**************************************
-     * Collecting visible layers before modification and rerendering
-     **************************************/
-    const initVisibleLayers = initLayers.getVisibleLayers(view);
-
-    /**************************************
-     * Calcite CSS/JS
-     **************************************/
-
-    // TODO võiks ka eraldi calcite funktsioonideks kirjutada
-    const shadowCast = initShadowCast.setupShadowCast(view);
-
-    let activeWidget;
-
-    const handleActionBarClick = ({ target }) => {
-      if (target.tagName !== "CALCITE-ACTION") {
-        return;
-      }
-
-      if (activeWidget) {
-        document.querySelector(
-          `[data-action-id=${activeWidget}]`
-        ).active = false;
-        document.querySelector(`[data-panel-id=${activeWidget}]`).hidden = true;
-      }
-
-      const nextWidget = target.dataset.actionId;
-      if (nextWidget !== activeWidget) {
-        document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
-        document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
-        activeWidget = nextWidget;
-      } else {
-        activeWidget = null;
-      }
-
-      if (nextWidget === "shadowCast") {
-        shadowCast.visible = !shadowCast.visible;
-      }
-
-      if (nextWidget === "share") {
-        const visibleLayersCurrently = initLayers.getVisibleLayers(view);
-
-        const [regularLayers, elevationChanged] =
-          initLayers.compareVisibleLayers(
-            initVisibleLayers,
-            visibleLayersCurrently
-          );
-        console.log(regularLayers);
-        console.log(elevationChanged);
-
-        const sharedLocation = goToLocation.createURL(
-          view,
-          regularLayers,
-          elevationChanged
-        );
-        goToLocation.copyTextToClipboard(sharedLocation);
-
-        // Displaying popup
-        const shareMapAlert = document.getElementById("share-map-alert");
-        shareMapAlert.open = "true";
-      }
-    };
-
-    document
-      .querySelector("calcite-action-bar")
-      .addEventListener("click", handleActionBarClick);
-
-    let actionBarExpanded = false;
-
-    document.addEventListener("calciteActionBarToggle", (event) => {
-      actionBarExpanded = !actionBarExpanded;
-      view.padding = {
-        left: actionBarExpanded ? 135 : 49,
-      };
-    });
-
-    /**************************************
-     * Parsing URL if sharing is used
-     **************************************/
-
-    // Going to specified location at runtime
-    const locationArray = goToLocation.getLocation();
-    goToLocation.getUndergroundInfo(view);
-    goToLocation.getLayerVisibility(view);
-    goToLocation.getElevationVisibility(view);
-
-    if (locationArray !== null) {
-      const viewpoint = goToLocation.setupViewPoint(locationArray);
-      view.goTo(viewpoint, { animate: false });
-      console.log(basemaps)
-    }
+  /**************************************
+   *  Measurement 3D
+   **************************************/
+  const measurement = new Measurement({
+    view,
+    container: "measurement-container",
   });
+
+  setupMeasurement(measurement);
+
+  /**************************************
+   * Slicing
+   **************************************/
+
+  setupSlice(view);
+
+  /**************************************
+   * Locate
+   **************************************/
+  const locate = setupLocate(view);
+
+  view.ui.add(locate, "top-right");
+
+  /**************************************
+   * Sketching
+   **************************************/
+
+  setupSketch(view, graphicsLayer);
+
+  /**************************************
+   * Reordering layers
+   **************************************/
+
+  // Reordering for on-the-fly layers
+  view.map.reorder(treeGroupLayer, 6);
+  view.map.reorder(geologyGroupLayer, 6);
+  view.map.reorder(geologyWMS, -1);
+
+  // Replacing sidemastid location, adding to correct group
+  const rajatisedGroup = view.map.findLayerById("180fa46104d-layer-35");
+  rajatisedGroup.add(communicationTower);
+
+  /**************************************
+   * Collecting visible layers before modification and rerendering
+   **************************************/
+  const initVisibleLayers = getVisibleLayers(view);
+
+  /**************************************
+   * Calcite CSS/JS
+   **************************************/
+
+  // TODO võiks ka eraldi calcite funktsioonideks kirjutada
+  const shadowCast = setupShadowCast(view);
+
+  let activeWidget;
+
+  const handleActionBarClick = ({ target }) => {
+    if (target.tagName !== "CALCITE-ACTION") {
+      return;
+    }
+
+    if (activeWidget) {
+      document.querySelector(`[data-action-id=${activeWidget}]`).active = false;
+      document.querySelector(`[data-panel-id=${activeWidget}]`).hidden = true;
+    }
+
+    const nextWidget = target.dataset.actionId;
+    if (nextWidget !== activeWidget) {
+      document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
+      document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
+      activeWidget = nextWidget;
+    } else {
+      activeWidget = null;
+    }
+
+    if (nextWidget === "shadowCast") {
+      shadowCast.visible = !shadowCast.visible;
+    }
+
+    if (nextWidget === "share") {
+      const visibleLayersCurrently = getVisibleLayers(view);
+
+      const [regularLayers, elevationChanged] = compareVisibleLayers(
+        initVisibleLayers,
+        visibleLayersCurrently
+      );
+      console.log(regularLayers);
+      console.log(elevationChanged);
+
+      const sharedLocation = createURL(view, regularLayers, elevationChanged);
+      copyTextToClipboard(sharedLocation);
+
+      // Displaying popup
+      const shareMapAlert = document.getElementById("share-map-alert");
+      shareMapAlert.open = "true";
+    }
+  };
+
+  document
+    .querySelector("calcite-action-bar")
+    .addEventListener("click", handleActionBarClick);
+
+  let actionBarExpanded = false;
+
+  document.addEventListener("calciteActionBarToggle", (event) => {
+    actionBarExpanded = !actionBarExpanded;
+    view.padding = {
+      left: actionBarExpanded ? 135 : 49,
+    };
+  });
+
+  /**************************************
+   * Parsing URL if sharing is used
+   **************************************/
+
+  // Going to specified location at runtime
+  const locationArray = getLocation();
+  getUndergroundInfo(view);
+  getLayerVisibility(view);
+  getElevationVisibility(view);
+
+  if (locationArray !== null) {
+    const viewpoint = setupViewPoint(locationArray);
+    view.goTo(viewpoint, { animate: false });
+    console.log(basemaps);
+  }
 });

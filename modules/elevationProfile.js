@@ -1,25 +1,24 @@
 // TODO ürita Maa-ameti DSM/CHM alla tuua?
+import ElevationProfile from "@arcgis/core/widgets/ElevationProfile.js";
 
-define(["esri/widgets/ElevationProfile"], (ElevationProfile) => ({
-  setupElevationProfile: (view) =>
-    new ElevationProfile({
-      view,
-      container: "elevation-profile-container",
-      profiles: [
-        {
-          type: "ground",
-          title: "Maapind",
-        },
-        {
-          type: "view",
-          title: "Kihid",
-        },
-      ],
-      // hide the select button
-      // this button can be displayed when there are polylines in the
-      // scene to select and display the elevation profile for
-      visibleElements: {
-        selectButton: true,
+const setupElevationProfile = (view) => {
+  return new ElevationProfile({
+    view,
+    container: "elevation-profile-container",
+    profiles: [
+      {
+        type: "ground",
+        title: "Maapind",
       },
-    }),
-}));
+      {
+        type: "view",
+        title: "Kihid",
+      },
+    ],
+    visibleElements: {
+      selectButton: true,
+    },
+  });
+};
+
+export { setupElevationProfile };

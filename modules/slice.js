@@ -1,7 +1,10 @@
-define(["esri/widgets/Slice"], (Slice) => ({
-  setupSlice: (view) =>
-    new Slice({
-      view: view,
-      container: "slicing-container"
-    }),
-}));
+import Slice from "@arcgis/core/widgets/Slice.js";
+
+const setupSlice = (view) => {
+  return new Slice({
+    view: view,
+    container: "slicing-container",
+  });
+};
+
+export { setupSlice };

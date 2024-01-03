@@ -1,54 +1,52 @@
-// TODO kas siin saaks sisendina deklareerida kohe view.map scene asemel, et konstukrutori ülesannet kergemaks teha
-define(["esri/layers/ElevationLayer"], (ElevationLayer) => ({
-  elevationManipulation: (view) => {
-    const opacitySlider = document.getElementById("opacitySlider");
-    opacitySlider.addEventListener("calciteSliderInput", () => {
-      const value = opacitySlider.value / 100;
-      view.map.ground.opacity = value;
-    });
+import ElevationLayer from "@arcgis/core/layers/ElevationLayer.js";
 
-    const navigateUndergroundInput = document.getElementById(
-      "navigationUnderground"
-    );
-    const elevationInput = document.getElementById("elevationInput");
+const elevationManipulation = (view) => {
+  const opacitySlider = document.getElementById("opacitySlider");
+  opacitySlider.addEventListener("calciteSliderInput", () => {
+    const value = opacitySlider.value / 100;
+    view.map.ground.opacity = value;
+  });
 
-    navigateUndergroundInput.addEventListener(
-      "calciteCheckboxChange",
-      (event) => {
-        view.map.ground.navigationConstraint.type = event.target.checked
-          ? "none"
-          : "stay-above";
-      }
-    );
+  const navigateUndergroundInput = document.getElementById(
+    "navigationUnderground"
+  );
+  console.log(navigateUndergroundInput);
+  const elevationInput = document.getElementById("elevationInput");
 
-    // TODO arrow function ümber teha
-    elevationInput.addEventListener("calciteCheckboxChange", updateElevation);
-
-    function updateElevation(e) {
-      // Turn ground layers visibility on/off
-      view.map.ground.layers.forEach((layer) => {
-        layer.visible = e.target.checked;
-      });
+  navigateUndergroundInput.addEventListener(
+    "calciteCheckboxChange",
+    (event) => {
+      view.map.ground.navigationConstraint.type = event.target.checked
+        ? "none"
+        : "stay-above";
     }
+  );
 
-    const elevationLayerGroup = document.getElementById("elevationModels");
+  elevationInput.addEventListener("calciteCheckboxChange", updateElevation);
 
-    elevationLayerGroup.addEventListener(
-      "calciteRadioButtonGroupChange",
-      () => {
-        const selectedItem = elevationLayerGroup.selectedItem.value;
+  function updateElevation(e) {
+    view.map.ground.layers.forEach((layer) => {
+      layer.visible = e.target.checked;
+    });
+  }
 
-        view.map.ground.layers.forEach((layer) => {
-          layer.visible = layer.id === selectedItem;
-        });
-      }
-    );
-  },
+  const elevationLayerGroup = document.getElementById("elevationModels");
 
-  setupElevationLayer: (url, title) =>
-    new ElevationLayer({
-      url,
-      title,
-      visible: false,
-    }),
-}));
+  elevationLayerGroup.addEventListener("calciteRadioButtonGroupChange", () => {
+    const selectedItem = elevationLayerGroup.selectedItem.value;
+
+    view.map.ground.layers.forEach((layer) => {
+      layer.visible = layer.id === selectedItem;
+    });
+  });
+};
+
+const setupElevationLayer = (url, title) => {
+  return new ElevationLayer({
+    url,
+    title,
+    visible: false,
+  });
+};
+
+export { elevationManipulation, setupElevationLayer };
