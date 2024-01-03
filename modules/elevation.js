@@ -10,7 +10,7 @@ const elevationManipulation = (view) => {
   const navigateUndergroundInput = document.getElementById(
     "navigationUnderground"
   );
-  console.log(navigateUndergroundInput);
+
   const elevationInput = document.getElementById("elevationInput");
 
   navigateUndergroundInput.addEventListener(

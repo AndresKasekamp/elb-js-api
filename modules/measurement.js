@@ -1,4 +1,11 @@
-const setupMeasurement = (measurement) => {
+import Measurement from "@arcgis/core/widgets/Measurement.js";
+
+const setupMeasurement = (view) => {
+  const measurement = new Measurement({
+    view,
+    container: "measurement-container",
+  });
+
   const distanceBtn = document.getElementById("distanceButton");
   const areaBtn = document.getElementById("areaButton");
   const clearBtn = document.getElementById("clearButton");

@@ -15,7 +15,7 @@
 
 // Esri imports
 import Conversion from "@arcgis/core/widgets/CoordinateConversion/support/Conversion.js";
-import Measurement from "@arcgis/core/widgets/Measurement.js";
+//import Measurement from "@arcgis/core/widgets/Measurement.js";
 
 // Local imports
 import {
@@ -230,12 +230,12 @@ view.when(() => {
   /**************************************
    *  Measurement 3D
    **************************************/
-  const measurement = new Measurement({
-    view,
-    container: "measurement-container",
-  });
+  // const measurement = new Measurement({
+  //   view,
+  //   container: "measurement-container",
+  // });
 
-  setupMeasurement(measurement);
+  setupMeasurement(view);
 
   /**************************************
    * Slicing
