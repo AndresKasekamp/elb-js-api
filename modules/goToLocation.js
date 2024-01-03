@@ -30,6 +30,7 @@ define(["esri/Viewpoint", "esri/Camera", "esri/geometry/Point"], (
 
       view.map.allLayers.items.forEach((obj) => {
         if (layersParamArr.includes(obj.title)) {
+          console.log(obj)
           obj.visible = !obj.visible;
         }
       });

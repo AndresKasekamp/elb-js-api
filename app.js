@@ -9,6 +9,9 @@
 // TODO los arendus
 // TODO kui määrata id title asemel (töökindlam), määrata vb ka kuskil failis? ja jagada läbi selle?
 // TODO fronti nupud jäävad jagamisele muutmata, kuidagi peab lahendama, et topelt muutus ei tuleks
+// TODO kuidagi läbi tekkinud bugi (otsides basemap mis pole allLayers all tekkis olukord, kus visibility muutus ja jäi nahk kihiks), proovida taasluua nupp, mis kasutaks ära seda käitumist
+// TODO uurida mis state on ja kuidas seda kasutada, et teha tühi basemap võimalus kasutajale, ilmselt peab basemaps ka eraldi parameetrina välja tooma
+// TODO ilmselt peab muutma activeBasemap hübriidiks vms
 
 require([
   "esri/widgets/CoordinateConversion/support/Conversion",
@@ -356,6 +359,7 @@ require([
     if (locationArray !== null) {
       const viewpoint = goToLocation.setupViewPoint(locationArray);
       view.goTo(viewpoint, { animate: false });
+      console.log(basemaps)
     }
   });
 });
