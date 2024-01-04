@@ -202,7 +202,7 @@ const setupBasemapGallery = (view) => {
 };
 
 const loadWMStile = (basemaps, view) => {
-  console.log(basemaps)
+
   basemaps.watch("activeBasemap", () => {
     const isOrtofoto = basemaps.activeBasemap.title === "Ortofoto";
 
