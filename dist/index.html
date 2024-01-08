@@ -12,9 +12,45 @@
     <!-- CSS calcite -->
     <script src="https://js.arcgis.com/calcite-components/1.11.0/calcite.esm.js" type="module"></script>
 
-    <!-- Custom widgets -->
-  <script type="module" crossorigin src="/elb-js-api/assets/index-J0iiHjMT.js"></script>
-  <link rel="stylesheet" crossorigin href="/elb-js-api/assets/index-PpMPqKeV.css">
+    <!-- AMD import for Accessor only -->
+    <script src="https://js.arcgis.com/4.28/"></script>
+    
+    <!-- ES6 for everything else -->
+
+    <!-- A simple windmill model -->
+    <script
+        src="https://developers.arcgis.com/javascript/latest/sample-code/scene-external-renderer/live/windmill.js"></script>
+
+    <!-- A simple fragment shader -->
+    <script id="shader-fs" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec3 vLightColor;
+    void main(void) {
+        gl_FragColor = vec4(vLightColor, 1.0);
+    }
+    </script>
+
+    <!-- A simple vertex shader -->
+    <script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec3 aVertexPosition;
+    attribute vec3 aVertexNormal;
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionMatrix;
+    uniform mat3 uNormalMatrix;
+    uniform vec3 uAmbientColor;
+    uniform vec3 uLightingDirection;
+    uniform vec3 uDirectionalColor;
+    varying vec3 vLightColor;
+    void main(void) {
+        gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
+        vec3 transformedNormal = normalize(uNormalMatrix * aVertexNormal);
+
+        float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+        vLightColor = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+    }
+    </script>
+  <script type="module" crossorigin src="/elb-js-api/assets/index-pCX-0tJH.js"></script>
+  <link rel="stylesheet" crossorigin href="/elb-js-api/assets/index-4b4radwv.css">
 </head>
 
 <body>
@@ -75,21 +111,26 @@
                 <div id="basemaps-container">
                 </div>
 
+                <calcite-label layout="inline">
+                    <calcite-checkbox id="basemapSwitch" scale="l"></calcite-checkbox>
+                    No basemap
+                </calcite-label>
+
                 <calcite-slider id="opacitySlider" label-handles min=0 max=100 step=1 value=100></calcite-slider>
             </calcite-panel>
             <calcite-panel heading="Elevation settings" height-scale="l" data-panel-id="elevation" hidden>
 
                 <calcite-radio-button-group id="elevationModels" name="ElevationModels" layout="vertical">
                     <calcite-label layout="inline">
-                        <calcite-radio-button value="987798be0faa561d" checked></calcite-radio-button>
+                        <calcite-radio-button id="dtmElevation" value="987798be0faa561d" checked></calcite-radio-button>
                         DTM
                     </calcite-label>
                     <calcite-label layout="inline">
-                        <calcite-radio-button value="bae50815bbab6ded"></calcite-radio-button>
+                        <calcite-radio-button id="apElevation" value="bae50815bbab6ded"></calcite-radio-button>
                         Aluspõhi 50m
                     </calcite-label>
                     <calcite-label layout="inline">
-                        <calcite-radio-button value="974102ce30be63bb"></calcite-radio-button>
+                        <calcite-radio-button id="akElevation" value="974102ce30be63bb"></calcite-radio-button>
                         Aluskord 50m
                     </calcite-label>
                 </calcite-radio-button-group>

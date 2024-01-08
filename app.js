@@ -15,7 +15,6 @@
 
 // Esri imports
 import Conversion from "@arcgis/core/widgets/CoordinateConversion/support/Conversion.js";
-//import Measurement from "@arcgis/core/widgets/Measurement.js";
 
 // Local imports
 import {
@@ -63,6 +62,9 @@ import {
   createURL,
   setupViewPoint,
 } from "./modules/goToLocation.js";
+import {
+  displayWindmills
+} from "./modules/rotatingWindmill";
 
 /************************************************************
  * Init scene (/w layers) and view
@@ -100,6 +102,11 @@ const akDTM = setupElevationLayer(
 );
 
 const view = setupWebView(scene);
+
+
+
+
+
 
 view.when(() => {
   /**************************************
@@ -256,6 +263,12 @@ view.when(() => {
   setupSketch(view, graphicsLayer);
 
   /**************************************
+   * Rotating windmills
+   **************************************/
+
+  displayWindmills(view);
+
+  /**************************************
    * Reordering layers
    **************************************/
 
@@ -350,6 +363,5 @@ view.when(() => {
   if (locationArray !== null) {
     const viewpoint = setupViewPoint(locationArray);
     view.goTo(viewpoint, { animate: false });
-    console.log(basemaps);
   }
 });

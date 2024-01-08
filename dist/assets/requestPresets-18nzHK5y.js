@@ -1,1 +1,0 @@
-import{bW as a}from"./index-J0iiHjMT.js";async function s(e,t){const{data:r}=await a(e,{responseType:"json",query:{f:"json",...t==null?void 0:t.customParameters,token:t==null?void 0:t.apiKey}});return r}export{s as t};

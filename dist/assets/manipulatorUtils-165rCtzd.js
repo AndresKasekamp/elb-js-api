@@ -1,0 +1,1 @@
+import{bl as l,a0 as a}from"./index-pCX-0tJH.js";function u(r,n=l(r)){return n.mode!=="on-the-ground"&&!(r.geometry==null||!r.geometry.hasZ)}function m(r,n){let e=null;const t=r.events.on("grab-changed",o=>{e!=null&&(e.remove(),e=null),o.action==="start"&&(e=r.disableDisplay()),n&&n(o)});return a(()=>{e==null||e.remove(),t.remove()})}export{u as n,m as t};
